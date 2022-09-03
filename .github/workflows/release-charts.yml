@@ -1,0 +1,25 @@
+name: release
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build helm-docs
+        uses: docker://docker.io/jnorwood/helm-docs:latest
+      - uses: EndBug/add-and-commit@v9 
+        with:
+          message: 'Automatic build of docs from GitHub Action'
+  release:
+    needs: docs-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Publish Helm charts
+        uses: stefanprodan/helm-gh-pages@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
