@@ -1,17 +1,17 @@
 # ml-gitops-tenant
 
-A Helm chart for Kubernetes
+A Helm chart to manage a multi-tiered gitops structure for a data science project.
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0](https://img.shields.io/badge/AppVersion-1.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installing the Chart
 
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add rh-intelligent-application-practice https://rh-intelligent-application-practice.github.io/helm-charts/
-helm repo update rh-intelligent-application-practice
-helm install [release-name] rh-intelligent-application-practice/ml-gitops-tenant
+helm repo add rh-iap https://rh-intelligent-application-practice.github.io/helm-charts/
+helm repo update rh-iap
+helm install [release-name] rh-iap/ml-gitops-tenant
 ```
 
 To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
@@ -40,39 +40,41 @@ Kubernetes: `>= 1.19.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| adminGroup.create | bool | `true` |  |
-| adminGroup.members | list | `[]` |  |
-| adminGroup.nameOverride | string | `""` |  |
-| argoCD.name | string | `"argocd"` |  |
-| argoCD.repos | list | `[]` |  |
-| argoCD.resourceCustomizations | string | `""` |  |
-| devNamespace.adminGroupRole | string | `"admin"` |  |
-| devNamespace.annotations | object | `{}` |  |
-| devNamespace.create | bool | `true` |  |
-| devNamespace.labels | object | `{}` |  |
-| devNamespace.nameOverride | string | `""` |  |
-| fullnameOverride | string | `""` |  |
-| gitopsNamespace.adminGroupRole | string | `"admin"` |  |
-| gitopsNamespace.annotations | object | `{}` |  |
-| gitopsNamespace.create | bool | `true` |  |
-| gitopsNamespace.labels | object | `{}` |  |
-| gitopsNamespace.nameOverride | string | `""` |  |
-| nameOverride | string | `""` |  |
-| pipelinesNamespace.adminGroupRole | string | `"admin"` |  |
-| pipelinesNamespace.annotations | object | `{}` |  |
-| pipelinesNamespace.create | bool | `true` |  |
-| pipelinesNamespace.labels | object | `{}` |  |
-| pipelinesNamespace.nameOverride | string | `""` |  |
-| prodNamespace.adminGroupRole | string | `"view"` |  |
-| prodNamespace.annotations | object | `{}` |  |
-| prodNamespace.create | bool | `true` |  |
-| prodNamespace.labels | object | `{}` |  |
-| prodNamespace.nameOverride | string | `""` |  |
-| testNamespace.adminGroupRole | string | `"view"` |  |
-| testNamespace.annotations | object | `{}` |  |
-| testNamespace.create | bool | `true` |  |
-| testNamespace.labels | object | `{}` |  |
-| testNamespace.nameOverride | string | `""` |  |
+| adminGroup.create | bool | `true` | Enable the creation of the admin group.  If creation is disabled, an existing group can still be specified with the nameOverride. |
+| adminGroup.members | list | `[]` | List of users to be added to the adminGroup |
+| adminGroup.nameOverride | string | `""` | String to override the name of the admin group |
+| datascienceNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the datascience namespace |
+| datascienceNamespace.annotations | object | `{}` | Additional annotations to be added to the datascience namespace |
+| datascienceNamespace.create | bool | `true` | Enable the creation of the data science namespace |
+| datascienceNamespace.labels | object | `{}` | Additional labels to be added to the datascience namespace |
+| datascienceNamespace.nameOverride | string | `""` | String to override the name of the datascience namespace |
+| devNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the dev namespace |
+| devNamespace.annotations | object | `{}` | Additional annotations to be added to the dev namespace |
+| devNamespace.create | bool | `true` | Enable the creation of the dev namespace |
+| devNamespace.labels | object | `{}` | Additional labels to be added to the dev namespace |
+| devNamespace.nameOverride | string | `""` | String to override the name of the dev namespace |
+| fullnameOverride | string | `""` | String to fully override fullname template |
+| gitopsNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the gitops namespace |
+| gitopsNamespace.annotations | object | `{}` | Additional annotations to be added to the gitops namespace |
+| gitopsNamespace.create | bool | `true` | Enable the creation of the gitops namespace |
+| gitopsNamespace.labels | object | `{}` | Additional labels to be added to the gitops namespace |
+| gitopsNamespace.nameOverride | string | `""` | String to override the name of the gitops namespace |
+| nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
+| pipelinesNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the pipelines namespace |
+| pipelinesNamespace.annotations | object | `{}` | Additional annotations to be added to the pipelines namespace |
+| pipelinesNamespace.create | bool | `true` | Enable the creation of the pipelines namespace |
+| pipelinesNamespace.labels | object | `{}` | Additional labels to be added to the pipelines namespace |
+| pipelinesNamespace.nameOverride | string | `""` | String to override the name of the pipelines namespace |
+| prodNamespace.adminGroupRole | string | `"view"` | Cluster role granting permissions admins group in the prod namespace |
+| prodNamespace.annotations | object | `{}` | Additional annotations to be added to the prod namespace |
+| prodNamespace.create | bool | `true` | Enable the creation of the prod namespace |
+| prodNamespace.labels | object | `{}` | Additional labels to be added to the prod namespace |
+| prodNamespace.nameOverride | string | `""` | String to override the name of the prod namespace |
+| testNamespace.adminGroupRole | string | `"view"` | Cluster role granting permissions admins group in the test namespace |
+| testNamespace.annotations | object | `{}` | Additional annotations to be added to the test namespace |
+| testNamespace.create | bool | `true` | Enable the creation of the test namespace |
+| testNamespace.labels | object | `{}` | Additional labels to be added to the test namespace |
+| testNamespace.nameOverride | string | `""` | String to override the name of the test namespace |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)
