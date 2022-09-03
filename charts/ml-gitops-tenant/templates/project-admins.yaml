@@ -1,0 +1,10 @@
+{{- if .Values.adminGroup.create -}}
+apiVersion: user.openshift.io/v1
+kind: Group
+metadata:
+  name: {{ include "ml-gitops-tenant.admin-group" . }}
+  labels:
+    {{- include "ml-gitops-tenant.labels" . | nindent 4 }}
+users:
+  {{- toYaml .Values.adminGroup.members | nindent 2 }}
+{{- end }}

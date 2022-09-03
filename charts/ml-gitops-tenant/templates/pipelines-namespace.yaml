@@ -1,0 +1,16 @@
+{{- if .Values.pipelinesNamespace.create -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ include "ml-gitops-tenant.pipelines-name" . }}
+  {{- with .Values.pipelinesNamespace.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    argocd.argoproj.io/managed-by: {{ include "ml-gitops-tenant.gitops-name" . }}
+    {{- include "ml-gitops-tenant.labels" . | nindent 4 }}
+    {{- with .Values.pipelinesNamespace.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}

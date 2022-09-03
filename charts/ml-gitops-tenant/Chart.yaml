@@ -1,0 +1,7 @@
+apiVersion: v2
+name: ml-gitops-tenant
+description: A Helm chart to manage a multi-tiered gitops structure for a data science project.
+type: application
+kubeVersion: ">= 1.19.0"
+
+version: 0.2.0

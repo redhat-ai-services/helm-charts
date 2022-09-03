@@ -1,0 +1,84 @@
+# -- String to partially override fullname template (will maintain the release name)
+nameOverride: ""
+# -- String to fully override fullname template
+fullnameOverride: ""
+
+gitopsNamespace:
+  # -- Enable the creation of the gitops namespace
+  create: true
+  # -- String to override the name of the gitops namespace
+  nameOverride: ""
+  # -- Cluster role granting permissions admins group in the gitops namespace
+  adminGroupRole: admin
+  # -- Additional annotations to be added to the gitops namespace
+  annotations: {}
+  # -- Additional labels to be added to the gitops namespace
+  labels: {}
+  
+pipelinesNamespace:
+  # -- Enable the creation of the pipelines namespace
+  create: true
+  # -- String to override the name of the pipelines namespace
+  nameOverride: ""
+  # -- Cluster role granting permissions admins group in the pipelines namespace
+  adminGroupRole: admin
+  # -- Additional annotations to be added to the pipelines namespace
+  annotations: {}
+  # -- Additional labels to be added to the pipelines namespace
+  labels: {}
+
+datascienceNamespace:
+  # -- Enable the creation of the data science namespace
+  create: true
+  # -- String to override the name of the datascience namespace
+  nameOverride: ""
+  # -- Cluster role granting permissions admins group in the datascience namespace
+  adminGroupRole: admin
+  # -- Additional annotations to be added to the datascience namespace
+  annotations: {}
+  # -- Additional labels to be added to the datascience namespace
+  labels: {}
+
+devNamespace:
+  # -- Enable the creation of the dev namespace
+  create: true
+  # -- String to override the name of the dev namespace
+  nameOverride: ""
+  # -- Cluster role granting permissions admins group in the dev namespace
+  adminGroupRole: admin
+  # -- Additional annotations to be added to the dev namespace
+  annotations: {}
+  # -- Additional labels to be added to the dev namespace
+  labels: {}
+
+testNamespace:
+  # -- Enable the creation of the test namespace
+  create: true
+  # -- String to override the name of the test namespace
+  nameOverride: ""
+  # -- Cluster role granting permissions admins group in the test namespace
+  adminGroupRole: view
+  # -- Additional annotations to be added to the test namespace
+  annotations: {}
+  # -- Additional labels to be added to the test namespace
+  labels: {}
+
+prodNamespace:
+  # -- Enable the creation of the prod namespace
+  create: true
+  # -- String to override the name of the prod namespace
+  nameOverride: ""
+  # -- Cluster role granting permissions admins group in the prod namespace
+  adminGroupRole: view
+  # -- Additional annotations to be added to the prod namespace
+  annotations: {}
+  # -- Additional labels to be added to the prod namespace
+  labels: {}
+
+adminGroup:
+  # -- Enable the creation of the admin group.  If creation is disabled, an existing group can still be specified with the nameOverride.
+  create: true
+  # -- String to override the name of the admin group
+  nameOverride: ""
+  # -- List of users to be added to the adminGroup
+  members: []
