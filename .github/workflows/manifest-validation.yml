@@ -1,0 +1,58 @@
+name: Manifests Validation
+on:
+  push:
+    branches-ignore:
+      - 'main'
+      - 'gh-pages'
+
+jobs:
+  # yaml-lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Code Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Set up Python 3.9
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.9
+  #         architecture: 'x64'
+  #     - name: Install dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install yamllint
+  #     - name: Validate Manifests
+  #       run: yamllint . -f github
+  helm-lint:
+    runs-on: ubuntu-latest
+    env:
+      HELM_VERSION: 3.9.4
+      HELM_DIRS: .
+    steps:
+      - name: Install Helm
+        run: |
+          sudo curl -L -o /usr/bin/helm https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz
+          sudo chmod +x /usr/bin/helm
+      - name: Code Checkout
+        uses: actions/checkout@v2
+      - name: Validate Charts
+        run: |
+          for i in `find "${HELM_DIRS}" -name "Chart.yaml" -exec dirname {} \;`;
+          do
+
+            echo
+            echo "Validating $i"
+            echo
+
+            helm lint $i
+
+            build_response=$?
+
+            if [ $build_response -ne 0 ]; then
+              echo "Error linting $i"
+              exit 1
+            fi
+
+          done
+
+          echo
+          echo "Charts successfully validated!"
