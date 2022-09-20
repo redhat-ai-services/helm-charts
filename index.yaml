@@ -2,14 +2,14 @@ apiVersion: v1
 entries:
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2022-09-03T02:46:15.884630198Z"
+    created: "2022-09-20T17:46:47.194625453Z"
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: fb33aa71dce95853e54c840f18a091d193ac0d1a257eea897a2c9bb2da08173d
+    digest: f7e43489ec990b131750946f96c3b255e161c016796815e37b43f089ca58cea8
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.0.tgz
     version: 0.2.0
-generated: "2022-09-03T02:46:15.883734294Z"
+generated: "2022-09-20T17:46:47.193079239Z"
