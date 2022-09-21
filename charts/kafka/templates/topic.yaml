@@ -1,0 +1,16 @@
+{{- range $topic := .Values.topics }}
+---
+kind: KafkaTopic
+apiVersion: kafka.strimzi.io/v1beta2
+metadata:
+  name: {{ $topic.name }}
+  labels:
+    strimzi.io/cluster: {{ include "kafka.fullname" $ }}
+    {{- include "kafka.labels" $ | nindent 4 }}
+spec:
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.bytes: 1073741824
+{{- end }}
