@@ -3,9 +3,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-09-21T18:46:44.534824489Z"
+    created: "2022-09-23T22:27:26.776660935Z"
     description: A Helm chart for Kubernetes
-    digest: fb62169f8e926396ad215515f5abc0c834e95e085acff28e63839b9cb8de8f6f
+    digest: 40045b493e1f184bd6a1d99afaae86bc103ee2755af09f07a79a327eb675752d
     name: kafka
     type: application
     urls:
@@ -13,14 +13,26 @@ entries:
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2022-09-21T18:46:44.53556332Z"
+    created: "2022-09-23T22:27:26.777613741Z"
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: ac53c19a92b80078236d89d4c1da3800d394a48edaef9ccbb4702cd542d2270b
+    digest: 4eb09c0a1e835bfcc346b5b207655033e2c278bbc366425b4bad57355dc41a54
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.0.tgz
     version: 0.2.0
-generated: "2022-09-21T18:46:44.533727043Z"
+  odh:
+  - apiVersion: v2
+    appVersion: v1.3
+    created: "2022-09-23T22:27:26.778760848Z"
+    description: A Helm chart for configuring OpenDataHub on OpenShift
+    digest: fe7fce039adf0170e3ead90f34667391ea6807b8b9d6bc296cebaf387feebeea
+    kubeVersion: '>= 1.19.0'
+    name: odh
+    type: application
+    urls:
+    - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.4.3.tgz
+    version: 0.4.3
+generated: "2022-09-23T22:27:26.775675129Z"
