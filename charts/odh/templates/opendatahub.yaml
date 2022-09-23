@@ -1,0 +1,154 @@
+apiVersion: kfdef.apps.kubeflow.org/v1
+kind: KfDef
+metadata:
+  name: opendatahub
+  labels:
+    {{- include "odh.labels" . | nindent 4 }}
+spec:
+  applications:
+    {{- if .Values.odhCommon.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odh-common
+      name: odh-common
+    {{- end }}
+    {{- if .Values.seldon.operator.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odhseldon/cluster
+      name: odhseldon
+    {{- end }}
+    {{- if .Values.superset.enabled }}
+    - kustomizeConfig:
+        parameters:
+          - name: SUPERSET_ADMIN_PASSWORD
+            value: admin
+        repoRef:
+          name: manifests
+          path: superset
+      name: superset
+    {{- end }}
+    {{- if .Values.kafka.operator.enabled }}
+    - kustomizeConfig:
+        parameters:
+          - name: namespace
+            value: openshift-operators
+        repoRef:
+          name: manifests
+          path: kafka/cluster
+      name: strimzi-operator
+    {{- end }}
+    {{- if .Values.kafka.instance.enabled }}
+    - kustomizeConfig:
+      repoRef:
+        name: manifests
+        path: kafka/kafka
+      name: kafka-cluster
+    {{- end }}
+    {{- if .Values.grafana.operator.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: grafana/cluster
+      name: grafana-cluster
+    {{- end }}
+    {{- if .Values.grafana.instance.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: grafana/grafana
+      name: grafana-instance
+    {{- end }}
+    {{- if .Values.prometheus.instance.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: prometheus/cluster
+      name: prometheus-cluster
+    {{- end }}
+    {{- if .Values.prometheus.operator.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: prometheus/operator
+      name: prometheus-operator
+    {{- end }}
+    {{- if .Values.jupyterHub.enabled }}
+    - kustomizeConfig:
+        parameters:
+          - name: s3_endpoint_url
+            value: s3.odh.com
+        repoRef:
+          name: manifests
+          path: jupyterhub/jupyterhub
+      name: jupyterhub
+    {{- end }}
+    {{- if .Values.additionalNotebooks.enabled }}
+    - kustomizeConfig:
+        overlays:
+          {{- toYaml .Values.additionalNotebooks.overlays | nindent 10 }}
+        repoRef:
+          name: manifests
+          path: jupyterhub/notebook-images
+      name: notebook-images
+    {{- end }}
+    {{- if .Values.notebookController.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odh-notebook-controller
+      name: odh-notebook-controller
+    {{- end }}
+    {{- if .Values.airflow.instance.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: airflow/operator
+      name: airflow-operator
+    {{- end }}
+    {{- if .Values.airflow.operator.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: airflow/cluster
+      name: airflow-cluster
+    {{- end }}
+    {{- if .Values.argoWorkflows.operator.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odhargo/cluster
+      name: odhargo-cluster
+    {{- end }}
+    {{- if .Values.argoWorkflows.instance.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odhargo/odhargo
+      name: odhargo
+    {{- end }}
+    {{- if .Values.modelMesh.enabled }}
+    - kustomizeConfig:
+      overlays:
+        - authentication
+      repoRef:
+        name: manifests
+        path: model-mesh
+      name: model-mesh
+    {{- end }}
+    {{- if .Values.odhDashboard.enabled }}
+    - kustomizeConfig:
+        overlays:
+          - authentication
+        repoRef:
+          name: manifests
+          path: odh-dashboard
+      name: odh-dashboard
+    {{- end }}
+  repos:
+    - name: kf-manifests
+      uri: {{ .Values.repos.kfManifestsUrl }}
+    - name: manifests
+      uri: "{{ .Values.repos.manifestsUrl }}{{ .Values.repos.manifestsVersion | default .Chart.AppVersion }}"

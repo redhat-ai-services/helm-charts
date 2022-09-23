@@ -1,0 +1,12 @@
+{{- if .Values.jupyterHub.singleUserProfile.enabled -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: additional-profiles
+  labels:
+    jupyterhub: singleuser-profiles
+    {{- include "odh.labels" . | nindent 4 }}
+data:
+  jupyterhub-singleuser-profiles.yaml: |-
+    {{- toYaml .Values.jupyterHub.singleUserProfile.profile | nindent 4 }}
+{{- end }}
