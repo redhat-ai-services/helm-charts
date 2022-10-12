@@ -1,11 +1,22 @@
 apiVersion: v1
 entries:
+  kafdrop:
+  - apiVersion: v1
+    appVersion: 3.x
+    created: "2022-10-12T20:42:59.445430107Z"
+    description: A Helm chart for Kafdrop
+    digest: 7cc9f3a146ded177af7912682d85892f4788c93899cb7e0a06fb6a8b774db47a
+    icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
+    name: kafdrop
+    urls:
+    - https://rh-intelligent-application-practice.github.io/helm-charts/kafdrop-0.1.0.tgz
+    version: 0.1.0
   kafka:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-09-23T22:27:26.776660935Z"
+    created: "2022-10-12T20:42:59.445692411Z"
     description: A Helm chart for Kubernetes
-    digest: 40045b493e1f184bd6a1d99afaae86bc103ee2755af09f07a79a327eb675752d
+    digest: 8fe1b160be23e5c5d157301d60c3383776174b89f8c15edb6223d23c773bb3b4
     name: kafka
     type: application
     urls:
@@ -13,10 +24,10 @@ entries:
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2022-09-23T22:27:26.777613741Z"
+    created: "2022-10-12T20:42:59.446188817Z"
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: 4eb09c0a1e835bfcc346b5b207655033e2c278bbc366425b4bad57355dc41a54
+    digest: 6f737ba4a7c70ed83a37f6c9467ecb93947490a9d60c8d29b9fc34b87df079a7
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
@@ -26,13 +37,13 @@ entries:
   odh:
   - apiVersion: v2
     appVersion: v1.3
-    created: "2022-09-23T22:27:26.778760848Z"
+    created: "2022-10-12T20:42:59.446641523Z"
     description: A Helm chart for configuring OpenDataHub on OpenShift
-    digest: fe7fce039adf0170e3ead90f34667391ea6807b8b9d6bc296cebaf387feebeea
+    digest: 28624a7c1ef41cd55663c5768e46c660a4ae6e262e465ccbff86107518b63d10
     kubeVersion: '>= 1.19.0'
     name: odh
     type: application
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.4.3.tgz
     version: 0.4.3
-generated: "2022-09-23T22:27:26.775675129Z"
+generated: "2022-10-12T20:42:59.444653097Z"
