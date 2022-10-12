@@ -1,0 +1,40 @@
+{{ template "kafdrop.header" . }}
+{{ template "kafdrop.description" . }}
+
+{{ template "kafdrop.versionBadge" . }}{{ template "kafdrop.typeBadge" . }}{{ template "kafdrop.appVersionBadge" . }}
+
+## Installing the Chart
+
+To access charts from this from the cli repository add it:
+
+```sh
+helm repo add rh-iap https://rh-intelligent-application-practice.github.io/helm-charts/
+helm repo update rh-iap
+helm install [release-name] rh-iap/{{ template "kafdrop.name" . }}
+```
+
+To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
+
+```yaml
+apiVersion: v2
+name: example-chart
+description: A Helm chart for Kubernetes
+type: application
+
+version: 0.1.0
+
+appVersion: "1.16.0"
+
+dependencies:
+  - name: "{{ template "kafdrop.name" . }}"
+    version: "{{ template "kafdrop.version" . }}"
+    repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
+```
+
+{{ template "kafdrop.sourcesSection" . }}
+
+{{ template "kafdrop.requirementsSection" . }}
+
+{{ template "kafdrop.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}
