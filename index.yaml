@@ -3,9 +3,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2022-11-09T22:41:57.086383005Z"
+    created: "2022-11-09T23:44:19.120167952Z"
     description: A Helm chart for Kafdrop
-    digest: 62c09c11eecb32c2229b945e63d429d29f4f5470d57a57550325f8d81a3b2b0b
+    digest: 58c0487a6cddd6c286fe1a7e094806460ddac0b9e5bc263c19d11ced85a5a251
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -14,9 +14,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-11-09T22:41:57.087147411Z"
+    created: "2022-11-09T23:44:19.120567754Z"
     description: A Helm chart for Kubernetes
-    digest: 55196b81217dec71c092cf6d7a5a1713672cfa5612c00e770655ba6a6b5db2c2
+    digest: 68fcb21f4d4ea64541fb8ff48295f7e4261bfa447f556723d42b0331d50de758
     name: kafka
     type: application
     urls:
@@ -24,10 +24,10 @@ entries:
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2022-11-09T22:41:57.088148819Z"
+    created: "2022-11-09T23:44:19.121374957Z"
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: 98c2fdc58671c3145fc58101432cf48c7e5b99cd657d0f7b826d2e554b044c4b
+    digest: cab34682c7ccca8582ca4028f1e2e5919cdf6230fda97d90b0e16c3e968f4492
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
@@ -35,6 +35,17 @@ entries:
     - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.0.tgz
     version: 0.2.0
   odh:
+  - apiVersion: v2
+    appVersion: v1.4
+    created: "2022-11-09T23:44:19.121879259Z"
+    description: A Helm chart for configuring OpenDataHub on OpenShift
+    digest: 3b692f7887d83eb4bc330b8d5d12069e55a886bda0cc999eab904474689a4f66
+    kubeVersion: '>= 1.19.0'
+    name: odh
+    type: application
+    urls:
+    - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.6.0.tgz
+    version: 0.6.0
   - apiVersion: v2
     appVersion: v1.4
     created: "2022-11-09T22:41:57.088569923Z"
@@ -57,4 +68,4 @@ entries:
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.4.3.tgz
     version: 0.4.3
-generated: "2022-11-09T22:41:57.085641499Z"
+generated: "2022-11-09T23:44:19.119106047Z"
