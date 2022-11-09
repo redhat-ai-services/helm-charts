@@ -2,22 +2,37 @@ odhCommon:
   # -- Enable install of ODH Common resources
   enabled: true
 
-seldon: 
-  operator:
-    # -- Enable install of Seldon Operator
-    enabled: false
+odhDashboard: 
+  # -- Enable install of the ODH Dashboard instance
+  enabled: true
+  overlays:
+    - authentication
 
-superset: 
-  # -- Enable install of Apache Superset instance
-  enabled: false
+notebookController:
+  enabled: true
 
-kafka:
-  operator:
-    # -- Enable install of the Strimzi Kafka Operator
-    enabled: false
-  instance:
-    # -- Enable install of a Kafka instance
-    enabled: false
+additionalNotebooks:
+  # -- Enable the install of additional Jupyter Notebook images via overlays
+  enabled: true
+  # -- Notebook overlays to include in the deployment
+  overlays:
+    - additional
+    # - cuda-11.0.3
+
+modelMesh:
+  # -- Enable install of the Model Mesh instance
+  enabled: true
+  overlays:
+    - odh-model-controller
+
+dataSciencePipelines:
+  # -- Enable install of the Data Science Pipelines (KubeFlow Pipelines) component
+  enabled: true
+  overlays:
+    - metadata-store-mariadb
+    - ds-pipeline-ui
+    - object-store-minio
+    - default-configs
 
 grafana: 
   operator:
@@ -35,20 +50,9 @@ prometheus:
   instance:
     enabled: false
 
-notebookController:
-  enabled: false
-
-additionalNotebooks:
-  # -- Enable the install of additional Jupyter Notebook images via overlays
-  enabled: true
-  # -- Notebook overlays to include in the deployment
-  overlays:
-    - additional
-    # - cuda-11.0.3
-
 jupyterHub: 
-  # -- Enable the install of a JupyterHub instance
-  enabled: true
+  # -- Enable the install of a JupyterHub instance (Depreciated)
+  enabled: false
   singleUserProfile: 
     # -- Enable the configuration of a singleUserProfile for JupyterHub
     enabled: false
@@ -67,33 +71,7 @@ jupyterHub:
     #         memory: 1Gi
     #         cpu: 1
 
-airflow: 
-  operator:
-    # -- Enable install of the Airflow Operator
-    enabled: false
-  instance:
-    # -- Enable install of the Airflow instance
-    enabled: false
-    
-argoWorkflows:
-  operator:
-    # -- Enable install of the Argo Workflows Operator
-    enabled: false
-  instance:
-    # -- Enable install of the Argo Workflows instance
-    enabled: false
-
-modelMesh:
-  # -- Enable install of the Model Mesh instnace
-  enabled: false
-
-odhDashboard: 
-  # -- Enable install of the ODH Dashboard instance
-  enabled: true
-
 repos:
-  # -- KubeFlow manifest URL
-  kfManifestsUrl: 'https://github.com/opendatahub-io/manifests/tarball/v1.5-branch-openshift'
   # -- ODH Manifests URL base
   manifestsUrl: 'https://github.com/opendatahub-io/odh-manifests/tarball/'
   # Overrides the manifestsVersion whose default is the chart appVersion.

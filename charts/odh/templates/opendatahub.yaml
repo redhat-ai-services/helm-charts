@@ -13,39 +13,39 @@ spec:
           path: odh-common
       name: odh-common
     {{- end }}
-    {{- if .Values.seldon.operator.enabled }}
+    {{- if .Values.odhDashboard.enabled }}
+    - kustomizeConfig:
+        overlays:
+          {{- toYaml .Values.odhDashboard.overlays | nindent 10 }}
+        repoRef:
+          name: manifests
+          path: odh-dashboard
+      name: odh-dashboard
+    {{- end }}
+    {{- if .Values.notebookController.enabled }}
     - kustomizeConfig:
         repoRef:
           name: manifests
-          path: odhseldon/cluster
-      name: odhseldon
+          path: odh-notebook-controller
+      name: odh-notebook-controller
     {{- end }}
-    {{- if .Values.superset.enabled }}
+    {{- if .Values.modelMesh.enabled }}
     - kustomizeConfig:
-        parameters:
-          - name: SUPERSET_ADMIN_PASSWORD
-            value: admin
+        overlays:
+          {{- toYaml .Values.modelMesh.overlays | nindent 10 }}
         repoRef:
           name: manifests
-          path: superset
-      name: superset
+          path: model-mesh
+      name: model-mesh
     {{- end }}
-    {{- if .Values.kafka.operator.enabled }}
+    {{- if .Values.dataSciencePipelines.enabled }}
     - kustomizeConfig:
-        parameters:
-          - name: namespace
-            value: openshift-operators
+        overlays:
+          {{- toYaml .Values.dataSciencePipelines.overlays | nindent 10 }}
         repoRef:
           name: manifests
-          path: kafka/cluster
-      name: strimzi-operator
-    {{- end }}
-    {{- if .Values.kafka.instance.enabled }}
-    - kustomizeConfig:
-      repoRef:
-        name: manifests
-        path: kafka/kafka
-      name: kafka-cluster
+          path: data-science-pipelines
+      name: ds-pipelines
     {{- end }}
     {{- if .Values.grafana.operator.enabled }}
     - kustomizeConfig:
@@ -94,61 +94,6 @@ spec:
           path: jupyterhub/notebook-images
       name: notebook-images
     {{- end }}
-    {{- if .Values.notebookController.enabled }}
-    - kustomizeConfig:
-        repoRef:
-          name: manifests
-          path: odh-notebook-controller
-      name: odh-notebook-controller
-    {{- end }}
-    {{- if .Values.airflow.instance.enabled }}
-    - kustomizeConfig:
-        repoRef:
-          name: manifests
-          path: airflow/operator
-      name: airflow-operator
-    {{- end }}
-    {{- if .Values.airflow.operator.enabled }}
-    - kustomizeConfig:
-        repoRef:
-          name: manifests
-          path: airflow/cluster
-      name: airflow-cluster
-    {{- end }}
-    {{- if .Values.argoWorkflows.operator.enabled }}
-    - kustomizeConfig:
-        repoRef:
-          name: manifests
-          path: odhargo/cluster
-      name: odhargo-cluster
-    {{- end }}
-    {{- if .Values.argoWorkflows.instance.enabled }}
-    - kustomizeConfig:
-        repoRef:
-          name: manifests
-          path: odhargo/odhargo
-      name: odhargo
-    {{- end }}
-    {{- if .Values.modelMesh.enabled }}
-    - kustomizeConfig:
-      overlays:
-        - authentication
-      repoRef:
-        name: manifests
-        path: model-mesh
-      name: model-mesh
-    {{- end }}
-    {{- if .Values.odhDashboard.enabled }}
-    - kustomizeConfig:
-        overlays:
-          - authentication
-        repoRef:
-          name: manifests
-          path: odh-dashboard
-      name: odh-dashboard
-    {{- end }}
   repos:
-    - name: kf-manifests
-      uri: {{ .Values.repos.kfManifestsUrl }}
     - name: manifests
       uri: "{{ .Values.repos.manifestsUrl }}{{ .Values.repos.manifestsVersion | default .Chart.AppVersion }}"
