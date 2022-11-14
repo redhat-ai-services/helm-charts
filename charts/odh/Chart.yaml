@@ -4,13 +4,16 @@ description: A Helm chart for configuring OpenDataHub on OpenShift
 type: application
 kubeVersion: ">= 1.19.0"
 
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
-# Versions are expected to follow Semantic Versioning (https://semver.org/)
 version: 0.6.0
-
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
 appVersion: "v1.4"
+
+icon: https://avatars.githubusercontent.com/u/57720972
+
+sources:
+  - https://github.com/rh-intelligent-application-practice/helm-charts/tree/main/charts/odh
+
+maintainers:
+  - name: RH Intelligent Application Practice
+    email: na-cs-intelligent-application-practice@redhat.com
+  - name: Trevor Royer
+    email: troyer@redhat.com
