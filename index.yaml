@@ -3,9 +3,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2022-11-14T17:55:55.851361171Z"
+    created: "2022-11-14T18:43:42.759456286Z"
     description: A Helm chart for Kafdrop
-    digest: 7a557b2d80ca9b8d4b5ac73fb94cde47a9b66b7fee50c6cf87babf56181bb504
+    digest: bf3db37bfd344a3cbac58ab1a608e8373c8fadc9614366c73aa82992e714a86a
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -14,9 +14,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-11-14T17:55:55.851583274Z"
+    created: "2022-11-14T18:43:42.759850891Z"
     description: A Helm chart for Kubernetes
-    digest: e6f2ffcda0a83bca20ff18f52c6e7fbbd099631d46ab5918da9d8e2cf6766d07
+    digest: 0b8a5dcb4b4746a98ced6b788e16dd32f5ecc4d99a8e9bd9377ca32f963916c6
     name: kafka
     type: application
     urls:
@@ -24,10 +24,10 @@ entries:
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2022-11-14T17:55:55.85209998Z"
+    created: "2022-11-14T18:43:42.760528601Z"
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: cee5dabfcedcf309af6fd9a1255769cb5b91b5ba1ef80368fc0a2c649120d8ae
+    digest: 0e7e76e2434a5082e76f961aca6829ad82686a9859c21c9a6ec3f818b48f99d8
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
@@ -37,11 +37,19 @@ entries:
   odh:
   - apiVersion: v2
     appVersion: v1.4
-    created: "2022-11-14T17:55:55.852492384Z"
+    created: "2022-11-14T18:43:42.762272025Z"
     description: A Helm chart for configuring OpenDataHub on OpenShift
-    digest: 6a61dfa77fe7bf8a433a78df671094b604d9deb2c89bdfd5574d02e67bdaef21
+    digest: d434d03b360a635c91e9066416d974a1dcb4a691a5e6b7abc7828ab84e58c4c4
+    icon: https://avatars.githubusercontent.com/u/57720972
     kubeVersion: '>= 1.19.0'
+    maintainers:
+    - email: na-cs-intelligent-application-practice@redhat.com
+      name: RH Intelligent Application Practice
+    - email: troyer@redhat.com
+      name: Trevor Royer
     name: odh
+    sources:
+    - https://github.com/rh-intelligent-application-practice/helm-charts/tree/main/charts/odh
     type: application
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.6.0.tgz
@@ -68,4 +76,4 @@ entries:
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.4.3.tgz
     version: 0.4.3
-generated: "2022-11-14T17:55:55.850552262Z"
+generated: "2022-11-14T18:43:42.757426857Z"
