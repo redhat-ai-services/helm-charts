@@ -32,6 +32,10 @@ dependencies:
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
+## Source Code
+
+* <https://github.com/rh-intelligent-application-practice/helm-charts/tree/main/charts/odh>
+
 ## Requirements
 
 Kubernetes: `>= 1.19.0`
