@@ -1,5 +1,5 @@
 nameOverride: ""
 fullnameOverride: ""
-topics:
-  - name: "bradys-topic"
-  - name: "bradys-topic-2"
+topics: []
+#   - name: "topic-1"
+#   - name: "topic-2"
