@@ -1,7 +1,11 @@
 {{ template "chart.header" . }}
 {{ template "chart.description" . }}
 
-The ml-gitops-tenant helm chart deploys the following namespaces:
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+## Resources Created
+
+This helm chart deploys the following namespaces:
 
 | Namespace | Description | Default Permissions |
 | ----------- | ----------- | ----------- |
@@ -12,7 +16,11 @@ The ml-gitops-tenant helm chart deploys the following namespaces:
 | my-tenant-test   | This namespace is the test namespace used for application components. | View |
 | my-tenant-prod   | This namespace is the production namespace used for application components. | View |
 
-{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+This helm chart will create the following group to grant permissions to the various namespaces:
+
+| Group |
+| ----- |
+| my-tenant-admins |
 
 ## Installing the Chart
 
