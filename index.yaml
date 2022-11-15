@@ -3,9 +3,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2022-11-15T22:12:06.700151917Z"
+    created: "2022-11-15T22:13:41.267407359Z"
     description: A Helm chart for Kafdrop
-    digest: 21ad42b80e7adee0333db09dcb6f08864c2c22ee1351d76a889e0e580f28467d
+    digest: 47f7748b83bbd52c34de7920654cab1905c67495858e9dadc9b45202d311c353
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -14,15 +14,26 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-11-15T22:12:06.70042564Z"
+    created: "2022-11-15T22:13:41.267668562Z"
     description: A Helm chart for Kubernetes
-    digest: 3cde4351e8b21e9362a36efb83e96db69d4d9df6744dd7551f4a767918d00576
+    digest: 7521759523fbe34cd993c4bcab85f314e5ec12278e930c7f0efeab7a5567999d
     name: kafka
     type: application
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/kafka-0.1.0.tgz
     version: 0.1.0
   ml-gitops-tenant:
+  - apiVersion: v2
+    created: "2022-11-15T22:13:41.268299868Z"
+    description: A Helm chart to manage a multi-tiered gitops structure for a data
+      science project.
+    digest: 9428cb4b7606eb34807b6e9bf44ce8a88023054e485671848d0f58b02346e1bb
+    kubeVersion: '>= 1.19.0'
+    name: ml-gitops-tenant
+    type: application
+    urls:
+    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.3.tgz
+    version: 0.2.3
   - apiVersion: v2
     created: "2022-11-15T22:12:06.70101559Z"
     description: A Helm chart to manage a multi-tiered gitops structure for a data
@@ -59,9 +70,9 @@ entries:
   odh:
   - apiVersion: v2
     appVersion: v1.4
-    created: "2022-11-15T22:12:06.701692447Z"
+    created: "2022-11-15T22:13:41.268854073Z"
     description: A Helm chart for configuring OpenDataHub on OpenShift
-    digest: 631cd443e8e75be526cbd5e6ed2b8c07c9bde1c1331f26da8249f26ccb3cc402
+    digest: c9a283604e7173c1e4c957b4fd75747fbf648f701d245c3b5fa2d117d1b868ab
     icon: https://avatars.githubusercontent.com/u/57720972
     kubeVersion: '>= 1.19.0'
     maintainers:
@@ -98,4 +109,4 @@ entries:
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.4.3.tgz
     version: 0.4.3
-generated: "2022-11-15T22:12:06.699264742Z"
+generated: "2022-11-15T22:13:41.266471051Z"
