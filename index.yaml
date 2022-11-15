@@ -3,9 +3,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2022-11-15T20:14:33.960834452Z"
+    created: "2022-11-15T20:15:27.458313423Z"
     description: A Helm chart for Kafdrop
-    digest: 5a3c3730ee165833f097c2f0f8ec8315664df3a07cc9e7b3eb10f14d7e4dd095
+    digest: a926ebd84e80656564e2d35e757d4fb9b190e131807df3b3c93accb24765b05b
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -14,9 +14,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-11-15T20:14:33.961208608Z"
+    created: "2022-11-15T20:15:27.458551329Z"
     description: A Helm chart for Kubernetes
-    digest: 89f90573fb443b37bef0238cd1f44701596e2c6bc578c313a891b4bc1e19a8a8
+    digest: 6fffcacbc804da58ee4619102a7691b8f134bd8b1c4caca80e5c2accf553a1f2
     name: kafka
     type: application
     urls:
@@ -24,10 +24,10 @@ entries:
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2022-11-15T20:14:33.962898407Z"
+    created: "2022-11-15T20:15:27.459773356Z"
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: a4dd5884aac1db36cb3a4d0cc3dd037d15a0e52067e35f0f3dc267a91a0ee9be
+    digest: b7d52ff72c0cafe50add704e777c3fa9cd5f76b1ac83d7c3fb13ccf1197cfc88
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
@@ -37,9 +37,9 @@ entries:
   odh:
   - apiVersion: v2
     appVersion: v1.4
-    created: "2022-11-15T20:14:33.963534531Z"
+    created: "2022-11-15T20:15:27.460768278Z"
     description: A Helm chart for configuring OpenDataHub on OpenShift
-    digest: cabf79388d14764c96fde73efd47c1624f717d93402e0ac14fa522790d463985
+    digest: 471cca915b4d0621c9ed57ccd3eb0f99485ccbe4fce889ca71f60ff03677f834
     icon: https://avatars.githubusercontent.com/u/57720972
     kubeVersion: '>= 1.19.0'
     maintainers:
@@ -76,4 +76,4 @@ entries:
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.4.3.tgz
     version: 0.4.3
-generated: "2022-11-15T20:14:33.959307733Z"
+generated: "2022-11-15T20:15:27.457501105Z"
