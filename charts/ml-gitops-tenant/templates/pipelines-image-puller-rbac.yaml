@@ -17,6 +17,7 @@ subjects:
   name: default
   namespace: {{ include "ml-gitops-tenant.dev-name" . }}
 {{- end }}
+
 {{- if .Values.testNamespace.create -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -35,6 +36,7 @@ subjects:
   name: default
   namespace: {{ include "ml-gitops-tenant.test-name" . }}
 {{- end }}
+
 {{- if .Values.prodNamespace.create -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
