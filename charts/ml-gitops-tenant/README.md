@@ -5,7 +5,7 @@ A Helm chart to manage a multi-tiered gitops structure for a data science projec
 The ml-gitops-tenant helm chart deploys the following namespaces:
 
 | Namespace | Description | Default Permissions |
-| ----------- | ----------- |
+| ----------- | ----------- | ----------- |
 | <my-tenant>-gitops | This namespace will contain an ArgoCD instance that manages deploying resources to all of the other namespaces. | Admin |
 | <my-tenant>-pipelines   | This namespace will host Tekton / OpenShift Pipeline resources. | Admin |
 | <my-tenant>-datascience   | This namespace will host data science related resources used for model training. | Admin |
