@@ -2,7 +2,11 @@
 
 A Helm chart to manage a multi-tiered gitops structure for a data science project.
 
-The ml-gitops-tenant helm chart deploys the following namespaces:
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+
+## Resources Created
+
+This helm chart deploys the following namespaces:
 
 | Namespace | Description | Default Permissions |
 | ----------- | ----------- | ----------- |
@@ -13,7 +17,11 @@ The ml-gitops-tenant helm chart deploys the following namespaces:
 | my-tenant-test   | This namespace is the test namespace used for application components. | View |
 | my-tenant-prod   | This namespace is the production namespace used for application components. | View |
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+This helm chart will create the following group to grant permissions to the various namespaces:
+
+| Group |
+| ----- |
+| my-tenant-admins |
 
 ## Installing the Chart
 
