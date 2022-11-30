@@ -2,7 +2,7 @@
 
 A Helm chart to manage a multi-tiered gitops structure for a data science project.
 
-![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.4](https://img.shields.io/badge/Version-0.2.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Resources Created
 
@@ -47,7 +47,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "ml-gitops-tenant"
-    version: "0.2.3"
+    version: "0.2.4"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
@@ -82,7 +82,7 @@ Kubernetes: `>= 1.19.0`
 | pipelinesNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the pipelines namespace |
 | pipelinesNamespace.annotations | object | `{}` | Additional annotations to be added to the pipelines namespace |
 | pipelinesNamespace.create | bool | `true` | Enable the creation of the pipelines namespace |
-| pipelinesNamespace.labels | object | `{}` | Additional labels to be added to the pipelines namespace |
+| pipelinesNamespace.labels | object | `{"operator.tekton.dev/prune.keep-since":7200,"operator.tekton.dev/prune.resources":"taskrun, pipelinerun"}` | Additional labels to be added to the pipelines namespace |
 | pipelinesNamespace.nameOverride | string | `""` | String to override the name of the pipelines namespace |
 | prodNamespace.adminGroupRole | string | `"view"` | Cluster role granting permissions admins group in the prod namespace |
 | prodNamespace.annotations | object | `{}` | Additional annotations to be added to the prod namespace |
