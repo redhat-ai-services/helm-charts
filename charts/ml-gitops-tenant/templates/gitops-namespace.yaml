@@ -9,7 +9,7 @@ metadata:
   {{- end }}
   labels:
     {{- include "ml-gitops-tenant.labels" . | nindent 4 }}
-  {{- with .Values.gitopsNamespace.annotations }}
+  {{- with .Values.gitopsNamespace.labels }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}
