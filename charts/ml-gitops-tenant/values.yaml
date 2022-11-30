@@ -25,7 +25,9 @@ pipelinesNamespace:
   # -- Additional annotations to be added to the pipelines namespace
   annotations: {}
   # -- Additional labels to be added to the pipelines namespace
-  labels: {}
+  labels:
+    operator.tekton.dev/prune.resources: "taskrun, pipelinerun"
+    operator.tekton.dev/prune.keep-since: 7200
 
 datascienceNamespace:
   # -- Enable the creation of the data science namespace
