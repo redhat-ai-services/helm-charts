@@ -29,7 +29,7 @@ appVersion: "1.16.0"
 dependencies:
   - name: "argocd"
     version: "0.3.7"
-    repository: "https://rh-iap.github.io/helm-charts/"
+    repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
 ## Requirements
