@@ -2,16 +2,16 @@
 
 A Helm chart for Kubernetes
 
-![Version: 0.3.6](https://img.shields.io/badge/Version-0.3.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.6](https://img.shields.io/badge/AppVersion-1.6-informational?style=flat-square)
+![Version: 0.3.7](https://img.shields.io/badge/Version-0.3.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installing the Chart
 
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add strangiato https://strangiato.github.io/helm-charts/
-helm repo update strangiato
-helm install [release-name] strangiato/argocd
+helm repo add rh-iap https://rh-intelligent-application-practice.github.io/helm-charts/
+helm repo update rh-iap
+helm install [release-name] rh-iap/argocd
 ```
 
 To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
@@ -28,8 +28,8 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "argocd"
-    version: "0.3.6"
-    repository: "https://strangiato.github.io/helm-charts/"
+    version: "0.3.7"
+    repository: "https://rh-iap.github.io/helm-charts/"
 ```
 
 ## Requirements
@@ -40,59 +40,37 @@ Kubernetes: `>= 1.19.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| applicationSet.resources.limits.cpu | string | `"2"` |  |
-| applicationSet.resources.limits.memory | string | `"1Gi"` |  |
-| applicationSet.resources.requests.cpu | string | `"250m"` |  |
-| applicationSet.resources.requests.memory | string | `"512Mi"` |  |
-| controller.resources.limits.cpu | string | `"2000m"` |  |
-| controller.resources.limits.memory | string | `"2048Mi"` |  |
-| controller.resources.requests.cpu | string | `"250m"` |  |
-| controller.resources.requests.memory | string | `"1024Mi"` |  |
-| fullnameOverride | string | `""` |  |
-| grafana.enabled | bool | `false` |  |
-| grafana.ingress.enabled | bool | `false` |  |
-| grafana.route.enabled | bool | `false` |  |
+| applicationSet.resources | object | `{"limits":{"cpu":"2","memory":"1Gi"},"requests":{"cpu":"250m","memory":"512Mi"}}` | Resource requests and limits for the applicationSet pod |
+| controller.resources | object | `{"limits":{"cpu":"2000m","memory":"2048Mi"},"requests":{"cpu":"250m","memory":"1024Mi"}}` | Resource requests and limits for the controller pod |
+| extraConfig | object | `{}` | Extra config options |
+| fullnameOverride | string | `""` | String to fully override fullname template |
+| grafana.enabled | bool | `false` | Enable grafana instance |
+| grafana.ingress.enabled | bool | `false` | Enable access via ingress |
+| grafana.route.enabled | bool | `false` | Enable access via OpenShift route |
 | ha.enabled | bool | `false` |  |
-| ha.resources.limits.cpu | string | `"500m"` |  |
-| ha.resources.limits.memory | string | `"256Mi"` |  |
-| ha.resources.requests.cpu | string | `"250m"` |  |
-| ha.resources.requests.memory | string | `"128Mi"` |  |
-| nameOverride | string | `""` |  |
-| notifications.enabled | bool | `false` |  |
-| projects[0].clusterResourceWhitelist | list | `[]` |  |
-| projects[0].description | string | `""` |  |
-| projects[0].destinations | list | `[]` |  |
-| projects[0].name | string | `"default"` |  |
-| projects[0].sourceRepos | list | `[]` |  |
-| prometheus.enabled | bool | `false` |  |
-| prometheus.ingress.enabled | bool | `false` |  |
-| prometheus.route.enabled | bool | `false` |  |
-| rbac.policy | string | `"g, system:cluster-admins, role:admin"` |  |
-| rbac.scopes | string | `"[groups]"` |  |
-| redis.resources.limits.cpu | string | `"500m"` |  |
-| redis.resources.limits.memory | string | `"256Mi"` |  |
-| redis.resources.requests.cpu | string | `"250m"` |  |
-| redis.resources.requests.memory | string | `"128Mi"` |  |
-| repo.resources.limits.cpu | string | `"1"` |  |
-| repo.resources.limits.memory | string | `"1Gi"` |  |
-| repo.resources.requests.cpu | string | `"250m"` |  |
-| repo.resources.requests.memory | string | `"256Mi"` |  |
-| repos | array/object | `[]` |  |
-| server.autoscale.enabled | bool | `false` |  |
-| server.grpc.ingress.enabled | bool | `false` |  |
-| server.ingress.enabled | bool | `false` |  |
-| server.resources.limits.cpu | string | `"500m"` |  |
-| server.resources.limits.memory | string | `"256Mi"` |  |
-| server.resources.requests.cpu | string | `"125m"` |  |
-| server.resources.requests.memory | string | `"128Mi"` |  |
-| server.route.enabled | bool | `true` |  |
+| ha.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"250m","memory":"128Mi"}}` | Resource requests and limits |
+| nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
+| notifications.enabled | bool | `true` | Enable notifications plugin |
+| projects | array/object | `[{"clusterResourceWhitelist":[],"description":"","destinations":[],"name":"default","sourceRepos":[]}]` | An array of projects objects to be configured within ArgoCD |
+| prometheus.enabled | bool | `false` | Enable prometheus instance |
+| prometheus.ingress.enabled | bool | `false` | Enable access via ingress |
+| prometheus.route.enabled | bool | `false` | Enable access via OpenShift route |
+| rbac.policy | string | `"g, system:cluster-admins, role:admin"` | RBAC mapping for roles within ArgoCD |
+| rbac.scopes | string | `"[groups]"` | RBAC objects that can be utilized within the policy mapping |
+| redis.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"250m","memory":"128Mi"}}` | Resource requests and limits for the redis pods |
+| repo.resources | object | `{"limits":{"cpu":"1","memory":"1Gi"},"requests":{"cpu":"250m","memory":"256Mi"}}` | Resource requests and limits for the repo pod |
+| repos | array/object | `[]` | An array of repos objects to be configured within ArgoCD |
+| resourceCustomizations | object | `{}` | Resource customizations for ArgoCD instance |
+| resourceExclusions | list | `[{"apiGroups":["tekton.dev"],"clusters":["*"],"kinds":["TaskRun","PipelineRun"]}]` | Resource exclusion list for ArgoCD instance |
+| server.autoscale.enabled | bool | `false` | Enable autoscaling for server pod |
+| server.grcp.ingress.enabled | bool | `false` | Enable grcp ingress option |
+| server.ingress.enabled | bool | `false` | Enable access via ingress |
+| server.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"125m","memory":"128Mi"}}` | Resource requests and limits for the server pod |
+| server.route.enabled | bool | `true` | Enable access via OpenShift route |
 | server.service.type | string | `""` |  |
-| sso.dex.openShiftOAuth | bool | `true` |  |
-| sso.dex.resources.limits.cpu | string | `"500m"` |  |
-| sso.dex.resources.limits.memory | string | `"256Mi"` |  |
-| sso.dex.resources.requests.cpu | string | `"250m"` |  |
-| sso.dex.resources.requests.memory | string | `"128Mi"` |  |
-| sso.provider | string | `"dex"` |  |
+| sso.dex.openShiftOAuth | bool | `true` | Enable login via OpenShiftOAuth |
+| sso.dex.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"250m","memory":"128Mi"}}` | Resource requests and limits for the dex pod |
+| sso.provider | string | `"dex"` | SSO provider |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)
