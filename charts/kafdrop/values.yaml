@@ -16,7 +16,7 @@ kafka:
 
 serviceAccount:
   # Specifies whether a service account should be created
-  # -- Enable creation of ServiceAccount for MLFlow Server pod
+  # -- Enable creation of ServiceAccount for application pod
   create: true
   # Annotations to add to the service account
   # -- Additional custom annotations for the ServiceAccount
@@ -53,9 +53,9 @@ service:
   port: 9000
 
 openshiftOauth: 
-  # -- Secures MLFlow with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`.
+  # -- Secures application with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`.
   enabled: true
-  # -- Enable access to MLFlow using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to MLFlow using the API.  
+  # -- Enable access to application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to MLFlow using the API.  
   # Warning: This feature requires cluster admin to install.
   enableBearerTokenAccess: false
   resources: {}
@@ -100,6 +100,7 @@ route:
   # -- Additional custom annotations for the route
   annotations: {}
 
+# -- The resource requests/limits for the application pod
 resources:
   requests:
     cpu: 1m
