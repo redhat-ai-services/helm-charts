@@ -1,7 +1,7 @@
-{{ template "kafdrop.header" . }}
-{{ template "kafdrop.description" . }}
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
 
-{{ template "kafdrop.versionBadge" . }}{{ template "kafdrop.typeBadge" . }}{{ template "kafdrop.appVersionBadge" . }}
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
 
 ## Installing the Chart
 
@@ -10,7 +10,7 @@ To access charts from this from the cli repository add it:
 ```sh
 helm repo add rh-iap https://rh-intelligent-application-practice.github.io/helm-charts/
 helm repo update rh-iap
-helm install [release-name] rh-iap/{{ template "kafdrop.name" . }}
+helm install [release-name] rh-iap/{{ template "chart.name" . }}
 ```
 
 To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
@@ -26,15 +26,15 @@ version: 0.1.0
 appVersion: "1.16.0"
 
 dependencies:
-  - name: "{{ template "kafdrop.name" . }}"
-    version: "{{ template "kafdrop.version" . }}"
+  - name: "{{ template "chart.name" . }}"
+    version: "{{ template "chart.version" . }}"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
-{{ template "kafdrop.sourcesSection" . }}
+{{ template "chart.sourcesSection" . }}
 
-{{ template "kafdrop.requirementsSection" . }}
+{{ template "chart.requirementsSection" . }}
 
-{{ template "kafdrop.valuesSection" . }}
+{{ template "chart.valuesSection" . }}
 
 {{ template "helm-docs.versionFooter" . }}
