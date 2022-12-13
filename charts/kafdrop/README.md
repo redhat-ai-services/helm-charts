@@ -63,13 +63,12 @@ dependencies:
 | mountProtoDesc.hostPath | string | `nil` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
-| openshiftOauth.enableBearerTokenAccess | bool | `false` | Enable access to MLFlow using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to MLFlow using the API.   Warning: This feature requires cluster admin to install. |
-| openshiftOauth.enabled | bool | `true` | Secures MLFlow with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`. |
+| openshiftOauth.enableBearerTokenAccess | bool | `false` | Enable access to application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to MLFlow using the API.   Warning: This feature requires cluster admin to install. |
+| openshiftOauth.enabled | bool | `true` | Secures application with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`. |
 | openshiftOauth.resources | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
 | replicaCount | int | `1` |  |
-| resources.requests.cpu | string | `"1m"` |  |
-| resources.requests.memory | string | `"128Mi"` |  |
+| resources | object | `{"requests":{"cpu":"1m","memory":"128Mi"}}` | The resource requests/limits for the application pod |
 | route.annotations | object | `{}` | Additional custom annotations for the route |
 | route.enabled | bool | `true` | Enable creation of the OpenShift Route object |
 | route.host | string | Set by OpenShift | The hostname for the route |
@@ -83,7 +82,7 @@ dependencies:
 | service.port | int | `9000` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` | Additional custom annotations for the ServiceAccount |
-| serviceAccount.create | bool | `true` | Enable creation of ServiceAccount for MLFlow Server pod |
+| serviceAccount.create | bool | `true` | Enable creation of ServiceAccount for application pod |
 | serviceAccount.name | string | fullname template | The name of the ServiceAccount to use. |
 | tolerations | list | `[]` |  |
 
