@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   argocd:
   - apiVersion: v2
-    created: "2022-12-13T16:26:23.625653357Z"
+    created: "2022-12-13T16:28:39.644000677Z"
     description: A Helm chart for Kubernetes
-    digest: a0c5c211377a166a8a8d8adb25b0a2e7c6223fb19e5d1a62ec5d9cc25af77806
+    digest: a2e996161530f3d131c5c24332c1c373c824d95a219c829cbb34902b19d22dce
     kubeVersion: '>= 1.19.0'
     name: argocd
     type: application
@@ -14,9 +14,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2022-12-13T16:26:23.626832374Z"
+    created: "2022-12-13T16:28:39.644945792Z"
     description: A Helm chart for Kafdrop
-    digest: ae033e4f2fe8211dcf9cb25daff8bde3fc33d685af81a82830d82709278e0d97
+    digest: 9fabf811aa3ae2cff6d566505914c550b1eb954f518365a2ce8082740e963b37
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -25,9 +25,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-12-13T16:26:23.627073078Z"
+    created: "2022-12-13T16:28:39.645240796Z"
     description: A Helm chart for Kubernetes
-    digest: 3cfd1ffa739dc2e2d63f5c4dbb9f50e49f3f46e0fb861fff386b68333371527b
+    digest: f3849700035cbb310651dd19b8cf2d84739c0152df02a22b7fbae1667bfe5531
     name: kafka
     type: application
     urls:
@@ -35,10 +35,10 @@ entries:
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2022-12-13T16:26:23.627587085Z"
+    created: "2022-12-13T16:28:39.645917706Z"
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: 804443a03ef563453f5ba670e2270153747ae3a62a1a6752b1bc65b68af280a9
+    digest: 282d2e427328da6f0ebc385d108601e57877cfe4a16f39c125dee82715644d27
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
@@ -92,9 +92,9 @@ entries:
   odh:
   - apiVersion: v2
     appVersion: v1.4
-    created: "2022-12-13T16:26:23.628063992Z"
+    created: "2022-12-13T16:28:39.646505915Z"
     description: A Helm chart for configuring OpenDataHub on OpenShift
-    digest: 69d59d273b118e99be22cd90b627fabce17ed326ee86665a1866d9a3dabaa18f
+    digest: 815610cfa1e2fe369e1a17fa549f774067c009695202af419e280d3b247d2a91
     icon: https://avatars.githubusercontent.com/u/57720972
     kubeVersion: '>= 1.19.0'
     maintainers:
@@ -131,4 +131,4 @@ entries:
     urls:
     - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.4.3.tgz
     version: 0.4.3
-generated: "2022-12-13T16:26:23.623991633Z"
+generated: "2022-12-13T16:28:39.642141749Z"
