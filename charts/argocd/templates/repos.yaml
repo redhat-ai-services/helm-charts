@@ -1,0 +1,15 @@
+{{- range $repo := .Values.repos }}
+kind: Secret
+apiVersion: v1
+metadata:
+  name: {{ $repo.name }}
+  labels:
+    argocd.argoproj.io/secret-type: repository
+    {{- include "argocd.labels" $ | nindent 4 }}
+data:
+  type: {{ $repo.type | b64enc }}
+  url: {{ $repo.url | b64enc }}
+  username: {{ $repo.username | b64enc }}
+  password: {{ $repo.password | b64enc }}
+type: Opaque
+{{- end }}

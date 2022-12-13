@@ -1,0 +1,167 @@
+# -- String to partially override fullname template (will maintain the release name)
+nameOverride: ""
+
+# -- String to fully override fullname template
+fullnameOverride: ""
+
+# -- (array/object) An array of repos objects to be configured within ArgoCD
+repos: []
+  # - name: private-repo-example
+  #   type: git
+  #   url: https://github.com/private/repo.git
+  #   username: username
+  #   password: password
+
+# -- (array/object) An array of projects objects to be configured within ArgoCD
+projects:
+  - name: default
+    description: ""
+    destinations: []
+      # - namespace: '*'
+      #   server: '*'
+    clusterResourceWhitelist: []
+      # - group: '*'
+      #   kind: '*'
+    sourceRepos: []
+      # - '*'
+
+rbac: 
+  # -- RBAC mapping for roles within ArgoCD
+  policy: |-
+    g, system:cluster-admins, role:admin
+  # -- RBAC objects that can be utilized within the policy mapping
+  scopes: '[groups]'
+
+# -- Extra config options
+extraConfig: {}
+  # accounts.pipeline: apiKey
+
+# -- Resource customizations for ArgoCD instance
+resourceCustomizations: {}
+
+# -- Resource exclusion list for ArgoCD instance
+resourceExclusions:
+  - apiGroups:
+      - tekton.dev
+    clusters:
+      - '*'
+    kinds:
+      - TaskRun
+      - PipelineRun
+
+server:
+  autoscale:
+    # -- Enable autoscaling for server pod
+    enabled: false
+  grcp:
+    ingress:
+      # -- Enable grcp ingress option
+      enabled: false
+  ingress:
+    # -- Enable access via ingress
+    enabled: false
+  route:
+    # -- Enable access via OpenShift route
+    enabled: true
+  service:
+    type: ''
+  # -- Resource requests and limits for the server pod
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 125m
+      memory: 128Mi
+
+grafana:
+  # -- Enable grafana instance
+  enabled: false
+  ingress:
+    # -- Enable access via ingress
+    enabled: false
+  route:
+    # -- Enable access via OpenShift route
+    enabled: false
+
+prometheus:
+  # -- Enable prometheus instance
+  enabled: false
+  ingress:
+    # -- Enable access via ingress
+    enabled: false
+  route:
+    # -- Enable access via OpenShift route
+    enabled: false
+
+notifications:
+  # -- Enable notifications plugin
+  enabled: true
+
+
+
+sso:
+  dex:
+    # -- Enable login via OpenShiftOAuth
+    openShiftOAuth: true
+    # -- Resource requests and limits for the dex pod
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  # -- SSO provider
+  provider: dex
+
+applicationSet:
+  # -- Resource requests and limits for the applicationSet pod
+  resources:
+    limits:
+      cpu: '2'
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+repo:
+  # -- Resource requests and limits for the repo pod
+  resources:
+    limits:
+      cpu: '1'
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+ha:
+  enabled: false
+  # -- Resource requests and limits
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 128Mi
+
+redis:
+  # -- Resource requests and limits for the redis pods
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 128Mi
+
+controller:
+  # -- Resource requests and limits for the controller pod
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2048Mi
+    requests:
+      cpu: 250m
+      memory: 1024Mi
