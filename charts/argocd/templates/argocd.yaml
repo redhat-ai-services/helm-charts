@@ -9,9 +9,9 @@ spec:
     {{- with .Values.server }}
     autoscale:
       enabled: {{ .autoscale.enabled }}
-    grpc:
+    grcp:
       ingress:
-        enabled: {{ .grpc.ingress.enabled }}
+        enabled: {{ .grcp.ingress.enabled }}
     ingress:
       enabled: {{ .ingress.enabled }}
     resources:
