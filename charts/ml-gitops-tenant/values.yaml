@@ -28,6 +28,12 @@ pipelinesNamespace:
   labels:
     operator.tekton.dev/prune.resources: "taskrun, pipelinerun"
     operator.tekton.dev/prune.keep-since: 7200
+  # -- Option to create a token for the ArgoCD instance
+  argocdPipelinesUserJob:
+    create: true
+    image: 
+      repository: registry.redhat.io/openshift-gitops-1/argocd-rhel8
+      tag: v1.5.0
 
 datascienceNamespace:
   # -- Enable the creation of the data science namespace
