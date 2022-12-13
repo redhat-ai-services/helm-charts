@@ -1,0 +1,33 @@
+{{- range $project := .Values.projects }}
+---
+kind: AppProject
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: {{ $project.name }}
+  labels:
+    {{- include "argocd.labels" $ | nindent 4 }}
+spec:
+  {{- if $project.description }}
+  description: {{ $project.description }}
+  {{- end}}
+  clusterResourceWhitelist:
+  {{- if $project.clusterResourceWhitelist }}
+    {{- toYaml $project.clusterResourceWhitelist | nindent 4 }}
+  {{- else }}
+    - group: '*'
+      kind: '*'
+  {{- end }}
+  destinations:
+  {{- if $project.destinations }}
+    {{- toYaml $project.destinations | nindent 4 }}
+  {{- else }}
+    - namespace: '*'
+      server: '*'
+  {{- end }}
+  sourceRepos:
+  {{- if $project.sourceRepos }}
+    {{- toYaml $project.sourceRepos | nindent 4 }}
+  {{- else }}
+    - '*'
+  {{- end }}
+{{- end }}

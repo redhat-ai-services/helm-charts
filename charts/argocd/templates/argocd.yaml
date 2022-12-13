@@ -1,0 +1,101 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: {{ include "argocd.fullname" . }}
+  labels:
+    {{- include "argocd.labels" . | nindent 4 }}
+spec:
+  server:
+    {{- with .Values.server }}
+    autoscale:
+      enabled: {{ .autoscale.enabled }}
+    grpc:
+      ingress:
+        enabled: {{ .grpc.ingress.enabled }}
+    ingress:
+      enabled: {{ .ingress.enabled }}
+    resources:
+      {{- toYaml .resources | nindent 6 }}
+    route:
+      enabled: {{ .route.enabled }}
+    service:
+      type: ''
+    {{- end }}
+  grafana:
+    {{- with .Values.grafana }}
+    enabled: {{ .enabled }}
+    ingress:
+      enabled: {{ .ingress.enabled }}
+    route:
+      enabled: {{ .route.enabled }}
+    {{- end }}
+  notifications:
+    {{- with .Values.notifications }}
+    enabled: {{ .enabled }}
+    {{- end }}
+  prometheus:
+    {{- with .Values.prometheus }}
+    enabled: {{ .enabled }}
+    ingress:
+      enabled: {{ .ingress.enabled }}
+    route:
+      enabled: {{ .route.enabled }}
+    {{- end}}
+  sso:
+    {{- with .Values.sso }}
+    provider: {{ .provider }}
+    {{- if eq .provider "dex" }}
+    dex:
+      openShiftOAuth: {{ .dex.openShiftOAuth }}
+      resources:
+        {{- toYaml .dex.resources | nindent 8 }}
+    {{- end }}
+    {{- end }}
+  applicationSet:
+    {{- with .Values.applicationSet }}
+    resources:
+        {{- toYaml .resources | nindent 8 }}
+    {{- end }}
+  rbac:
+    {{- with .Values.rbac }}
+    defaultPolicy: ''
+    policy: |-
+      {{ .policy | indent 6 | trim }}
+    scopes: {{ .scopes | quote }}
+    {{- end }}
+  repo:
+    {{- with .Values.repo }}
+    resources:
+      {{- toYaml .resources | nindent 6 }}
+    {{- end }}
+
+  ha:
+    {{- with .Values.ha }}
+    enabled: {{ .enabled }}
+    resources:
+      {{- toYaml .resources | nindent 6 }}
+    {{- end }}
+  tls:
+    ca: {}
+  redis:
+    {{- with .Values.redis }}
+    resources:
+      {{- toYaml .resources | nindent 6 }}
+    {{- end }}
+  controller:
+    {{- with .Values.controller }}
+    resources:
+      {{- toYaml .resources | nindent 6 }}
+    {{- end }}
+  {{- if .Values.extraConfig }}
+  extraConfig:
+    {{- toYaml .Values.extraConfig | nindent 4 }}
+  {{- end }}
+  {{- if .Values.resourceCustomizations }}
+  resourceCustomizations: |
+    {{- toYaml .Values.resourceCustomizations | nindent 4 }}
+  {{- end }}
+  {{- if .Values.resourceExclusions }}
+  resourceExclusions: |
+    {{- toYaml .Values.resourceExclusions | nindent 4 }}
+  {{- end }}

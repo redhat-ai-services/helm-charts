@@ -1,0 +1,146 @@
+# -- String to partially override fullname template (will maintain the release name)
+nameOverride: ""
+
+# -- String to fully override fullname template
+fullnameOverride: ""
+
+# -- (array/object) An array of repos objects to be configured within ArgoCD
+repos: []
+  # - name: private-repo-example
+  #   type: git
+  #   url: https://github.com/private/repo.git
+  #   username: username
+  #   password: password
+
+# -- (array/object) An array of projects objects to be configured within ArgoCD
+projects:
+  - name: default
+    description: ""
+    destinations: []
+      # - namespace: '*'
+      #   server: '*'
+    clusterResourceWhitelist: []
+      # - group: '*'
+      #   kind: '*'
+    sourceRepos: []
+      # - '*'
+
+rbac: 
+  # -- RBAC mapping for roles within ArgoCD
+  policy: |-
+    g, system:cluster-admins, role:admin
+  # -- RBAC objects that can be utilized within the policy mapping
+  scopes: '[groups]'
+
+# -- Extra config options
+extraConfig: {}
+  # accounts.pipeline: apiKey
+
+# -- Resource customizations for ArgoCD instance
+resourceCustomizations: {}
+
+# -- Resource exclusion list for ArgoCD instance
+resourceExclusions:
+  - apiGroups:
+      - tekton.dev
+    clusters:
+      - '*'
+    kinds:
+      - TaskRun
+      - PipelineRun
+
+server:
+  autoscale:
+    enabled: false
+  grpc:
+    ingress:
+      enabled: false
+  ingress:
+    enabled: false
+  route:
+    enabled: true
+  service:
+    type: ''
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 125m
+      memory: 128Mi
+
+grafana:
+  enabled: false
+  ingress:
+    enabled: false
+  route:
+    enabled: false
+
+notifications:
+  enabled: true
+
+prometheus:
+  enabled: false
+  ingress:
+    enabled: false
+  route:
+    enabled: false
+
+sso:
+  dex:
+    openShiftOAuth: true
+    # -- resource requests and limits for the dex pod
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  provider: dex
+
+applicationSet:
+  resources:
+    limits:
+      cpu: '2'
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+repo:
+  resources:
+    limits:
+      cpu: '1'
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+ha:
+  enabled: false
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 128Mi
+
+redis:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 128Mi
+
+controller:
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2048Mi
+    requests:
+      cpu: 250m
+      memory: 1024Mi
