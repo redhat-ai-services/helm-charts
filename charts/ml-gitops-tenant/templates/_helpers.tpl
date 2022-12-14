@@ -18,57 +18,38 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+{{- define "ml-gitops-tenant.namespace" -}}
+{{- if .namespace.nameOverride }}
+{{- .namespace.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $fullname := include "ml-gitops-tenant.fullname" .context }}
+{{- printf "%s-%s"  $fullname .namespace.nameSuffix  }}
+{{- end }}
+{{- end }}
+
 {{- define "ml-gitops-tenant.gitops-name" -}}
-{{- if .Values.gitopsNamespace.nameOverride }}
-{{- .Values.gitopsNamespace.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- range $namespace := .Values.namespaces -}}
+{{- if eq $namespace.role "gitops" }}
+{{- if $namespace.nameOverride }}
+{{- $namespace.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $fullname := include "ml-gitops-tenant.fullname" . }}
-{{- printf "%s-%s"  $fullname "gitops"  }}
+{{- $fullname := include "ml-gitops-tenant.fullname" $ }}
+{{- printf "%s-%s"  $fullname $namespace.nameSuffix  }}
 {{- end }}
 {{- end }}
-
-{{- define "ml-gitops-tenant.dev-name" -}}
-{{- if .Values.devNamespace.nameOverride }}
-{{- .Values.devNamespace.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $fullname := include "ml-gitops-tenant.fullname" . }}
-{{- printf "%s-%s"  $fullname "dev"  }}
-{{- end }}
-{{- end }}
-
-{{- define "ml-gitops-tenant.test-name" -}}
-{{- if .Values.testNamespace.nameOverride }}
-{{- .Values.testNamespace.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $fullname := include "ml-gitops-tenant.fullname" . }}
-{{- printf "%s-%s"  $fullname "test"  }}
-{{- end }}
-{{- end }}
-
-{{- define "ml-gitops-tenant.prod-name" -}}
-{{- if .Values.prodNamespace.nameOverride }}
-{{- .Values.prodNamespace.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $fullname := include "ml-gitops-tenant.fullname" . }}
-{{- printf "%s-%s"  $fullname "prod"  }}
 {{- end }}
 {{- end }}
 
 {{- define "ml-gitops-tenant.pipelines-name" -}}
-{{- if .Values.pipelinesNamespace.nameOverride }}
-{{- .Values.pipelinesNamespace.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- range $namespace := .Values.namespaces -}}
+{{- if eq $namespace.role "pipelines" }}
+{{- if $namespace.nameOverride }}
+{{- $namespace.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $fullname := include "ml-gitops-tenant.fullname" . }}
-{{- printf "%s-%s"  $fullname "pipelines"  }}
+{{- $fullname := include "ml-gitops-tenant.fullname" $ }}
+{{- printf "%s-%s"  $fullname $namespace.nameSuffix  }}
 {{- end }}
 {{- end }}
-
-{{- define "ml-gitops-tenant.datascience-name" -}}
-{{- if .Values.pipelinesNamespace.nameOverride }}
-{{- .Values.pipelinesNamespace.nameOverride | trunc 63 | trimSuffix "-" }}
-{{- else }}
-{{- $fullname := include "ml-gitops-tenant.fullname" . }}
-{{- printf "%s-%s"  $fullname "datascience"  }}
 {{- end }}
 {{- end }}
 
