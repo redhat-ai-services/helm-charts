@@ -2,7 +2,7 @@
 
 A Helm chart for Kubernetes
 
-![Version: 0.3.7](https://img.shields.io/badge/Version-0.3.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.8](https://img.shields.io/badge/Version-0.3.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "argocd"
-    version: "0.3.7"
+    version: "0.3.8"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
