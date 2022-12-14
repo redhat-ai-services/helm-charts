@@ -53,9 +53,9 @@ server:
   autoscale:
     # -- Enable autoscaling for server pod
     enabled: false
-  grcp:
+  grpc:
     ingress:
-      # -- Enable grcp ingress option
+      # -- Enable grpc ingress option
       enabled: false
   ingress:
     # -- Enable access via ingress

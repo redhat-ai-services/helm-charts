@@ -63,7 +63,7 @@ Kubernetes: `>= 1.19.0`
 | resourceCustomizations | object | `{}` | Resource customizations for ArgoCD instance |
 | resourceExclusions | list | `[{"apiGroups":["tekton.dev"],"clusters":["*"],"kinds":["TaskRun","PipelineRun"]}]` | Resource exclusion list for ArgoCD instance |
 | server.autoscale.enabled | bool | `false` | Enable autoscaling for server pod |
-| server.grcp.ingress.enabled | bool | `false` | Enable grcp ingress option |
+| server.grpc.ingress.enabled | bool | `false` | Enable grpc ingress option |
 | server.ingress.enabled | bool | `false` | Enable access via ingress |
 | server.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"125m","memory":"128Mi"}}` | Resource requests and limits for the server pod |
 | server.route.enabled | bool | `true` | Enable access via OpenShift route |
