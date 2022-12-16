@@ -14,10 +14,10 @@ namespaces:
     role: pipelines
     nameOverride: ""
     adminGroupRole: admin
-    annotations: {}
-    labels:
+    annotations:
       operator.tekton.dev/prune.resources: "taskrun, pipelinerun"
-      operator.tekton.dev/prune.keep-since: 7200
+      operator.tekton.dev/prune.keep-since: "7200"
+    labels: {}
   - nameSuffix: datascience
     role: dev
     nameOverride: ""
