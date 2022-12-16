@@ -2,7 +2,7 @@
 
 A Helm chart to manage a multi-tiered gitops structure for a data science project.
 
-![Version: 0.2.4](https://img.shields.io/badge/Version-0.2.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Resources Created
 
@@ -47,7 +47,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "ml-gitops-tenant"
-    version: "0.2.4"
+    version: "0.3.0"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
@@ -59,41 +59,49 @@ Kubernetes: `>= 1.19.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| additionalRoles | list | `[{"name":"sealed-secrets-deployer","rules":[{"apiGroups":["bitnami.com"],"resources":["sealedsecrets"],"verbs":["get","list","watch","create","update","patch","delete"]}],"subject":{"name":"argocd-argocd-application-controller"}}]` | Additional roles to apply to the application controller service account in all namespaces managed by ArgoCD |
 | adminGroup.create | bool | `true` | Enable the creation of the admin group.  If creation is disabled, an existing group can still be specified with the nameOverride. |
 | adminGroup.members | list | `[]` | List of users to be added to the adminGroup |
 | adminGroup.nameOverride | string | `""` | String to override the name of the admin group |
-| datascienceNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the datascience namespace |
-| datascienceNamespace.annotations | object | `{}` | Additional annotations to be added to the datascience namespace |
-| datascienceNamespace.create | bool | `true` | Enable the creation of the data science namespace |
-| datascienceNamespace.labels | object | `{}` | Additional labels to be added to the datascience namespace |
-| datascienceNamespace.nameOverride | string | `""` | String to override the name of the datascience namespace |
-| devNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the dev namespace |
-| devNamespace.annotations | object | `{}` | Additional annotations to be added to the dev namespace |
-| devNamespace.create | bool | `true` | Enable the creation of the dev namespace |
-| devNamespace.labels | object | `{}` | Additional labels to be added to the dev namespace |
-| devNamespace.nameOverride | string | `""` | String to override the name of the dev namespace |
 | fullnameOverride | string | `""` | String to fully override fullname template |
-| gitopsNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the gitops namespace |
-| gitopsNamespace.annotations | object | `{}` | Additional annotations to be added to the gitops namespace |
-| gitopsNamespace.create | bool | `true` | Enable the creation of the gitops namespace |
-| gitopsNamespace.labels | object | `{}` | Additional labels to be added to the gitops namespace |
-| gitopsNamespace.nameOverride | string | `""` | String to override the name of the gitops namespace |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
-| pipelinesNamespace.adminGroupRole | string | `"admin"` | Cluster role granting permissions admins group in the pipelines namespace |
-| pipelinesNamespace.annotations | object | `{}` | Additional annotations to be added to the pipelines namespace |
-| pipelinesNamespace.create | bool | `true` | Enable the creation of the pipelines namespace |
-| pipelinesNamespace.labels | object | `{"operator.tekton.dev/prune.keep-since":7200,"operator.tekton.dev/prune.resources":"taskrun, pipelinerun"}` | Additional labels to be added to the pipelines namespace |
-| pipelinesNamespace.nameOverride | string | `""` | String to override the name of the pipelines namespace |
-| prodNamespace.adminGroupRole | string | `"view"` | Cluster role granting permissions admins group in the prod namespace |
-| prodNamespace.annotations | object | `{}` | Additional annotations to be added to the prod namespace |
-| prodNamespace.create | bool | `true` | Enable the creation of the prod namespace |
-| prodNamespace.labels | object | `{}` | Additional labels to be added to the prod namespace |
-| prodNamespace.nameOverride | string | `""` | String to override the name of the prod namespace |
-| testNamespace.adminGroupRole | string | `"view"` | Cluster role granting permissions admins group in the test namespace |
-| testNamespace.annotations | object | `{}` | Additional annotations to be added to the test namespace |
-| testNamespace.create | bool | `true` | Enable the creation of the test namespace |
-| testNamespace.labels | object | `{}` | Additional labels to be added to the test namespace |
-| testNamespace.nameOverride | string | `""` | String to override the name of the test namespace |
+| namespaces[0].adminGroupRole | string | `"admin"` |  |
+| namespaces[0].annotations | object | `{}` |  |
+| namespaces[0].labels | object | `{}` |  |
+| namespaces[0].nameOverride | string | `""` |  |
+| namespaces[0].nameSuffix | string | `"gitops"` |  |
+| namespaces[0].role | string | `"gitops"` |  |
+| namespaces[1].adminGroupRole | string | `"admin"` |  |
+| namespaces[1].annotations | object | `{}` |  |
+| namespaces[1].labels."operator.tekton.dev/prune.keep-since" | int | `7200` |  |
+| namespaces[1].labels."operator.tekton.dev/prune.resources" | string | `"taskrun, pipelinerun"` |  |
+| namespaces[1].nameOverride | string | `""` |  |
+| namespaces[1].nameSuffix | string | `"pipelines"` |  |
+| namespaces[1].role | string | `"pipelines"` |  |
+| namespaces[2].adminGroupRole | string | `"admin"` |  |
+| namespaces[2].annotations | object | `{}` |  |
+| namespaces[2].labels | object | `{}` |  |
+| namespaces[2].nameOverride | string | `""` |  |
+| namespaces[2].nameSuffix | string | `"datascience"` |  |
+| namespaces[2].role | string | `"dev"` |  |
+| namespaces[3].adminGroupRole | string | `"admin"` |  |
+| namespaces[3].annotations | object | `{}` |  |
+| namespaces[3].labels | object | `{}` |  |
+| namespaces[3].nameOverride | string | `""` |  |
+| namespaces[3].nameSuffix | string | `"dev"` |  |
+| namespaces[3].role | string | `"dev"` |  |
+| namespaces[4].adminGroupRole | string | `"view"` |  |
+| namespaces[4].annotations | object | `{}` |  |
+| namespaces[4].labels | object | `{}` |  |
+| namespaces[4].nameOverride | string | `""` |  |
+| namespaces[4].nameSuffix | string | `"test"` |  |
+| namespaces[4].role | string | `"test"` |  |
+| namespaces[5].adminGroupRole | string | `"view"` |  |
+| namespaces[5].annotations | object | `{}` |  |
+| namespaces[5].labels | object | `{}` |  |
+| namespaces[5].nameOverride | string | `""` |  |
+| namespaces[5].nameSuffix | string | `"prod"` |  |
+| namespaces[5].role | string | `"prod"` |  |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)
