@@ -2,7 +2,7 @@
 
 A Helm chart to manage a multi-tiered gitops structure for a data science project.
 
-![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Resources Created
 
@@ -47,7 +47,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "ml-gitops-tenant"
-    version: "0.3.4"
+    version: "0.3.5"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
@@ -72,9 +72,9 @@ Kubernetes: `>= 1.19.0`
 | namespaces[0].nameSuffix | string | `"gitops"` |  |
 | namespaces[0].role | string | `"gitops"` |  |
 | namespaces[1].adminGroupRole | string | `"admin"` |  |
-| namespaces[1].annotations | object | `{}` |  |
-| namespaces[1].labels."operator.tekton.dev/prune.keep-since" | int | `7200` |  |
-| namespaces[1].labels."operator.tekton.dev/prune.resources" | string | `"taskrun, pipelinerun"` |  |
+| namespaces[1].annotations."operator.tekton.dev/prune.keep-since" | string | `"7200"` |  |
+| namespaces[1].annotations."operator.tekton.dev/prune.resources" | string | `"taskrun, pipelinerun"` |  |
+| namespaces[1].labels | object | `{}` |  |
 | namespaces[1].nameOverride | string | `""` |  |
 | namespaces[1].nameSuffix | string | `"pipelines"` |  |
 | namespaces[1].role | string | `"pipelines"` |  |
