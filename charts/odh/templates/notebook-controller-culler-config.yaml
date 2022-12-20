@@ -1,0 +1,12 @@
+{{- if .Values.notebookController.enabled }}
+{{- if .Values.notebookController.culler.enabled }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: notebook-controller-culler-config
+data:
+  CULL_IDLE_TIME: {{ .Values.notebookController.culler.cullIdleTime }}
+  ENABLE_CULLING: {{ .Values.notebookController.culler.enabled }}
+  IDLENESS_CHECK_PERIOD: '1'
+{{- end }}
+{{- end }}

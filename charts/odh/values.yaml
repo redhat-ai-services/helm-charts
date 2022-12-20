@@ -10,6 +10,9 @@ odhDashboard:
 
 notebookController:
   enabled: true
+  culling:
+    enabled: true
+    cullIdleTime: '240'
 
 additionalNotebooks:
   # -- Enable the install of additional Jupyter Notebook images via overlays
