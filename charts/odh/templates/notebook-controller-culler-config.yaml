@@ -4,6 +4,8 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: notebook-controller-culler-config
+  labels:
+    {{- include "odh.labels" . | nindent 4 }}
 data:
   CULL_IDLE_TIME: {{ .Values.notebookController.culler.cullIdleTime }}
   ENABLE_CULLING: {{ .Values.notebookController.culler.enabled }}
