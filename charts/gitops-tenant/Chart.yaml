@@ -4,4 +4,4 @@ description: A Helm chart to manage a multi-tiered gitops structure for a data s
 type: application
 kubeVersion: ">= 1.19.0"
 
-version: 0.3.6
+version: 0.3.7

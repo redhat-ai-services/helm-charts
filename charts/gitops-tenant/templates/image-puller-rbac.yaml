@@ -1,3 +1,4 @@
+{{- if include "gitops-tenant.pipelines-name" . }}
 {{- range $namespace := .Values.namespaces }}
 {{- if and (ne $namespace.role "gitops") (ne $namespace.role "pipelines")}}
 ---
@@ -16,5 +17,6 @@ subjects:
 - kind: ServiceAccount
   name: default
   namespace: {{ include "gitops-tenant.namespace" ( dict "namespace" $namespace "context" $ ) }}
+{{- end }}
 {{- end }}
 {{- end }}
