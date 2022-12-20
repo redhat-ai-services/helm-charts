@@ -1,5 +1,5 @@
 {{- if .Values.notebookController.enabled }}
-{{- if .Values.notebookController.culler.enabled }}
+{{- if .Values.notebookController.culling.enabled }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -7,8 +7,8 @@ metadata:
   labels:
     {{- include "odh.labels" . | nindent 4 }}
 data:
-  CULL_IDLE_TIME: {{ .Values.notebookController.culler.cullIdleTime }}
-  ENABLE_CULLING: {{ .Values.notebookController.culler.enabled }}
+  CULL_IDLE_TIME: {{ .Values.notebookController.culling.cullIdleTime }}
+  ENABLE_CULLING: {{ .Values.notebookController.culling.enabled }}
   IDLENESS_CHECK_PERIOD: '1'
 {{- end }}
 {{- end }}
