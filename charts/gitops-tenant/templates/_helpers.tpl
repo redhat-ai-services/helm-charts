@@ -29,6 +29,7 @@ If release name contains chart name it will be used as a full name.
 {{- printf "%s"  $fullname  }}
 {{- end }}
 {{- end }}
+{{- end }}
 
 {{- define "gitops-tenant.gitops-name" -}}
 {{- range $namespace := .Values.namespaces -}}
