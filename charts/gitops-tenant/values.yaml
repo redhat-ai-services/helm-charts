@@ -4,7 +4,12 @@ nameOverride: ""
 fullnameOverride: ""
 
 namespaces:
-
+  - nameSuffix: gitops
+    role: gitops
+    nameOverride: ""
+    adminGroupRole: admin
+    annotations: {}
+    labels: {}
   - nameSuffix: pipelines
     role: pipelines
     nameOverride: ""
