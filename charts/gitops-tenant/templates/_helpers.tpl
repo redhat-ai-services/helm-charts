@@ -23,7 +23,10 @@ If release name contains chart name it will be used as a full name.
 {{- .namespace.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- $fullname := include "gitops-tenant.fullname" .context }}
+{{- if .namespace.nameSuffix }}
 {{- printf "%s-%s"  $fullname .namespace.nameSuffix  }}
+{{- else }}
+{{- printf "%s"  $fullname  }}
 {{- end }}
 {{- end }}
 
