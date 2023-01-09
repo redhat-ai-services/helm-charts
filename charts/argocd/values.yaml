@@ -67,7 +67,7 @@ server:
       # -- TLS cert termination policy for accessing ArgoCD Route
       termination: reencrypt
       # -- Insecure policy behavior for accessing ArgoCD Route
-      insecureEdgeTerminationPolicy: redirect
+      insecureEdgeTerminationPolicy: Redirect
   service:
     type: ''
   # -- Resource requests and limits for the server pod
