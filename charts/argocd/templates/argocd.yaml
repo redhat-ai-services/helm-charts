@@ -18,6 +18,9 @@ spec:
       {{- toYaml .resources | nindent 6 }}
     route:
       enabled: {{ .route.enabled }}
+      tls:
+        termination: {{ .route.tls.termination }}
+        insecureEdgeTerminationPolicy: {{ .route.tls.insecureEdgeTerminationPolicy }}
     service:
       type: ''
     {{- end }}
