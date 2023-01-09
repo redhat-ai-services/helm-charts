@@ -67,7 +67,7 @@ Kubernetes: `>= 1.19.0`
 | server.ingress.enabled | bool | `false` | Enable access via ingress |
 | server.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"125m","memory":"128Mi"}}` | Resource requests and limits for the server pod |
 | server.route.enabled | bool | `true` | Enable access via OpenShift route |
-| server.route.tls.insecureEdgeTerminationPolicy | string | `"redirect"` | Insecure policy behavior for accessing ArgoCD Route |
+| server.route.tls.insecureEdgeTerminationPolicy | string | `"Redirect"` | Insecure policy behavior for accessing ArgoCD Route |
 | server.route.tls.termination | string | `"reencrypt"` | TLS cert termination policy for accessing ArgoCD Route |
 | server.service.type | string | `""` |  |
 | sso.dex.openShiftOAuth | bool | `true` | Enable login via OpenShiftOAuth |
