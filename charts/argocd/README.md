@@ -2,7 +2,7 @@
 
 A Helm chart for Kubernetes
 
-![Version: 0.3.8](https://img.shields.io/badge/Version-0.3.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.9](https://img.shields.io/badge/Version-0.3.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "argocd"
-    version: "0.3.8"
+    version: "0.3.9"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
@@ -67,6 +67,8 @@ Kubernetes: `>= 1.19.0`
 | server.ingress.enabled | bool | `false` | Enable access via ingress |
 | server.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"125m","memory":"128Mi"}}` | Resource requests and limits for the server pod |
 | server.route.enabled | bool | `true` | Enable access via OpenShift route |
+| server.route.tls.insecureEdgeTerminationPolicy | string | `"redirect"` | Insecure policy behavior for accessing ArgoCD Route |
+| server.route.tls.termination | string | `"reencrypt"` | TLS cert termination policy for accessing ArgoCD Route |
 | server.service.type | string | `""` |  |
 | sso.dex.openShiftOAuth | bool | `true` | Enable login via OpenShiftOAuth |
 | sso.dex.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"250m","memory":"128Mi"}}` | Resource requests and limits for the dex pod |
