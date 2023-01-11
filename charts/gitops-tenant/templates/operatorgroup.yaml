@@ -5,6 +5,7 @@ apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: {{ include "gitops-tenant.namespace" ( dict "namespace" $namespace "context" $ ) }}
+  namespace: {{ include "gitops-tenant.namespace" ( dict "namespace" $namespace "context" $ ) }}
   labels:
     argocd.argoproj.io/managed-by: {{ include "gitops-tenant.gitops-name" $ }}
     {{- include "gitops-tenant.labels" $ | nindent 4 }}
