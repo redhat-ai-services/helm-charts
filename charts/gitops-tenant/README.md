@@ -2,7 +2,7 @@
 
 A Helm chart to manage a multi-tiered gitops structure for a data science project.
 
-![Version: 0.3.8](https://img.shields.io/badge/Version-0.3.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.9](https://img.shields.io/badge/Version-0.3.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Resources Created
 
@@ -47,7 +47,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "gitops-tenant"
-    version: "0.3.8"
+    version: "0.3.9"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
@@ -80,18 +80,21 @@ Kubernetes: `>= 1.19.0`
 | namespaces[1].role | string | `"pipelines"` |  |
 | namespaces[2].adminGroupRole | string | `"admin"` |  |
 | namespaces[2].annotations | object | `{}` |  |
+| namespaces[2].createOperatorGroup | bool | `true` |  |
 | namespaces[2].labels | object | `{}` |  |
 | namespaces[2].nameOverride | string | `""` |  |
 | namespaces[2].nameSuffix | string | `"dev"` |  |
 | namespaces[2].role | string | `"dev"` |  |
 | namespaces[3].adminGroupRole | string | `"view"` |  |
 | namespaces[3].annotations | object | `{}` |  |
+| namespaces[3].createOperatorGroup | bool | `true` |  |
 | namespaces[3].labels | object | `{}` |  |
 | namespaces[3].nameOverride | string | `""` |  |
 | namespaces[3].nameSuffix | string | `"test"` |  |
 | namespaces[3].role | string | `"test"` |  |
 | namespaces[4].adminGroupRole | string | `"view"` |  |
 | namespaces[4].annotations | object | `{}` |  |
+| namespaces[4].createOperatorGroup | bool | `true` |  |
 | namespaces[4].labels | object | `{}` |  |
 | namespaces[4].nameOverride | string | `""` |  |
 | namespaces[4].nameSuffix | string | `"prod"` |  |
