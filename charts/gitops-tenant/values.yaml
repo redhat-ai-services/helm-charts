@@ -24,18 +24,21 @@ namespaces:
     adminGroupRole: admin
     annotations: {}
     labels: {}
+    createOperatorGroup: true
   - nameSuffix: test
     role: test
     nameOverride: ""
     adminGroupRole: view
     annotations: {}
     labels: {}
+    createOperatorGroup: true
   - nameSuffix: prod
     role: prod
     nameOverride: ""
     adminGroupRole: view
     annotations: {}
     labels: {}
+    createOperatorGroup: true
 
 adminGroup:
   # -- Enable the creation of the admin group.  If creation is disabled, an existing group can still be specified with the nameOverride.
