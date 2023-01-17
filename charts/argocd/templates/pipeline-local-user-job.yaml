@@ -53,6 +53,7 @@ spec:
                 fi
                 HAS_CONFIGMAP=$(kubectl get configmap argocd-env-configmap -n $namespace --ignore-not-found)
                 if [ -z "$HAS_CONFIGMAP" ];
+                then
                   kubectl create configmap argocd-env-configmap --from-literal=ARGOCD_SERVER=${ARGO_SERVER_HOST} -n ${namespace}
                 else
                   echo "The configmap argocd-env-configmap already exists, skipping"
