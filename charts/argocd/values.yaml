@@ -32,9 +32,13 @@ rbac:
   # -- RBAC objects that can be utilized within the policy mapping
   scopes: '[groups]'
 
+# -- Create pipeline accounts and generate a token in the designated namespace
+pipelineAccounts:
+  # - name: pipeline
+  #   namespace: default
+
 # -- Extra config options
 extraConfig: {}
-  # accounts.pipeline: apiKey
 
 # -- Resource customizations for ArgoCD instance
 resourceCustomizations: {}

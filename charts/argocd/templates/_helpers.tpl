@@ -60,3 +60,16 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the list of accounts and namespaces to create a token
+*/}}
+{{- define "argocd.accountsNamespaces" -}}
+{{- $list := "" }}
+{{- range $pipelineAccount := .Values.pipelineAccounts }}
+{{- $account := $pipelineAccount.name }}
+{{- $namespace := default $.Release.Namespace $pipelineAccount.namespace }}
+{{- $list = printf "%s %s=%s" $list $account $namespace }}
+{{- end }}
+{{- print $list | trim }}
+{{- end }}

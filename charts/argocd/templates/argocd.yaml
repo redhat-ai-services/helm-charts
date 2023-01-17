@@ -90,9 +90,14 @@ spec:
     resources:
       {{- toYaml .resources | nindent 6 }}
     {{- end }}
-  {{- if .Values.extraConfig }}
+  {{- if or (.Values.extraConfig) (.Values.pipelineAccounts) }}
   extraConfig:
-    {{- toYaml .Values.extraConfig | nindent 4 }}
+    {{- range $pipelineAccount := .Values.pipelineAccounts }}
+    accounts.{{ $pipelineAccount.name }}: apiKey
+    {{- end }}
+    {{- if .Values.extraConfig }}
+      {{- toYaml .Values.extraConfig | nindent 4 }}
+    {{- end }}
   {{- end }}
   {{- if .Values.resourceCustomizations }}
   resourceCustomizations: |
