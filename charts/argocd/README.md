@@ -2,7 +2,7 @@
 
 A Helm chart for Kubernetes
 
-![Version: 0.3.9](https://img.shields.io/badge/Version-0.3.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "argocd"
-    version: "0.3.9"
+    version: "0.4.0"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
@@ -51,6 +51,7 @@ Kubernetes: `>= 1.19.0`
 | ha.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"250m","memory":"128Mi"}}` | Resource requests and limits |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
 | notifications.enabled | bool | `true` | Enable notifications plugin |
+| pipelineAccounts | string | `nil` | Create pipeline accounts and generate a token in the designated namespace |
 | projects | array/object | `[{"clusterResourceWhitelist":[],"description":"","destinations":[],"name":"default","sourceRepos":[]}]` | An array of projects objects to be configured within ArgoCD |
 | prometheus.enabled | bool | `false` | Enable prometheus instance |
 | prometheus.ingress.enabled | bool | `false` | Enable access via ingress |
