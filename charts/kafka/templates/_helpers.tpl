@@ -60,3 +60,28 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Get the kakfa version number
+*/}}
+{{- define "kafka.semversion" -}}
+{{- $version := default .Chart.AppVersion .Values.kafka.version -}}
+{{- $semversion := semver $version -}}
+{{- end }}
+
+{{/*
+Get the kakfa version number
+*/}}
+{{- define "kafka.version" -}}
+{{- $version := default .Chart.AppVersion .Values.kafka.version -}}
+{{- print $version -}}
+{{- end }}
+
+{{/*
+Get the kakfa version number
+*/}}
+{{- define "kafka.minorVersion" -}}
+{{- $version := default .Chart.AppVersion .Values.kafka.version -}}
+{{- $semversion := semver $version -}}
+{{- printf "%d.%d" $semversion.Major $semversion.Minor -}}
+{{- end }}
