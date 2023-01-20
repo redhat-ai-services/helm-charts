@@ -3,3 +3,13 @@ fullnameOverride: ""
 topics: []
 #   - name: "topic-1"
 #   - name: "topic-2"
+
+
+
+kafka:
+  replicas: 3
+  ## -- The kafka version to deploy.  Defaults to the Chart AppVersion if not specified.
+  version: ""
+
+zookeeper:
+  replicas: 3

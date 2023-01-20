@@ -41,7 +41,41 @@ pipelineAccounts:
 extraConfig: {}
 
 # -- Resource customizations for ArgoCD instance
-resourceCustomizations: {}
+# resourceCustomizations: {}
+resourceCustomizations:
+  machinelearning.seldon.io/SeldonDeployment:
+    health.lua: |
+      health_status = {}
+      if obj.status ~= nil then
+        if obj.status.conditions ~= nil then
+          numConditions = 0
+          numTrue = 0
+          numFalse = 0
+          message = ""
+          for _, condition in pairs(obj.status.conditions) do
+            numConditions = numConditions + 1
+            if condition.status == "False" then
+              numFalse = numFalse + 1
+              message = message .. " " .. condition.type .. ": " .. condition.reason .. ";"
+            elseif condition.status == "True" then
+              numTrue = numTrue + 1
+            end
+          end
+          if numTrue == numConditions then
+            health_status.status = "Healthy"
+            health_status.message = "SeldonDeployment is healthy"
+            return health_status
+          else numFalse > 0 then
+            health_status.status = "Progressing"
+            health_status.message = message
+            return health_status
+          end
+        end
+      end
+
+      health_status.status = "Progressing"
+      health_status.message = "Waiting for SeldonDeployment"
+      return health_status
 
 # -- Resource exclusion list for ArgoCD instance
 resourceExclusions:

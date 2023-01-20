@@ -6,8 +6,8 @@ metadata:
     {{- include "kafka.labels" . | nindent 4 }}
 spec:
   kafka:
-    version: 3.1.0
-    replicas: 3
+    version: {{ .kafka.version | default .Chart.AppVersion }}
+    replicas: {{ .Values.kafka.replicas }}
     listeners:
       - name: plain
         port: 9092
@@ -27,7 +27,7 @@ spec:
     storage:
       type: ephemeral
   zookeeper:
-    replicas: 3
+    replicas: {{ .Values.zookeeper.replicas }}
     storage:
       type: ephemeral
   entityOperator:
