@@ -2,7 +2,7 @@
 
 A Helm chart for Kubernetes
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.4.3](https://img.shields.io/badge/Version-0.4.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "argocd"
-    version: "0.4.2"
+    version: "0.4.3"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
@@ -61,7 +61,7 @@ Kubernetes: `>= 1.19.0`
 | redis.resources | object | `{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"250m","memory":"128Mi"}}` | Resource requests and limits for the redis pods |
 | repo.resources | object | `{"limits":{"cpu":"1","memory":"1Gi"},"requests":{"cpu":"250m","memory":"256Mi"}}` | Resource requests and limits for the repo pod |
 | repos | array/object | `[]` | An array of repos objects to be configured within ArgoCD |
-| resourceCustomizations | object | `{}` | Resource customizations for ArgoCD instance |
+| resourceCustomizations | object | `{"machinelearning.seldon.io/SeldonDeployment":{"health.lua":"health_status = {}\nif obj.status ~= nil then\n  if obj.status.conditions ~= nil then\n    numConditions = 0\n    numTrue = 0\n    numFalse = 0\n    message = \"\"\n    for _, condition in pairs(obj.status.conditions) do\n      numConditions = numConditions + 1\n      if condition.status == \"False\" then\n        numFalse = numFalse + 1\n        message = message .. \" \" .. condition.type .. \": \" .. condition.reason .. \";\"\n      elseif condition.status == \"True\" then\n        numTrue = numTrue + 1\n      end\n    end\n    if numTrue == numConditions then\n      health_status.status = \"Healthy\"\n      health_status.message = \"SeldonDeployment is healthy\"\n      return health_status\n    else numFalse > 0 then\n      health_status.status = \"Progressing\"\n      health_status.message = message\n      return health_status\n    end\n  end\nend\n\nhealth_status.status = \"Progressing\"\nhealth_status.message = \"Waiting for SeldonDeployment\"\nreturn health_status\n"}}` | Resource customizations for ArgoCD instance resourceCustomizations: {} |
 | resourceExclusions | list | `[{"apiGroups":["tekton.dev"],"clusters":["*"],"kinds":["TaskRun","PipelineRun"]}]` | Resource exclusion list for ArgoCD instance |
 | server.autoscale.enabled | bool | `false` | Enable autoscaling for server pod |
 | server.grpc.ingress.enabled | bool | `false` | Enable grpc ingress option |
