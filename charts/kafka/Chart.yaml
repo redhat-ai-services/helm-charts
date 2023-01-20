@@ -1,8 +1,9 @@
 apiVersion: v2
 name: kafka
 description: A Helm chart for Kubernetes
-
 type: application
+
+icon: https://upload.wikimedia.org/wikipedia/commons/0/0a/Apache_kafka-icon.svg
 
 version: 0.1.1
 appVersion: "3.3.1"
