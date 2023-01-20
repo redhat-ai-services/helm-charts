@@ -1,15 +1,19 @@
+# -- String to partially override fullname template (will maintain the release name)
 nameOverride: ""
+# -- String to fully override fullname template
 fullnameOverride: ""
+
+# -- List of topics to be created
 topics: []
 #   - name: "topic-1"
 #   - name: "topic-2"
 
-
-
 kafka:
+  # -- The number of kafka replicas to create
   replicas: 3
   ## -- The kafka version to deploy.  Defaults to the Chart AppVersion if not specified.
   version: ""
 
 zookeeper:
+  # -- The number of zookeeper replicas to create
   replicas: 3
