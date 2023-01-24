@@ -4,7 +4,7 @@ description: A Helm chart for configuring OpenDataHub on OpenShift
 type: application
 kubeVersion: ">= 1.19.0"
 
-version: 0.7.0
+version: 0.7.1
 appVersion: "v1.4.1"
 
 icon: https://avatars.githubusercontent.com/u/57720972

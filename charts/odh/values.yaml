@@ -12,6 +12,7 @@ notebookController:
   culling:
     enabled: true
     cullIdleTime: '240'
+    idlenessCheckPeriod: "5"
 
 notebookImages:
   # -- Enable the install of additional Jupyter Notebook images
