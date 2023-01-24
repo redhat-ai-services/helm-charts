@@ -2,7 +2,7 @@
 
 A Helm chart for configuring OpenDataHub on OpenShift
 
-![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.4](https://img.shields.io/badge/AppVersion-v1.4-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.4.1](https://img.shields.io/badge/AppVersion-v1.4.1-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "odh"
-    version: "0.6.1"
+    version: "0.7.0"
     repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
 ```
 
@@ -44,25 +44,23 @@ Kubernetes: `>= 1.19.0`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| additionalNotebooks.enabled | bool | `true` | Enable the install of additional Jupyter Notebook images via overlays |
-| additionalNotebooks.overlays | list | `["additional"]` | Notebook overlays to include in the deployment |
 | dataSciencePipelines.enabled | bool | `true` | Enable install of the Data Science Pipelines (KubeFlow Pipelines) component |
 | dataSciencePipelines.overlays[0] | string | `"metadata-store-mariadb"` |  |
 | dataSciencePipelines.overlays[1] | string | `"ds-pipeline-ui"` |  |
 | dataSciencePipelines.overlays[2] | string | `"object-store-minio"` |  |
-| dataSciencePipelines.overlays[3] | string | `"default-configs"` |  |
+| dataSciencePipelines.overlays[3] | string | `"integration-odhdashboard"` |  |
+| dataSciencePipelines.overlays[4] | string | `"default-configs"` |  |
 | grafana.instance.enabled | bool | `false` | Enable install of a Grafana instance |
 | grafana.operator.enabled | bool | `false` | Enable install of the Grafana Operator |
-| jupyterHub.enabled | bool | `false` | Enable the install of a JupyterHub instance (Depreciated) |
-| jupyterHub.singleUserProfile.enabled | bool | `false` | Enable the configuration of a singleUserProfile for JupyterHub |
 | modelMesh.enabled | bool | `true` | Enable install of the Model Mesh instance |
 | modelMesh.overlays[0] | string | `"odh-model-controller"` |  |
 | notebookController.culling.cullIdleTime | string | `"240"` |  |
 | notebookController.culling.enabled | bool | `true` |  |
 | notebookController.enabled | bool | `true` |  |
+| notebookImages.enabled | bool | `true` | Enable the install of additional Jupyter Notebook images |
 | odhCommon.enabled | bool | `true` | Enable install of ODH Common resources |
 | odhDashboard.enabled | bool | `true` | Enable install of the ODH Dashboard instance |
-| odhDashboard.overlays[0] | string | `"authentication"` |  |
+| odhDashboard.overlays | list | `[]` |  |
 | prometheus.instance.enabled | bool | `false` |  |
 | prometheus.operator.enabled | bool | `false` | Enable install of the Prometheus Operator |
 | repos.manifestsUrl | string | `"https://github.com/opendatahub-io/odh-manifests/tarball/"` | ODH Manifests URL base |
