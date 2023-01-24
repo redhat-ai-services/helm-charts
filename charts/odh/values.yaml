@@ -5,8 +5,7 @@ odhCommon:
 odhDashboard: 
   # -- Enable install of the ODH Dashboard instance
   enabled: true
-  overlays:
-    - authentication
+  overlays: []
 
 notebookController:
   enabled: true
@@ -14,13 +13,9 @@ notebookController:
     enabled: true
     cullIdleTime: '240'
 
-additionalNotebooks:
-  # -- Enable the install of additional Jupyter Notebook images via overlays
+notebookImages:
+  # -- Enable the install of additional Jupyter Notebook images
   enabled: true
-  # -- Notebook overlays to include in the deployment
-  overlays:
-    - additional
-    # - cuda-11.0.3
 
 modelMesh:
   # -- Enable install of the Model Mesh instance
@@ -35,6 +30,7 @@ dataSciencePipelines:
     - metadata-store-mariadb
     - ds-pipeline-ui
     - object-store-minio
+    - integration-odhdashboard
     - default-configs
 
 grafana: 
@@ -52,27 +48,6 @@ prometheus:
     # -- Enable install of a Prometheus instance
   instance:
     enabled: false
-
-jupyterHub: 
-  # -- Enable the install of a JupyterHub instance (Depreciated)
-  enabled: false
-  singleUserProfile: 
-    # -- Enable the configuration of a singleUserProfile for JupyterHub
-    enabled: false
-    # profile:
-    #   profiles:
-    #   - name: preload repos
-    #     env:
-    #       - name: JUPYTER_PRELOAD_REPOS
-    #         value: https://github.com/guimou/xraylab_notebooks.git
-    #   - name: globals
-    #     resources:
-    #       requests:
-    #         memory: 500m
-    #         cpu: 500m
-    #       limits:
-    #         memory: 1Gi
-    #         cpu: 1
 
 repos:
   # -- ODH Manifests URL base

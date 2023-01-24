@@ -29,6 +29,13 @@ spec:
           path: odh-notebook-controller
       name: odh-notebook-controller
     {{- end }}
+    {{- if .Values.notebookImages.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: notebook-images
+      name: notebook-images
+    {{- end }}
     {{- if .Values.modelMesh.enabled }}
     - kustomizeConfig:
         overlays:
@@ -45,7 +52,7 @@ spec:
         repoRef:
           name: manifests
           path: data-science-pipelines
-      name: ds-pipelines
+      name: data-science-pipelines
     {{- end }}
     {{- if .Values.grafana.operator.enabled }}
     - kustomizeConfig:
@@ -74,25 +81,6 @@ spec:
           name: manifests
           path: prometheus/operator
       name: prometheus-operator
-    {{- end }}
-    {{- if .Values.jupyterHub.enabled }}
-    - kustomizeConfig:
-        parameters:
-          - name: s3_endpoint_url
-            value: s3.odh.com
-        repoRef:
-          name: manifests
-          path: jupyterhub/jupyterhub
-      name: jupyterhub
-    {{- end }}
-    {{- if .Values.additionalNotebooks.enabled }}
-    - kustomizeConfig:
-        overlays:
-          {{- toYaml .Values.additionalNotebooks.overlays | nindent 10 }}
-        repoRef:
-          name: manifests
-          path: jupyterhub/notebook-images
-      name: notebook-images
     {{- end }}
   repos:
     - name: manifests
