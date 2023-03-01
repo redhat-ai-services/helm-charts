@@ -4,12 +4,14 @@ nameOverride: ""
 fullnameOverride: ""
 
 namespaces:
+  # -- GitOps namespace configuration for managing objects in all tenant namespaces
   - nameSuffix: gitops
     role: gitops
     nameOverride: ""
     adminGroupRole: admin
     annotations: {}
     labels: {}
+  # -- Pipelines namespace for executing pipelines
   - nameSuffix: pipelines
     role: pipelines
     nameOverride: ""
@@ -18,6 +20,7 @@ namespaces:
       operator.tekton.dev/prune.resources: "taskrun, pipelinerun"
       operator.tekton.dev/prune.keep-since: "7200"
     labels: {}
+  # -- Dev application namespace
   - nameSuffix: dev
     role: dev
     nameOverride: ""
@@ -25,6 +28,7 @@ namespaces:
     annotations: {}
     labels: {}
     createOperatorGroup: true
+  # -- Test application namespace
   - nameSuffix: test
     role: test
     nameOverride: ""
@@ -32,6 +36,7 @@ namespaces:
     annotations: {}
     labels: {}
     createOperatorGroup: true
+  # -- Prod application namespace
   - nameSuffix: prod
     role: prod
     nameOverride: ""
