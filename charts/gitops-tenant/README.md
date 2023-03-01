@@ -12,7 +12,6 @@ This helm chart deploys the following namespaces:
 | ----------- | ----------- | ----------- |
 | my-tenant-gitops | This namespace will contain an ArgoCD instance that manages deploying resources to all of the other namespaces. | Admin |
 | my-tenant-pipelines   | This namespace will host Tekton / OpenShift Pipeline resources. | Admin |
-| my-tenant-datascience   | This namespace will host data science related resources used for model training, such as Jupyter notebooks, distributed training resources, model registries, etc. | Admin |
 | my-tenant-dev   | This namespace is the development namespace used for application components. | Admin |
 | my-tenant-test   | This namespace is the test namespace used for application components. | View |
 | my-tenant-prod   | This namespace is the production namespace used for application components. | View |
