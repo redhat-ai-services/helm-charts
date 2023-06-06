@@ -9,7 +9,7 @@ A Helm chart to manage a multi-tiered gitops structure for a data science projec
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add rh-iap https://rh-intelligent-application-practice.github.io/helm-charts/
+helm repo add rh-iap https://rh-datascience-and-edge-practice.github.io/helm-charts/
 helm repo update rh-iap
 helm install [release-name] rh-iap/ml-gitops-tenant
 ```
@@ -29,7 +29,7 @@ appVersion: "1.16.0"
 dependencies:
   - name: "ml-gitops-tenant"
     version: "0.2.0"
-    repository: "https://rh-intelligent-application-practice.github.io/helm-charts/"
+    repository: "https://rh-datascience-and-edge-practice.github.io/helm-charts/"
 ```
 
 ## Requirements
