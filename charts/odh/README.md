@@ -34,7 +34,7 @@ dependencies:
 
 ## Source Code
 
-* <https://github.com/rh-intelligent-application-practice/helm-charts/tree/main/charts/odh>
+* <https://github.com/rh-datascience-and-edge-practice/helm-charts/tree/main/charts/odh>
 
 ## Requirements
 
