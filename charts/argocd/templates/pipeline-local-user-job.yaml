@@ -1,0 +1,76 @@
+{{- if .Values.pipelineAccounts }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-pipeline-local-user
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  template:
+    spec:
+      containers:
+      - name: create-pipeline-local-user
+        image: registry.redhat.io/openshift-gitops-1/argocd-rhel8:1.7
+        command:
+          - /bin/bash
+          - -c
+          - |
+            export HOME=/home/argocd
+
+            echo "Getting argocd admin credential..."
+            if kubectl get secret argocd-cluster >/dev/null;
+            then
+              # Retrieve password
+              PASSWORD=$(oc get secret argocd-cluster -o jsonpath="{.data.admin\.password}" | base64 -d)
+            else
+              echo "Could not retrieve admin password"
+              exit 1
+            fi
+
+            IFS=' '
+            read -ra LIST <<< "$ACCOUNTS_NAMESPACES"
+            for i in "${LIST[@]}"; do   # access each element of array
+                echo "Generating token for $i"
+                account=${i%%=*}
+                namespace=${i#*=}
+                HAS_SECRET=$(kubectl get secret argocd-env-secret -n $namespace --ignore-not-found)
+                if [ -z "$HAS_SECRET" ];
+                then
+                  echo "No argo-env-secret present, creating"
+                  argocd login ${ARGO_SERVER_HOST} --username admin --password ${PASSWORD} --insecure
+                  echo "Generating token for ${account}"
+                  TOKEN=$(argocd account generate-token --account ${account})
+                  if [ "$TOKEN" ];
+                  then
+                    echo "Creating secret argocd-env-secret in namespace ${namespace}"
+                    kubectl create secret generic argocd-env-secret --from-literal=ARGOCD_AUTH_TOKEN=${TOKEN} --from-literal=ARGOCD_USERNAME=${account} --from-literal=ARGOCD_SERVER=${ARGO_SERVER_HOST} -n ${namespace}
+                  else
+                    echo "Token $TOKEN could not be generated, no secret created"
+                    exit 1
+                  fi
+                else
+                  echo "The secret argocd-env-secret already exists, skipping"
+                fi
+                HAS_CONFIGMAP=$(kubectl get configmap argocd-env-configmap -n $namespace --ignore-not-found)
+                if [ -z "$HAS_CONFIGMAP" ];
+                then
+                  kubectl create configmap argocd-env-configmap --from-literal=ARGOCD_SERVER=${ARGO_SERVER_HOST} -n ${namespace}
+                else
+                  echo "The configmap argocd-env-configmap already exists, skipping"
+                fi
+            done
+        env:
+        # The account namespace where the token needs to be deployed to
+        # Example value: product-catalog-pipeline=product-catalog-cicd demo-pipeline=demo-cicd
+        - name: ACCOUNTS_NAMESPACES
+          value: "{{ include "argocd.accountsNamespaces" . }}"
+        - name: ARGO_SERVER_HOST
+          value: "argocd-server.{{ .Release.Namespace }}.svc"
+        imagePullPolicy: Always
+      serviceAccount: {{ include "argocd.fullname" . }}-argocd-application-controller
+      serviceAccountName: {{ include "argocd.fullname" . }}-argocd-application-controller
+      dnsPolicy: ClusterFirst
+      restartPolicy: OnFailure
+      terminationGracePeriodSeconds: 30
+{{- end }}

@@ -1,0 +1,87 @@
+apiVersion: kfdef.apps.kubeflow.org/v1
+kind: KfDef
+metadata:
+  name: opendatahub
+  labels:
+    {{- include "odh.labels" . | nindent 4 }}
+spec:
+  applications:
+    {{- if .Values.odhCommon.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odh-common
+      name: odh-common
+    {{- end }}
+    {{- if .Values.odhDashboard.enabled }}
+    - kustomizeConfig:
+        overlays:
+          {{- toYaml .Values.odhDashboard.overlays | nindent 10 }}
+        repoRef:
+          name: manifests
+          path: odh-dashboard
+      name: odh-dashboard
+    {{- end }}
+    {{- if .Values.notebookController.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: odh-notebook-controller
+      name: odh-notebook-controller
+    {{- end }}
+    {{- if .Values.notebookImages.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: notebook-images
+      name: notebook-images
+    {{- end }}
+    {{- if .Values.modelMesh.enabled }}
+    - kustomizeConfig:
+        overlays:
+          {{- toYaml .Values.modelMesh.overlays | nindent 10 }}
+        repoRef:
+          name: manifests
+          path: model-mesh
+      name: model-mesh
+    {{- end }}
+    {{- if .Values.dataSciencePipelines.enabled }}
+    - kustomizeConfig:
+        overlays:
+          {{- toYaml .Values.dataSciencePipelines.overlays | nindent 10 }}
+        repoRef:
+          name: manifests
+          path: data-science-pipelines
+      name: data-science-pipelines
+    {{- end }}
+    {{- if .Values.grafana.operator.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: grafana/cluster
+      name: grafana-cluster
+    {{- end }}
+    {{- if .Values.grafana.instance.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: grafana/grafana
+      name: grafana-instance
+    {{- end }}
+    {{- if .Values.prometheus.instance.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: prometheus/cluster
+      name: prometheus-cluster
+    {{- end }}
+    {{- if .Values.prometheus.operator.enabled }}
+    - kustomizeConfig:
+        repoRef:
+          name: manifests
+          path: prometheus/operator
+      name: prometheus-operator
+    {{- end }}
+  repos:
+    - name: manifests
+      uri: "{{ .Values.repos.manifestsUrl }}{{ .Values.repos.manifestsVersion | default .Chart.AppVersion }}"

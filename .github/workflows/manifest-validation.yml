@@ -10,9 +10,9 @@ jobs:
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Code Checkout
-  #       uses: actions/checkout@v2
+  #       uses: actions/checkout@v3
   #     - name: Set up Python 3.9
-  #       uses: actions/setup-python@v2
+  #       uses: actions/setup-python@v4
   #       with:
   #         python-version: 3.9
   #         architecture: 'x64'
@@ -33,7 +33,7 @@ jobs:
           sudo curl -L -o /usr/bin/helm https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz
           sudo chmod +x /usr/bin/helm
       - name: Code Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Validate Charts
         run: |
           for i in `find "${HELM_DIRS}" -name "Chart.yaml" -exec dirname {} \;`;

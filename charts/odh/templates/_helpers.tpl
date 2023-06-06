@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "kafka.name" -}}
+{{- define "odh.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "kafka.fullname" -}}
+{{- define "odh.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "kafka.chart" -}}
+{{- define "odh.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "kafka.labels" -}}
-helm.sh/chart: {{ include "kafka.chart" . }}
-{{ include "kafka.selectorLabels" . }}
+{{- define "odh.labels" -}}
+helm.sh/chart: {{ include "odh.chart" . }}
+{{ include "odh.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,43 +45,18 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "kafka.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "kafka.name" . }}
+{{- define "odh.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "odh.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "kafka.serviceAccountName" -}}
+{{- define "odh.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "kafka.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "odh.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
-{{- end }}
-
-{{/*
-Get the kakfa version number
-*/}}
-{{- define "kafka.semversion" -}}
-{{- $version := default .Chart.AppVersion .Values.kafka.version -}}
-{{- $semversion := semver $version -}}
-{{- end }}
-
-{{/*
-Get the kakfa version number
-*/}}
-{{- define "kafka.version" -}}
-{{- $version := default .Chart.AppVersion .Values.kafka.version -}}
-{{- print $version -}}
-{{- end }}
-
-{{/*
-Get the kakfa version number
-*/}}
-{{- define "kafka.minorVersion" -}}
-{{- $version := default .Chart.AppVersion .Values.kafka.version -}}
-{{- $semversion := semver $version -}}
-{{- printf "%d.%d" $semversion.Major $semversion.Minor -}}
 {{- end }}

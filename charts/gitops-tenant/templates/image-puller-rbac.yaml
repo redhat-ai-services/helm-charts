@@ -1,0 +1,22 @@
+{{- if include "gitops-tenant.pipelines-name" . }}
+{{- range $namespace := .Values.namespaces }}
+{{- if and (ne $namespace.role "gitops") (ne $namespace.role "pipelines")}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "gitops-tenant.namespace" ( dict "namespace" $namespace "context" $ ) }}-image-puller
+  namespace: {{ include "gitops-tenant.pipelines-name" $ }}
+  labels:
+    {{- include "gitops-tenant.labels" $ | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:image-puller
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: {{ include "gitops-tenant.namespace" ( dict "namespace" $namespace "context" $ ) }}
+{{- end }}
+{{- end }}
+{{- end }}

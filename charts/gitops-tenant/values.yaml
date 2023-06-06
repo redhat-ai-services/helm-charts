@@ -4,12 +4,14 @@ nameOverride: ""
 fullnameOverride: ""
 
 namespaces:
+  # -- GitOps namespace configuration for managing objects in all tenant namespaces
   - nameSuffix: gitops
     role: gitops
     nameOverride: ""
     adminGroupRole: admin
     annotations: {}
     labels: {}
+  # -- Pipelines namespace for executing pipelines
   - nameSuffix: pipelines
     role: pipelines
     nameOverride: ""
@@ -18,30 +20,30 @@ namespaces:
       operator.tekton.dev/prune.resources: "taskrun, pipelinerun"
       operator.tekton.dev/prune.keep-since: "7200"
     labels: {}
-  - nameSuffix: datascience
-    role: dev
-    nameOverride: ""
-    adminGroupRole: admin
-    annotations: {}
-    labels: {}
+  # -- Dev application namespace
   - nameSuffix: dev
     role: dev
     nameOverride: ""
     adminGroupRole: admin
     annotations: {}
     labels: {}
+    createOperatorGroup: true
+  # -- Test application namespace
   - nameSuffix: test
     role: test
     nameOverride: ""
     adminGroupRole: view
     annotations: {}
     labels: {}
+    createOperatorGroup: true
+  # -- Prod application namespace
   - nameSuffix: prod
     role: prod
     nameOverride: ""
     adminGroupRole: view
     annotations: {}
     labels: {}
+    createOperatorGroup: true
 
 adminGroup:
   # -- Enable the creation of the admin group.  If creation is disabled, an existing group can still be specified with the nameOverride.

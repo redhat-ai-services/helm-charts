@@ -6,8 +6,8 @@ metadata:
     {{- include "kafka.labels" . | nindent 4 }}
 spec:
   kafka:
-    version: 3.1.0
-    replicas: 3
+    version: {{ include "kafka.version" . }}
+    replicas: {{ .Values.kafka.replicas }}
     listeners:
       - name: plain
         port: 9092
@@ -23,11 +23,11 @@ spec:
       transaction.state.log.min.isr: 2
       default.replication.factor: 3
       min.insync.replicas: 2
-      inter.broker.protocol.version: '3.1'
+      inter.broker.protocol.version: "{{ include "kafka.minorVersion" . }}"
     storage:
       type: ephemeral
   zookeeper:
-    replicas: 3
+    replicas: {{ .Values.zookeeper.replicas }}
     storage:
       type: ephemeral
   entityOperator:

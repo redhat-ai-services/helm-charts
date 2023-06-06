@@ -1,0 +1,19 @@
+apiVersion: v2
+name: odh
+description: A Helm chart for configuring OpenDataHub on OpenShift
+type: application
+kubeVersion: ">= 1.19.0"
+
+version: 0.7.1
+appVersion: "v1.4.1"
+
+icon: https://avatars.githubusercontent.com/u/57720972
+
+sources:
+  - https://github.com/rh-intelligent-application-practice/helm-charts/tree/main/charts/odh
+
+maintainers:
+  - name: RH Intelligent Application Practice
+    email: na-cs-intelligent-application-practice@redhat.com
+  - name: Trevor Royer
+    email: troyer@redhat.com
