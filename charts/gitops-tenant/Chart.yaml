@@ -1,6 +1,6 @@
 apiVersion: v2
 name: gitops-tenant
-description: A Helm chart to manage a multi-tiered gitops structure for a data science project.
+description: A Helm chart to manage a multi-tiered gitops structure a project.
 type: application
 kubeVersion: ">= 1.19.0"
 
