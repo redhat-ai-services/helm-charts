@@ -9,7 +9,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
+    {{- if ne (include "gitops-tenant.gitops-name" $) "" }}
     argocd.argoproj.io/managed-by: {{ include "gitops-tenant.gitops-name" $ }}
+    {{- end }}
     {{- include "gitops-tenant.labels" $ | nindent 4 }}
     {{- with $namespace.labels }}
       {{- toYaml . | nindent 4 }}
