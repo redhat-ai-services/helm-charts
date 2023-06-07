@@ -2,7 +2,7 @@
 
 A Helm chart to manage a multi-tiered gitops structure a project.
 
-![Version: 0.3.12](https://img.shields.io/badge/Version-0.3.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.3.11](https://img.shields.io/badge/Version-0.3.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 ## Resources Created
 
@@ -46,7 +46,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "gitops-tenant"
-    version: "0.3.12"
+    version: "0.3.11"
     repository: "https://rh-datascience-and-edge-practice.github.io/helm-charts/"
 ```
 
