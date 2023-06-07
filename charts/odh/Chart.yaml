@@ -1,6 +1,6 @@
 apiVersion: v2
 name: odh
-description: A Helm chart for configuring OpenDataHub on OpenShift
+description: A Helm chart for configuring OpenDataHub on OpenShift.
 type: application
 kubeVersion: ">= 1.19.0"
 
