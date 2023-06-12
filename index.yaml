@@ -19,7 +19,7 @@ entries:
     name: argocd
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/argocd-0.4.2.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/argocd-0.4.2.tgz
     version: 0.4.2
   - apiVersion: v2
     created: "2023-01-17T19:40:28.874478827Z"
@@ -29,7 +29,7 @@ entries:
     name: argocd
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/argocd-0.4.1.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/argocd-0.4.1.tgz
     version: 0.4.1
   - apiVersion: v2
     created: "2023-01-17T17:58:19.996852634Z"
@@ -39,7 +39,7 @@ entries:
     name: argocd
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/argocd-0.4.0.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/argocd-0.4.0.tgz
     version: 0.4.0
   - apiVersion: v2
     created: "2023-01-11T18:05:42.610996644Z"
@@ -49,7 +49,7 @@ entries:
     name: argocd
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/argocd-0.3.9.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/argocd-0.3.9.tgz
     version: 0.3.9
   - apiVersion: v2
     created: "2023-01-03T15:45:07.393726058Z"
@@ -59,7 +59,7 @@ entries:
     name: argocd
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/argocd-0.3.8.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/argocd-0.3.8.tgz
     version: 0.3.8
   - apiVersion: v2
     created: "2022-12-14T00:10:32.671552236Z"
@@ -69,7 +69,7 @@ entries:
     name: argocd
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/argocd-0.3.7.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/argocd-0.3.7.tgz
     version: 0.3.7
   gitops-tenant:
   - apiVersion: v2
@@ -101,7 +101,7 @@ entries:
     name: gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/gitops-tenant-0.3.10.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/gitops-tenant-0.3.10.tgz
     version: 0.3.10
   - apiVersion: v2
     created: "2023-01-11T17:55:49.431675408Z"
@@ -112,7 +112,7 @@ entries:
     name: gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/gitops-tenant-0.3.9.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/gitops-tenant-0.3.9.tgz
     version: 0.3.9
   - apiVersion: v2
     created: "2023-01-09T16:22:10.197923345Z"
@@ -123,7 +123,7 @@ entries:
     name: gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/gitops-tenant-0.3.8.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/gitops-tenant-0.3.8.tgz
     version: 0.3.8
   - apiVersion: v2
     created: "2022-12-20T22:24:11.371373738Z"
@@ -134,7 +134,7 @@ entries:
     name: gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/gitops-tenant-0.3.7.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/gitops-tenant-0.3.7.tgz
     version: 0.3.7
   - apiVersion: v2
     created: "2022-12-20T22:16:43.680275339Z"
@@ -145,7 +145,7 @@ entries:
     name: gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/gitops-tenant-0.3.6.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/gitops-tenant-0.3.6.tgz
     version: 0.3.6
   kafdrop:
   - apiVersion: v1
@@ -179,7 +179,7 @@ entries:
     name: kafka
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/kafka-0.1.1.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/kafka-0.1.1.tgz
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
@@ -189,7 +189,7 @@ entries:
     name: kafka
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/kafka-0.1.0.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/kafka-0.1.0.tgz
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
@@ -213,7 +213,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.3.4.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.3.4.tgz
     version: 0.3.4
   - apiVersion: v2
     created: "2022-12-16T21:35:07.84673387Z"
@@ -224,7 +224,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.3.3.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.3.3.tgz
     version: 0.3.3
   - apiVersion: v2
     created: "2022-12-16T21:31:16.935309584Z"
@@ -235,7 +235,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.3.2.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.3.2.tgz
     version: 0.3.2
   - apiVersion: v2
     created: "2022-12-16T21:11:06.727491578Z"
@@ -246,7 +246,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.3.1.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v2
     created: "2022-12-16T18:55:10.645230039Z"
@@ -257,7 +257,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.3.0.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v2
     created: "2022-12-14T00:10:50.575928794Z"
@@ -268,7 +268,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.4.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.2.4.tgz
     version: 0.2.4
   - apiVersion: v2
     created: "2022-11-15T23:15:38.077049342Z"
@@ -279,7 +279,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.3.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.2.3.tgz
     version: 0.2.3
   - apiVersion: v2
     created: "2022-11-15T22:12:06.70101559Z"
@@ -290,7 +290,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.2.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.2.2.tgz
     version: 0.2.2
   - apiVersion: v2
     created: "2022-11-15T21:53:21.376395557Z"
@@ -301,7 +301,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.1.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.2.1.tgz
     version: 0.2.1
   - apiVersion: v2
     created: "2022-11-15T20:19:49.157192503Z"
@@ -312,7 +312,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.2.0.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v2
     created: "2022-12-16T21:25:42.598578669Z"
@@ -323,7 +323,7 @@ entries:
     name: ml-gitops-tenant
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/ml-gitops-tenant-0.0.1.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/ml-gitops-tenant-0.0.1.tgz
     version: 0.0.1
   odh:
   - apiVersion: v2
@@ -335,7 +335,7 @@ entries:
     kubeVersion: '>= 1.19.0'
     maintainers:
     - email: na-cs-intelligent-application-practice@redhat.com
-      name: RH Intelligent Application Practice
+      name: RH Data Science and Edge Practice
     - email: troyer@redhat.com
       name: Trevor Royer
     name: odh
@@ -354,15 +354,15 @@ entries:
     kubeVersion: '>= 1.19.0'
     maintainers:
     - email: na-cs-intelligent-application-practice@redhat.com
-      name: RH Intelligent Application Practice
+      name: RH Data Science and Edge Practice
     - email: troyer@redhat.com
       name: Trevor Royer
     name: odh
     sources:
-    - https://github.com/rh-intelligent-application-practice/helm-charts/tree/main/charts/odh
+    - https://github.com/rh-datascience-and-edge-practice/helm-charts/tree/main/charts/odh
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.7.0.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/odh-0.7.0.tgz
     version: 0.7.0
   - apiVersion: v2
     appVersion: v1.4
@@ -373,15 +373,15 @@ entries:
     kubeVersion: '>= 1.19.0'
     maintainers:
     - email: na-cs-intelligent-application-practice@redhat.com
-      name: RH Intelligent Application Practice
+      name: RH Data Science and Edge Practice
     - email: troyer@redhat.com
       name: Trevor Royer
     name: odh
     sources:
-    - https://github.com/rh-intelligent-application-practice/helm-charts/tree/main/charts/odh
+    - https://github.com/rh-datascience-and-edge-practice/helm-charts/tree/main/charts/odh
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.6.1.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/odh-0.6.1.tgz
     version: 0.6.1
   - apiVersion: v2
     appVersion: v1.4
@@ -392,15 +392,15 @@ entries:
     kubeVersion: '>= 1.19.0'
     maintainers:
     - email: na-cs-intelligent-application-practice@redhat.com
-      name: RH Intelligent Application Practice
+      name: RH Data Science and Edge Practice
     - email: troyer@redhat.com
       name: Trevor Royer
     name: odh
     sources:
-    - https://github.com/rh-intelligent-application-practice/helm-charts/tree/main/charts/odh
+    - https://github.com/rh-datascience-and-edge-practice/helm-charts/tree/main/charts/odh
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.6.0.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/odh-0.6.0.tgz
     version: 0.6.0
   - apiVersion: v2
     appVersion: v1.4
@@ -411,7 +411,7 @@ entries:
     name: odh
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.5.0.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/odh-0.5.0.tgz
     version: 0.5.0
   - apiVersion: v2
     appVersion: v1.3
@@ -422,6 +422,6 @@ entries:
     name: odh
     type: application
     urls:
-    - https://rh-intelligent-application-practice.github.io/helm-charts/odh-0.4.3.tgz
+    - https://rh-datascience-and-edge-practice.github.io/helm-charts/odh-0.4.3.tgz
     version: 0.4.3
 generated: "2023-06-07T20:29:00.136921444Z"
