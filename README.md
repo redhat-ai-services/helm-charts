@@ -6,7 +6,7 @@ To access charts from this from the cli repository add it:
 
 ```sh
 
-helm repo add rh-dse https://rh-datascience-and-edge-practice.github.io/helm-charts/
+helm repo add rh-dse https://redhat-ai-practice.github.io/helm-charts/
 helm repo update rh-dse
 ```
 
@@ -25,5 +25,5 @@ appVersion: "1.16.0"
 dependencies:
   - name: "odh"
     version: "0.1.3"
-    repository: "https://rh-datascience-and-edge-practice.github.io/helm-charts/"
+    repository: "https://redhat-ai-practice.github.io/helm-charts/"
 ```

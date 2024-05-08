@@ -9,7 +9,7 @@ A Helm chart for Kubernetes
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add rh-dse https://rh-datascience-and-edge-practice.github.io/helm-charts/
+helm repo add rh-dse https://redhat-ai-practice.github.io/helm-charts/
 helm repo update rh-dse
 helm install [release-name] rh-dse/kafka
 ```
@@ -29,7 +29,7 @@ appVersion: "1.16.0"
 dependencies:
   - name: "kafka"
     version: "0.1.2"
-    repository: "https://rh-datascience-and-edge-practice.github.io/helm-charts/"
+    repository: "https://redhat-ai-practice.github.io/helm-charts/"
 ```
 
 ## Values

@@ -27,7 +27,7 @@ This helm chart will create the following group to grant permissions to the vari
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add rh-dse https://rh-datascience-and-edge-practice.github.io/helm-charts/
+helm repo add rh-dse https://redhat-ai-practice.github.io/helm-charts/
 helm repo update rh-dse
 helm install [release-name] rh-dse/gitops-tenant
 ```
@@ -47,7 +47,7 @@ appVersion: "1.16.0"
 dependencies:
   - name: "gitops-tenant"
     version: "0.3.12"
-    repository: "https://rh-datascience-and-edge-practice.github.io/helm-charts/"
+    repository: "https://redhat-ai-practice.github.io/helm-charts/"
 ```
 
 ## Requirements

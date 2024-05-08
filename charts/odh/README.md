@@ -9,7 +9,7 @@ A Helm chart for configuring OpenDataHub on OpenShift.
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add rh-dse https://rh-datascience-and-edge-practice.github.io/helm-charts/
+helm repo add rh-dse https://redhat-ai-practice.github.io/helm-charts/
 helm repo update rh-dse
 helm install [release-name] rh-dse/odh
 ```
@@ -29,12 +29,12 @@ appVersion: "1.16.0"
 dependencies:
   - name: "odh"
     version: "0.7.1"
-    repository: "https://rh-datascience-and-edge-practice.github.io/helm-charts/"
+    repository: "https://redhat-ai-practice.github.io/helm-charts/"
 ```
 
 ## Source Code
 
-* <https://github.com/rh-datascience-and-edge-practice/helm-charts/tree/main/charts/odh>
+* <https://github.com/redhat-ai-practice/helm-charts/tree/main/charts/odh>
 
 ## Requirements
 
