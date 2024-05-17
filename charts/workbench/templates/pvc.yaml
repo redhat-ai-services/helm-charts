@@ -1,0 +1,24 @@
+{{- range $volume := .Values.storage }}
+{{- if $volume.create }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ $volume.name | default include "workbench.fullname" $ }}
+  labels:
+    {{- include "workbench.labels" $ | nindent 4 }}
+spec:
+  accessModes:
+  {{- if $volume.accessMode }}
+  {{- toYaml $volume.accessMode | indect 4}}
+  {{- else }}
+    - ReadWriteOnce
+  {{- end }}
+  resources:
+    requests:
+      storage: {{- $volume.volumeSize }}
+  volumeMode: {{- $volume.volumeMode | default "Filesystem" }}
+  {{- if $volume.storageClass }}
+  storageClass: {{- $volume.storageClass }}
+  {{- end }}
+{{- end }}
+{{- end }}

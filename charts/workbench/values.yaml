@@ -1,0 +1,55 @@
+# Default values for workbench.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+username: user1
+
+image:
+  repository: image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-minimal-notebook'
+  tag: ""
+  pullPolicy: IfNotPresent
+
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+resources:
+  limits:
+    cpu: '2'
+    memory: 8Gi
+  requests:
+    cpu: '1'
+    memory: 8Gi
+
+storage:
+  - name: ""
+    mountPath: /opt/app-root/src
+    createPVC: true
+    volumeSize: 20Gi
+    accessModes:
+      - ReadWriteOnce
+    volumeMode: Filesystem
+
+secrets:
+#  - name: aws-connection-data-connection
+
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

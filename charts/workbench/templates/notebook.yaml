@@ -1,0 +1,99 @@
+apiVersion: kubeflow.org/v1
+kind: Notebook
+metadata:
+  name: {{ include "workbench.fullname" . }}
+  labels:
+    {{- include "workbench.labels" . | nindent 4 }}
+  annotations:
+    notebooks.opendatahub.io/inject-oauth: 'true'
+    opendatahub.io/image-display-name: Minimal Python
+    notebooks.opendatahub.io/oauth-logout-url: 'https://rhods-dashboard-redhat-ods-applications.apps.cluster-pmhtr.pmhtr.sandbox831.opentlc.com/projects/{{ .Release.Namespace }}?notebookLogout={{ include "workbench.fullname" . }}'
+    opendatahub.io/accelerator-name: ''
+    openshift.io/description: ''
+    openshift.io/display-name: {{ include "workbench.fullname" . }}
+    notebooks.opendatahub.io/last-image-selection: 's2i-minimal-notebook:2024.1'
+spec:
+  template:
+    spec:
+      affinity: {}
+      containers:
+        - name: {{ include "workbench.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /notebook/{{ .Release.Namespace }}/{{ include "workbench.fullname" . }}/api
+              port: notebook-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /notebook/{{ .Release.Namespace }}/{{ include "workbench.fullname" . }}/api
+              port: notebook-port
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          env:
+            - name: NOTEBOOK_ARGS
+              value: |-
+                --ServerApp.port=8888
+                --ServerApp.token=''
+                --ServerApp.password=''
+                --ServerApp.base_url=/notebook/{{ .Release.Namespace }}/{{ include "workbench.fullname" . }}
+                --ServerApp.quit_button=False
+                --ServerApp.tornado_settings={"user":"{{ .Values.username }}","hub_host":"https://rhods-dashboard-redhat-ods-applications.apps.cluster-pmhtr.pmhtr.sandbox831.opentlc.com","hub_prefix":"/projects/{{ .Release.Namespace }}"}
+            - name: JUPYTER_IMAGE
+              value: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            - name: PIP_CERT
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: REQUESTS_CA_BUNDLE
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: SSL_CERT_FILE
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+            - name: PIPELINES_SSL_SA_CERTS
+              value: /etc/pki/tls/custom-certs/ca-bundle.crt
+          ports:
+            - containerPort: 8888
+              name: notebook-port
+              protocol: TCP
+          volumeMounts:
+            {{- range $volume := .Values.storage }}
+            - mountPath: {{- $volume.mountPath }}
+              name: {{ $volume.name | default include "workbench.fullname" $ }}
+            {{- end }}
+            - mountPath: /dev/shm
+              name: shm
+            - mountPath: /etc/pki/tls/custom-certs/ca-bundle.crt
+              name: trusted-ca
+              readOnly: true
+              subPath: ca-bundle.crt
+          workingDir: /opt/app-root/src
+      enableServiceLinks: false
+      serviceAccountName: {{ include "workbench.fullname" . }}
+      volumes:
+        {{- range $volume := .Values.storage }}
+        - name: {{ $volume.name | default include "workbench.fullname" $ }}
+          persistentVolumeClaim:
+            claimName: {{ $volume.name | default include "workbench.fullname" $ }}
+        {{- end }}
+        - emptyDir:
+            medium: Memory
+          name: shm
+        - configMap:
+            items:
+              - key: ca-bundle.crt
+                path: ca-bundle.crt
+            name: workbench-trusted-ca-bundle
+            optional: true
+          name: trusted-ca
