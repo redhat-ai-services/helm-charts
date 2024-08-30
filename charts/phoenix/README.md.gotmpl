@@ -37,4 +37,15 @@ dependencies:
 
 {{ template "chart.valuesSection" . }}
 
+## Usage
+
+### Setting the Phoenix URL for your application
+
+By default when doing trace collection, Phoenix attempts to log metrics to a phoenix instance running on `localhost:6006`.  When deplying a remote Phoenix server you must tell your application the host URL for that server.  You can configure that by setting the `PHOENIX_HOST` environment variable:
+
+```
+import os
+os.environ["PHOENIX_HOST"] = "release-name.my-namespace.svc.cluster.local"
+```
+
 {{ template "helm-docs.versionFooter" . }}
