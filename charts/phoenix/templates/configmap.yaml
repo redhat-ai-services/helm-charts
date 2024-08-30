@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "phoenix.fullname" . }}
+  labels:
+    {{- include "phoenix.labels" . | nindent 4 }}
+data:
+  COLLECTOR_ENDPOINT: "http://phoenix:{{ .Values.service.port }}/v1/traces"
+  INSTRUMENT_LLAMA_INDEX: 'true'
+  PHOENIX_WORKING_DIR: '/var/lib/phoenix'
+  NUMBA_CACHE_DIR: '/tmp'
+  PHOENIX_PORT: '{{ .Values.service.port }}'
+  PHOENIX_GRPC_PORT: '4317'
+  PHOENIX_HOST: '0.0.0.0'
+  PHOENIX_ENABLE_PROMETHEUS: 'true'
+  PHOENIX_SERVER_INSTRUMENTATION_OTLP_TRACE_COLLECTOR_HTTP_ENDPOINT: ''
+  PHOENIX_SERVER_INSTRUMENTATION_OTLP_TRACE_COLLECTOR_GRPC_ENDPOINT: ''
+  # PHOENIX_NOTEBOOK_ENV: 'ocpai'
+  # PHOENIX_PROJECT_NAME: 'redhat-saia'

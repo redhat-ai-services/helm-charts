@@ -1,0 +1,108 @@
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+image:
+  repository: arizephoenix/phoenix
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "version-4.20.2"
+
+imagePullSecrets: []
+
+openai:
+  key: {}
+    # existingSecret: 
+    #   name: "my_secret"
+    #   key: OPENAI_API_KEY
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations:
+  prometheus.io/path: /metrics
+  prometheus.io/port: "9090"
+  prometheus.io/scrape: "true"
+
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 6006
+
+route:
+  # -- Enable creation of the OpenShift Route object
+  enabled: true
+  # Allow OCP to determine the host if left blank
+  # -- The hostname for the route
+  # @default -- Set by OpenShift
+  host: ""
+  # -- The path for the OpenShift route
+  path: ""
+  tls:
+    # -- Enable secure route settings
+    enabled: true
+    # -- Secure route termination policy
+    termination: edge
+    # -- Insecure route termination policy
+    insecureEdgeTerminationPolicy: Redirect
+  # -- Additional custom annotations for the route
+  annotations: {}
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+volumeClaimTemplates:
+  requests:
+    storage: 8Gi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

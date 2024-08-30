@@ -1,0 +1,7 @@
+apiVersion: v2
+name: phoenix
+description: A Helm chart for deploying Phoenix on OpenShift
+type: application
+
+version: 0.1.0
+appVersion: "4.20.2"
