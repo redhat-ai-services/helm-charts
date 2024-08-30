@@ -27,7 +27,15 @@ openai:
 
 persistence:
   # -- Configures the type of persistence that should be used.
-  type: 
+  # Supported options include `pvc`, `postgres`, and `crunchy-postgres`
+  type: pvc
+  pvc:
+    # -- The volume size when utilizing the pvc storage option
+    volumeSize: 8Gi
+
+volumeClaimTemplates:
+  requests:
+    storage: 8Gi
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -114,10 +122,6 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
-
-volumeClaimTemplates:
-  requests:
-    storage: 8Gi
 
 livenessProbe:
   httpGet:
