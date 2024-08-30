@@ -4,4 +4,6 @@ description: A Helm chart for deploying Phoenix on OpenShift
 type: application
 
 version: 0.1.0
-appVersion: "4.20.2"
+appVersion: "version-4.20.2"
+
+icon: https://pbs.twimg.com/profile_images/1652081979146506240/e2xH7qJL_400x400.png
