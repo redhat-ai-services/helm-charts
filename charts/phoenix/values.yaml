@@ -1,14 +1,22 @@
+# -- String to partially override fullname template (will maintain the release name)
 nameOverride: ""
+# -- String to fully override fullname template
 fullnameOverride: ""
 
+# -- Number of replicas
 replicaCount: 1
 
 image:
+  # -- The image repository to use
   repository: arizephoenix/phoenix
+  # -- The image pull policy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "version-4.20.2"
+  # -- The image tag to use
+  # @default -- Chart appVersion
+  tag: ""
 
+# -- The image pull secret for the image repository
 imagePullSecrets: []
 
 openai:
@@ -17,27 +25,37 @@ openai:
     #   name: "my_secret"
     #   key: OPENAI_API_KEY
 
+persistence:
+  # -- Configures the type of persistence that should be used.
+  type: 
+
 serviceAccount:
   # Specifies whether a service account should be created
+  # -- Enable creation of a ServiceAccount
   create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
   # Annotations to add to the service account
+  # -- Additional custom annotations for the ServiceAccount
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
+  # -- The name of the ServiceAccount to use.
+  # @default -- fullname template
   name: ""
 
+# -- Map of annotations to add to the pods
 podAnnotations:
   prometheus.io/path: /metrics
   prometheus.io/port: "9090"
   prometheus.io/scrape: "true"
 
+# -- Map of labels to add to the pods
 podLabels: {}
 
+# -- Map of securityContexts to add to the pod
 podSecurityContext: {}
   # fsGroup: 2000
 
+# -- Map of securityContexts to add to the container
 securityContext: {}
   # capabilities:
   #   drop:
@@ -47,7 +65,9 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
+  # -- Kubernetes Service type
   type: ClusterIP
+  # -- The http port for the application
   port: 6006
 
 route:
@@ -69,6 +89,7 @@ route:
   # -- Additional custom annotations for the route
   annotations: {}
 
+# -- Resource configuration for the application server
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
