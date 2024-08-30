@@ -122,8 +122,11 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+# -- Node selector for the application
 nodeSelector: {}
 
+# -- Tolerations for the application
 tolerations: []
 
+# -- Affinity configuration for the application
 affinity: {}
