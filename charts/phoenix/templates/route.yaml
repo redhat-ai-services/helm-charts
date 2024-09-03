@@ -21,7 +21,11 @@ spec:
     name: {{ include "phoenix.fullname" . }}
     weight: 100
   port:
-    targetPort: http
+    {{- if .Values.openshiftOauth.enabled }}
+    targetPort: oauth-proxy
+    {{- else }}
+    targetPort: phoenix
+    {{- end }}
   {{- if .Values.route.tls.enabled }}
   tls:
     termination: {{ .Values.route.tls.termination }}

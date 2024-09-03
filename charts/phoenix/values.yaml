@@ -1,14 +1,22 @@
+# -- String to partially override fullname template (will maintain the release name)
 nameOverride: ""
+# -- String to fully override fullname template
 fullnameOverride: ""
 
+# -- Number of replicas
 replicaCount: 1
 
 image:
+  # -- The image repository to use
   repository: arizephoenix/phoenix
+  # -- The image pull policy
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "version-4.20.2"
+  # -- The image tag to use
+  # @default -- Chart appVersion
+  tag: ""
 
+# -- The image pull secret for the image repository
 imagePullSecrets: []
 
 openai:
@@ -17,27 +25,45 @@ openai:
     #   name: "my_secret"
     #   key: OPENAI_API_KEY
 
+persistence:
+  # -- Configures the type of persistence that should be used.
+  # Supported options include `pvc`, `postgres`, and `crunchy-postgres`
+  type: pvc
+  pvc:
+    # -- The volume size when utilizing the pvc storage option
+    volumeSize: 8Gi
+
+volumeClaimTemplates:
+  requests:
+    storage: 8Gi
+
 serviceAccount:
   # Specifies whether a service account should be created
+  # -- Enable creation of a ServiceAccount
   create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
   # Annotations to add to the service account
+  # -- Additional custom annotations for the ServiceAccount
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
+  # -- The name of the ServiceAccount to use.
+  # @default -- fullname template
   name: ""
 
+# -- Map of annotations to add to the pods
 podAnnotations:
   prometheus.io/path: /metrics
   prometheus.io/port: "9090"
   prometheus.io/scrape: "true"
 
+# -- Map of labels to add to the pods
 podLabels: {}
 
+# -- Map of securityContexts to add to the pod
 podSecurityContext: {}
   # fsGroup: 2000
 
+# -- Map of securityContexts to add to the container
 securityContext: {}
   # capabilities:
   #   drop:
@@ -47,7 +73,9 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
+  # -- Kubernetes Service type
   type: ClusterIP
+  # -- The http port for the application
   port: 6006
 
 route:
@@ -63,12 +91,53 @@ route:
     # -- Enable secure route settings
     enabled: true
     # -- Secure route termination policy
-    termination: edge
+    termination: reencrypt
     # -- Insecure route termination policy
     insecureEdgeTerminationPolicy: Redirect
   # -- Additional custom annotations for the route
   annotations: {}
 
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+openshiftOauth: 
+  # -- Secures the application with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`.
+  enabled: true
+  # -- Enable access to the application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to the API.  
+  # Warning: This feature requires cluster admin to install.
+  enableBearerTokenAccess: true
+  image:
+    # -- The image repository to use
+    repository: registry.redhat.io/openshift4/ose-oauth-proxy
+    # -- The docker image pull policy
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    # -- The image tag to use
+    # @default -- Chart appVersion
+    tag: v4.12
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+# -- Resource configuration for the application server
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -80,10 +149,6 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
-
-volumeClaimTemplates:
-  requests:
-    storage: 8Gi
 
 livenessProbe:
   httpGet:
@@ -101,8 +166,11 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+# -- Node selector for the application
 nodeSelector: {}
 
+# -- Tolerations for the application
 tolerations: []
 
+# -- Affinity configuration for the application
 affinity: {}
