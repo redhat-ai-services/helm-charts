@@ -32,6 +32,10 @@ dependencies:
     repository: "https://redhat-ai-practice.github.io/helm-charts/"
 ```
 
+## Source Code
+
+* <https://github.com/redhat-ai-services/helm-charts/tree/main/charts/phoenix>
+
 ## Usage
 
 ### Setting the Phoenix URL for your application
