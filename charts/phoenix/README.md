@@ -47,6 +47,10 @@ import os
 os.environ["PHOENIX_HOST"] = "release-name.my-namespace.svc.cluster.local"
 ```
 
+> Warning
+>
+> Phoenix does not appear to support configuring a bearer token that can be used with PHOENIX_HOST to authenticate with OpenShift OAuth.  It is recommended that you run Phoenix on the same cluster as your application to allow them to communicate using the service port.
+
 ## Values
 
 | Key | Type | Default | Description |
