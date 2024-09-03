@@ -35,8 +35,6 @@ dependencies:
 
 {{ template "chart.requirementsSection" . }}
 
-{{ template "chart.valuesSection" . }}
-
 ## Usage
 
 ### Setting the Phoenix URL for your application
@@ -47,5 +45,7 @@ By default when doing trace collection, Phoenix attempts to log metrics to a pho
 import os
 os.environ["PHOENIX_HOST"] = "release-name.my-namespace.svc.cluster.local"
 ```
+
+{{ template "chart.valuesSection" . }}
 
 {{ template "helm-docs.versionFooter" . }}
