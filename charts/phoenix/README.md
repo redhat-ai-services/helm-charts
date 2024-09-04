@@ -2,7 +2,7 @@
 
 A Helm chart for deploying Phoenix on OpenShift
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: version-4.20.2](https://img.shields.io/badge/AppVersion-version--4.20.2-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: version-4.20.2](https://img.shields.io/badge/AppVersion-version--4.20.2-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "phoenix"
-    version: "0.1.0"
+    version: "0.1.1"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -75,7 +75,7 @@ os.environ["PHOENIX_HOST"] = "release-name.my-namespace.svc.cluster.local"
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
 | nodeSelector | object | `{}` | Node selector for the application |
 | openai.key | object | `{}` |  |
-| openshiftOauth.enableBearerTokenAccess | bool | `true` | Enable access to the application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to the API.   Warning: This feature requires cluster admin to install. |
+| openshiftOauth.enableBearerTokenAccess | bool | `false` | Enable access to the application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to the API.   Warning: This feature requires cluster admin to install. |
 | openshiftOauth.enabled | bool | `true` | Secures the application with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`. |
 | openshiftOauth.image.pullPolicy | string | `"IfNotPresent"` | The docker image pull policy |
 | openshiftOauth.image.repository | string | `"registry.redhat.io/openshift4/ose-oauth-proxy"` | The image repository to use |
