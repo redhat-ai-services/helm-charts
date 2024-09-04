@@ -9,9 +9,9 @@ A Helm chart for Kubernetes
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add rh-dse https://redhat-ai-practice.github.io/helm-charts/
-helm repo update rh-dse
-helm install [release-name] rh-dse/kafka
+helm repo add redhat-ai-services https://redhat-ai-services.github.io/helm-charts/
+helm repo update redhat-ai-services
+helm install [release-name] redhat-ai-services/kafka
 ```
 
 To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
@@ -29,7 +29,7 @@ appVersion: "1.16.0"
 dependencies:
   - name: "kafka"
     version: "0.1.2"
-    repository: "https://redhat-ai-practice.github.io/helm-charts/"
+    repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
 ## Values

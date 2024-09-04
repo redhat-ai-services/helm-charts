@@ -9,9 +9,9 @@ A Helm chart for deploying Phoenix on OpenShift
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add rh-aip https://redhat-ai-practice.github.io/helm-charts/
-helm repo update rh-aip
-helm install [release-name] rh-aip/phoenix
+helm repo add redhat-ai-services https://redhat-ai-services.github.io/helm-charts/
+helm repo update redhat-ai-services
+helm install [release-name] redhat-ai-services/phoenix
 ```
 
 To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
@@ -29,7 +29,7 @@ appVersion: "1.16.0"
 dependencies:
   - name: "phoenix"
     version: "0.1.0"
-    repository: "https://redhat-ai-practice.github.io/helm-charts/"
+    repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
 ## Source Code

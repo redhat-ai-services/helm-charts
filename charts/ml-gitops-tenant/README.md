@@ -28,9 +28,9 @@ This helm chart will create the following group to grant permissions to the vari
 To access charts from this from the cli repository add it:
 
 ```sh
-helm repo add rh-dse https://redhat-ai-practice.github.io/helm-charts/
-helm repo update rh-dse
-helm install [release-name] rh-dse/ml-gitops-tenant
+helm repo add redhat-ai-services https://redhat-ai-services.github.io/helm-charts/
+helm repo update redhat-ai-services
+helm install [release-name] redhat-ai-services/ml-gitops-tenant
 ```
 
 To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
@@ -48,7 +48,7 @@ appVersion: "1.16.0"
 dependencies:
   - name: "ml-gitops-tenant"
     version: "0.3.5"
-    repository: "https://redhat-ai-practice.github.io/helm-charts/"
+    repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
 ## Requirements
