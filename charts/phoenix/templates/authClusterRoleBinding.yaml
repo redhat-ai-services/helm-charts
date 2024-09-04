@@ -2,7 +2,7 @@
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ include "phoenix.fullname" . }}-auth-delegator
+  name: {{ include "phoenix.fullname" . }}-{{ {{ .Release.Namespace }}-auth-delegator
   labels:
     {{- include "phoenix.labels" . | nindent 4 }}
 subjects:
