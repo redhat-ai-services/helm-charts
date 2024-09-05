@@ -35,6 +35,7 @@ dependencies:
 ## Source Code
 
 * <https://github.com/redhat-ai-services/helm-charts/tree/main/charts/phoenix>
+* <https://github.com/Arize-ai/phoenix>
 
 ## Usage
 
