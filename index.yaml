@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   argocd:
   - apiVersion: v2
-    created: "2024-09-04T18:32:20.744780462Z"
+    created: "2024-09-05T14:47:33.024378747Z"
     description: A Helm chart for Kubernetes
-    digest: 19d1ddad61a3325118524a6f5fd7ba7b1d1ef31e644df591b19e70b27b097a8e
+    digest: 20e835f6f30d537471ed810aef75083ede87bbaa6afcc54fc86af8c3556c4a55
     kubeVersion: '>= 1.19.0'
     name: argocd
     type: application
@@ -73,9 +73,9 @@ entries:
     version: 0.3.7
   gitops-tenant:
   - apiVersion: v2
-    created: "2024-09-04T18:32:20.745200495Z"
+    created: "2024-09-05T14:47:33.024823087Z"
     description: A Helm chart to manage a multi-tiered gitops structure a project.
-    digest: 59760ca45858088abcce10afa9a671d289d1b838078cbb30e832759fe5fce34d
+    digest: ec3ab3e17feb84ac41c6def5204f581d921e2e0dfb938934d26e9e290cf1f6ba
     kubeVersion: '>= 1.19.0'
     name: gitops-tenant
     type: application
@@ -150,9 +150,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2024-09-04T18:32:20.745676714Z"
+    created: "2024-09-05T14:47:33.025325005Z"
     description: A Helm chart for Kafdrop
-    digest: 8926259c8bc68ef8f0ca97b7956c94bf07e9ce0fa8b4c350dba5d7bdbe48b688
+    digest: 2f78ef08bb3fe1668b5bdae3dad36dbcec699679e45516b70ce5506e45213744
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -161,9 +161,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 3.3.1
-    created: "2024-09-04T18:32:20.74590524Z"
+    created: "2024-09-05T14:47:33.02563255Z"
     description: A Helm chart for Kubernetes
-    digest: 11e732752c565815ac12cda026a11c692bd19f5ca0017a19a32bdab0495d5d09
+    digest: 0ea104f87646e679bf10b281bfadb45bf09809af8f5bab924daab45f95a54298
     icon: https://upload.wikimedia.org/wikipedia/commons/0/0a/Apache_kafka-icon.svg
     name: kafka
     type: application
@@ -193,11 +193,11 @@ entries:
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2024-09-04T18:32:20.746304474Z"
+    created: "2024-09-05T14:47:33.026134688Z"
     deprecated: true
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: 5b880484b642568dcd889643ede51011fe99ebb2a8d1cd5c4ba0be43d48409ba
+    digest: f314c4d0e6ad2dd29e24d05aecc068d885c7da09617d02bf10850ba233588536
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
@@ -328,9 +328,9 @@ entries:
   odh:
   - apiVersion: v2
     appVersion: v1.4.1
-    created: "2024-09-04T18:32:20.746659897Z"
+    created: "2024-09-05T14:47:33.026495652Z"
     description: A Helm chart for configuring OpenDataHub on OpenShift.
-    digest: c53d029a33a62a672ac9a5e117c3957d6c1d332d8c51372b40c976820b3ff5ed
+    digest: 9d768402c02628ba0c0412ecdbf877d233499fc8b605556cee7ae5f6ec13be90
     icon: https://avatars.githubusercontent.com/u/57720972
     kubeVersion: '>= 1.19.0'
     maintainers:
@@ -427,13 +427,14 @@ entries:
   phoenix:
   - apiVersion: v2
     appVersion: version-4.20.2
-    created: "2024-09-04T18:32:20.747211286Z"
+    created: "2024-09-05T14:47:33.027046642Z"
     description: A Helm chart for deploying Phoenix on OpenShift
-    digest: 30f596c2e40b53ca577aba3b9f30023af0c056b7841e5acea4034147152ed2ce
+    digest: c931d96427c830887c9f3e20e8ac0556f9db8d79648d8f32a2e5f74928aaa789
     icon: https://pbs.twimg.com/profile_images/1652081979146506240/e2xH7qJL_400x400.png
     name: phoenix
     sources:
     - https://github.com/redhat-ai-services/helm-charts/tree/main/charts/phoenix
+    - https://github.com/Arize-ai/phoenix
     type: application
     urls:
     - https://redhat-ai-services.github.io/helm-charts/phoenix-0.1.1.tgz
@@ -451,4 +452,4 @@ entries:
     urls:
     - https://redhat-ai-services.github.io/helm-charts/phoenix-0.1.0.tgz
     version: 0.1.0
-generated: "2024-09-04T18:32:20.743963428Z"
+generated: "2024-09-05T14:47:33.022565035Z"
