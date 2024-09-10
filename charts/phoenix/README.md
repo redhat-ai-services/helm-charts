@@ -41,20 +41,29 @@ dependencies:
 
 ### Setting the Phoenix URL for your application
 
-By default when doing trace collection, Phoenix attempts to log metrics to a phoenix instance running on `localhost:6006`.  When deplying a remote Phoenix server you must tell your application the host URL for that server.  You can configure that by setting the `PHOENIX_HOST` environment variable:
+By default when doing trace collection, Phoenix attempts to log metrics to a phoenix instance running on `localhost:6006`.  When deplying a Phoenix server you must tell your application the host URL for that server.  You can configure that by setting the `PHOENIX_HOST` environment variable if your application is running in OpenShift:
 
 ```
 import os
 os.environ["PHOENIX_HOST"] = "release-name.my-namespace.svc.cluster.local"
 ```
 
+Or by setting `PHOENIX_COLLECTOR_ENDPOINT`:
+
+```
+import os
+os.environ["PHOENIX_COLLECTOR_ENDPOINT"] = "http://release-name.my-namespace.svc.cluster.local:6006"
+```
+
+With `PHOENIX_HOST`, the Phoenix client will use the default port 6006 and construct the `PHOENIX_COLLECTOR_ENDPOINT` for you.
+
 > [!WARNING]
 >
-> By default, this helm chart disables the ability to authenticate via bearer token.  To enable this feature, you can install {{ template "chart.name" . }} with the following option:
+> By default, this helm chart disables the ability to authenticate via bearer token.  To enable this feature, you can install phoenix with the following option:
 >
 > ```
-> helm install [release-name] redhat-ai-services/{{ template "chart.name" . }} \
->     --set openshiftOauth.enableBearerTokenAccess=True  
+> helm install [release-name] redhat-ai-services/phoenix \
+>     --set openshiftOauth.enableBearerTokenAccess=True 
 > ```
 >
 > This option requires cluster admin privileges.
