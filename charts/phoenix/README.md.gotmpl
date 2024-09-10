@@ -57,10 +57,10 @@ With `PHOENIX_HOST`, the Phoenix client will use the default port 6006 and const
 
 > [!WARNING]
 >
-> By default, this helm chart disables the ability to authenticate via bearer token.  To enable this feature, you can install {{ template "chart.name" . }} with the following option:
+> By default, this helm chart disables the ability to authenticate via bearer token.  To enable this feature, you can install phoenix with the following option:
 >
 > ```
-> helm install [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+> helm install [release-name] redhat-ai-services/phoenix \
 >     --set openshiftOauth.enableBearerTokenAccess=True  
 > ```
 >
