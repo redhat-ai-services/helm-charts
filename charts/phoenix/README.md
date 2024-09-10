@@ -57,6 +57,10 @@ os.environ["PHOENIX_COLLECTOR_ENDPOINT"] = "http://release-name.my-namespace.svc
 
 With `PHOENIX_HOST`, the Phoenix client will use the default port 6006 and construct the `PHOENIX_COLLECTOR_ENDPOINT` for you.
 
+For more information see the official configuration documentation:
+
+https://docs.arize.com/phoenix/setup/configuration
+
 > [!WARNING]
 >
 > By default, this helm chart disables the ability to authenticate via bearer token.  To enable this feature, you can install phoenix with the following option:
