@@ -48,9 +48,18 @@ import os
 os.environ["PHOENIX_HOST"] = "release-name.my-namespace.svc.cluster.local"
 ```
 
-> Warning
+> [!WARNING]
 >
-> Phoenix does not appear to support configuring a bearer token that can be used with PHOENIX_HOST to authenticate with OpenShift OAuth.  It is recommended that you run Phoenix on the same cluster as your application to allow them to communicate using the service port.
+> By default, this helm chart disables the ability to authenticate via bearer token.  To enable this feature, you can install {{ template "chart.name" . }} with the following option:
+>
+> ```
+> helm install [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+>     --set openshiftOauth.enableBearerTokenAccess=True  
+> ```
+>
+> This option requires cluster admin privileges.
+>
+> At this point in time, the phoenix instrumentation does not appear to support authenicating via bearer token.  It is recommended that you run Phoenix on the same cluster as your application to allow them to communicate using the service port.
 
 ## Values
 
