@@ -41,14 +41,37 @@ spec:
               - -m
               - phoenix.server.main
               - serve
-          {{- if hasKey .Values.openai.key "existingSecret" }}
           env:
+          {{- if hasKey .Values.openai.key "existingSecret" }}
             - name: OPENAI_API_KEY
               valueFrom:
                 secretKeyRef:
                 {{- with .Values.openai.key.existingSecret }}
                 {{- toYaml . | nindent 18 }}
                 {{- end }}
+          {{- end }}
+          {{- if eq .Values.persistence.type "externalPostgres" }}
+          {{- with .Values.persistence.externalPostgres.existingSecret }}
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .name }}
+                  key: {{ .databaseNameKey }}
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .name }}
+                  key: {{ .databaseUserKey }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .name }}
+                  key: {{ .databasePasswordKey }}
+            {{- end }}
+            - name: DATABASE_HOST_URL
+              value: {{ .Values.persistence.externalPostgres.hostUrl }}
+            - name: PHOENIX_SQL_DATABASE_URL
+              value: "postgresql://$(DATABASE_USER):$(DATABASE_PASSWORD)@$(DATABASE_HOST_URL)/$(DATABASE_NAME)"
           {{- end }}
           envFrom:
             - configMapRef:
@@ -115,6 +138,10 @@ spec:
         - name: oauth-tls
           secret:
             secretName: {{ include "phoenix.fullname" . }}-tls
+        {{- if ne .Values.persistence.type "pvc" }}
+        - name: {{ include "phoenix.fullname" . }}
+          emptyDir: {}
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

@@ -27,11 +27,18 @@ openai:
 
 persistence:
   # -- Configures the type of persistence that should be used.
-  # Supported options include `pvc`, `postgres`, and `crunchy-postgres`
-  type: pvc
+  # Supported options include `pvc`, `postgres`, and `externalPostgres`
+  type: externalPostgres
   pvc:
     # -- The volume size when utilizing the pvc storage option
     volumeSize: 8Gi
+  externalPostgres:
+    hostUrl: phoenix-postgresql.phoenix-test.svc.cluster.local:5432
+    existingSecret:
+      name: phoenix-postgresql
+      databaseNameKey: database-name
+      databaseUserKey: database-user
+      databasePasswordKey: database-password
 
 volumeClaimTemplates:
   requests:
