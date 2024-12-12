@@ -1,0 +1,39 @@
+# This is to override the chart name.
+nameOverride: ""
+fullnameOverride: ""
+
+servingRuntime:
+  useExisting: ""
+  image: 'quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316'
+
+inferenceService:
+  minReplicas: 1
+  maxReplicas: 1
+  args: []
+  storage:
+    # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
+    mode: uri
+    # -- The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://"
+    storageUri: oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct
+    # -- The secret containing s3 credentials.  Mode must be set to "s3" to use this option.
+    key: ""
+    # -- The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option.
+    path: ""
+  
+  timeout: 30m
+  
+  resources:
+    limits:
+      nvidia.com/gpu: '1'
+    requests:
+      nvidia.com/gpu: '1'
+  
+  # -- The tolerations to be applied to the model server pod.
+  tolerations:
+    - effect: NoSchedule
+      key: nvidia.com/gpu
+      operator: Exists
+
+
+# This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
