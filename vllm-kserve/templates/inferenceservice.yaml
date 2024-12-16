@@ -41,3 +41,7 @@ spec:
       {{- end }}
     tolerations:
       {{- toYaml .Values.inferenceService.tolerations | nindent 8 }}
+    {{- with .Values.inferenceService.imagePullSecrets }}
+    imagePullSecrets:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}

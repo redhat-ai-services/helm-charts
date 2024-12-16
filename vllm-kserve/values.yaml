@@ -13,13 +13,19 @@ inferenceService:
   storage:
     # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
     mode: uri
+
     # -- The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://"
     storageUri: oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct
+
     # -- The secret containing s3 credentials.  Mode must be set to "s3" to use this option.
     key: ""
+
     # -- The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option.
     path: ""
-  
+
+  # -- This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  imagePullSecrets: []
+
   timeout: 30m
   
   resources:
@@ -33,7 +39,3 @@ inferenceService:
     - effect: NoSchedule
       key: nvidia.com/gpu
       operator: Exists
-
-
-# This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
