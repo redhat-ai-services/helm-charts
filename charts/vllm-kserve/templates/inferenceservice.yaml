@@ -20,6 +20,10 @@ spec:
       annotations:
         serving.knative.dev/progress-deadline: {{ .Values.inferenceService.timeout | default "30m" }}
       args: [] # todo
+      {{- if .Values.inferenceService.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.inferenceService.nodeSelector | nindent 8 }}
+      {{- end }}
       modelFormat:
         name: vLLM
       name: ''

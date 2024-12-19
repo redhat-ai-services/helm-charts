@@ -10,6 +10,8 @@ inferenceService:
   minReplicas: 1
   maxReplicas: 1
   args: []
+  nodeSelector: 
+    test: test
   storage:
     # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
     mode: uri
