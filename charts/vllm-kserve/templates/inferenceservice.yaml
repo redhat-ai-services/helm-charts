@@ -19,7 +19,10 @@ spec:
     model:
       annotations:
         serving.knative.dev/progress-deadline: {{ .Values.inferenceService.timeout | default "30m" }}
-      args: [] # todo
+      {{- if .Values.inferenceService.args }}
+      args:
+        {{- toYaml .Values.inferenceService.args | nindent 8 }}
+      {{- end }}
       {{- if .Values.inferenceService.nodeSelector }}
       nodeSelector:
         {{- toYaml .Values.inferenceService.nodeSelector | nindent 8 }}
