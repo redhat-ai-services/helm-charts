@@ -6,7 +6,7 @@ metadata:
     opendatahub.io/accelerator-name: nvidia-gpu
     opendatahub.io/apiProtocol: REST
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-  name: llama-converted
+  name: {{ include "vllm-kserve.fullname" . }}
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
