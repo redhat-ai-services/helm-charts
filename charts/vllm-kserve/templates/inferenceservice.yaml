@@ -16,9 +16,9 @@ spec:
     {{- if gt (int .Values.inferenceService.maxReplicas) 0}}
     maxReplicas: {{ .Values.inferenceService.maxReplicas }}
     {{- end }}
+    annotations:
+      serving.knative.dev/progress-deadline: {{ .Values.inferenceService.timeout | default "30m" }}
     model:
-      annotations:
-        serving.knative.dev/progress-deadline: {{ .Values.inferenceService.timeout | default "30m" }}
       {{- if .Values.inferenceService.args }}
       args:
         {{- toYaml .Values.inferenceService.args | nindent 8 }}
