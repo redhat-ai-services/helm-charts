@@ -13,7 +13,7 @@ metadata:
 spec:
   predictor:
     minReplicas: {{ .Values.inferenceService.minReplicas }}
-    {{- if gt .Values.inferenceService.maxReplicas 0}}
+    {{- if gt (int .Values.inferenceService.maxReplicas) 0}}
     maxReplicas: {{ .Values.inferenceService.maxReplicas }}
     {{- end }}
     model:
