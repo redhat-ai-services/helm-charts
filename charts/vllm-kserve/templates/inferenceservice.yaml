@@ -9,7 +9,7 @@ metadata:
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'
   name: {{ include "vllm-kserve.fullname" . }}
   labels:
-    opendatahub.io/dashboard: 'true'
+    {{ include "vllm-kserve.labels" .}}
 spec:
   predictor:
     minReplicas: {{ .Values.inferenceService.minReplicas }}

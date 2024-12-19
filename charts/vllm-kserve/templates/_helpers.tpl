@@ -34,6 +34,7 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "vllm-kserve.labels" -}}
+opendatahub.io/dashboard: 'true'
 helm.sh/chart: {{ include "vllm-kserve.chart" . }}
 {{ include "vllm-kserve.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
