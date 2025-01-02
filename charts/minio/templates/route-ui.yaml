@@ -1,0 +1,31 @@
+{{- if .Values.uiRoute.enabled -}}
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ include "minio.fullname" . }}-ui
+  labels:
+    {{- include "minio.labels" . | nindent 4 }}
+  {{- with .Values.uiRoute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.uiRoute.host }}
+  host: {{ .Values.uiRoute.host }}
+  {{- end }}
+  {{- if .Values.uiRoute.path }}
+  path: {{ .Values.uiRoute.path }}
+  {{- end }}
+  to:
+    kind: Service
+    name: {{ include "minio.fullname" . }}
+    weight: 100
+  port:
+    targetPort: ui
+  {{- if .Values.uiRoute.tls.enabled }}
+  tls:
+    termination: {{ .Values.uiRoute.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.uiRoute.tls.insecureEdgeTerminationPolicy }}
+  {{- end }}
+  wildcardPolicy: None
+{{- end }}

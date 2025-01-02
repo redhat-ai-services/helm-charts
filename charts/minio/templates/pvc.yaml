@@ -1,0 +1,19 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "minio.fullname" . }}
+  labels:
+    {{- include "minio.labels" . | nindent 4 }}
+spec:
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size }}
+  {{- if .Values.persistence.storageClassName }}
+  storageClassName: {{ .Values.persistence.volumeMode }}
+  {{- end}}
+  {{- if .Values.persistence.volumeMode }}
+  volumeMode: {{ .Values.persistence.volumeMode }}
+  {{- end }}
