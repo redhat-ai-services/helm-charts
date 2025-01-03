@@ -29,8 +29,8 @@ persistence:
 credentials:
   # existingSecret: my-minio-credentials
   generateSecret: true
-  minioUserKey: ROOT_USER
-  minioPasswordKey: ROOT_PASSWORD
+  minioUserKey: AWS_ACCESS_KEY_ID
+  minioPasswordKey: AWS_SECRET_ACCESS_KEY
 
 uiRoute:
   # -- Enable creation of the OpenShift Route object
