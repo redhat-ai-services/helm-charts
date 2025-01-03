@@ -2,7 +2,7 @@
 
 A Helm chart for Kubernetes
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: RELEASE.2024-12-18T13-15-44Z](https://img.shields.io/badge/AppVersion-RELEASE.2024--12--18T13--15--44Z-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: RELEASE.2024-12-18T13-15-44Z](https://img.shields.io/badge/AppVersion-RELEASE.2024--12--18T13--15--44Z-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "minio"
-    version: "0.1.1"
+    version: "0.1.2"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
