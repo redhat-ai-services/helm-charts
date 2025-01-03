@@ -21,7 +21,7 @@ spec:
     name: {{ include "minio.fullname" . }}
     weight: 100
   port:
-    targetPort: ui
+    targetPort: api
   {{- if .Values.apiRoute.tls.enabled }}
   tls:
     termination: {{ .Values.apiRoute.tls.termination }}
