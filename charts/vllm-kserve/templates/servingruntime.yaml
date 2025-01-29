@@ -8,7 +8,7 @@ metadata:
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
   name: {{ include "vllm-kserve.fullname" . }}
   labels:
-    {{ include "vllm-kserve.labels" .}}
+    {{- include "vllm-kserve.labels" . | indent 4 }}
 spec:
   annotations:
     prometheus.io/path: /metrics
