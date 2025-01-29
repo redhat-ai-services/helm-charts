@@ -38,9 +38,9 @@ spec:
       runtime: {{ include "vllm-kserve.fullname" . }}
       {{- end }}
       {{- with .Values.inferenceService.storage }}
-      {{- if eq .mode "uri" }}
+      {{- if eq (lower .mode) "uri" }}
       storageUri: {{ .storageUri }}
-      {{- else if eq .mode "s3"}}
+      {{- else if eq (lower .mode) "s3"}}
       storage:
         key: {{ .key }}
         path: {{ .path }}
