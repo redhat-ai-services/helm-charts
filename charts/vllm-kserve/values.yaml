@@ -4,7 +4,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 servingRuntime:
-  # -- Use an existing servingRuntime instead of deploying one
+  # -- Use an existing servingRuntime instead of deploying one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime value.
   useExisting: ""
   # -- The vLLM model server image
   image: 'quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316'
