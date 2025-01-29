@@ -31,6 +31,52 @@ dependencies:
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
+## Usage
+
+### Deploying a Model with ModelCar (OCI)
+
+The chart provides the ability to deploy models via URI or S3.  To deploy a model from an OCI container (aka ModelCar) you must set the storage mode to `uri` and then provide the OCI URI.
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set inferenceService.storage.mode=uri \
+  --set inferenceService.storage.storageUri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct"
+```
+
+### Deploy a Model with S3
+
+To deploy a model from an S3 bucket, a secret containing the connection details in the OpenShift AI S3 Data Connection format must exist.
+
+```yaml
+kind: Secret
+apiVersion: v1
+metadata:
+  name: my-s3-connection
+  labels:
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/managed: 'true'
+  annotations:
+    opendatahub.io/connection-type: s3
+    opendatahub.io/connection-type-ref: s3
+    openshift.io/description: ''
+    openshift.io/display-name: my-s3-connection
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID: YmxhaA==
+  AWS_S3_BUCKET: YmxhaA==
+  AWS_S3_ENDPOINT: YmxhaA==
+  AWS_SECRET_ACCESS_KEY: YmxhaA==
+```
+
+To configure the S3 option, you must set the storage mode to S3 and provide the name of the secret for the S3 Data Connection and the path the model exists in the bucket.  The model cannot be located in the root folder of the bucket.
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set inferenceService.storage.mode=s3 \
+  --set inferenceService.storage.key="my-s3-connection" \
+  --set inferenceService.storage.path="my-model-folder"
+```
+
 {{ template "chart.sourcesSection" . }}
 
 {{ template "chart.requirementsSection" . }}
