@@ -9,7 +9,7 @@ metadata:
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'
   name: {{ include "vllm-kserve.fullname" . }}
   labels:
-    {{- include "vllm-kserve.labels" . | indent 4 }}
+    {{- include "vllm-kserve.labels" . | nindent 4 }}
 spec:
   predictor:
     minReplicas: {{ .Values.inferenceService.minReplicas }}
