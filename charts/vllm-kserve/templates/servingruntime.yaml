@@ -6,7 +6,7 @@ metadata:
     opendatahub.io/accelerator-name: nvidia-gpu
     opendatahub.io/apiProtocol: REST
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-  name: {{ include "vllm-kserve.fullname" . }}
+  name: {{ include "vllm-kserve.servingRuntimeName" . }}
   labels:
     {{- include "vllm-kserve.labels" . | nindent 4 }}
 spec:

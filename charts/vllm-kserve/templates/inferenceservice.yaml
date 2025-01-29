@@ -7,7 +7,7 @@ metadata:
     serving.knative.openshift.io/enablePassthrough: 'true'
     sidecar.istio.io/inject: 'true'
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'
-  name: {{ include "vllm-kserve.fullname" . }}
+  name: {{ include "vllm-kserve.inferenceServiceName" . }}
   labels:
     {{- include "vllm-kserve.labels" . | nindent 4 }}
 spec:
@@ -39,7 +39,7 @@ spec:
       {{- if .Values.servingRuntime.useExisting }}
       runtime: {{ .Values.servingRuntime.useExisting }}
       {{- else }}
-      runtime: {{ include "vllm-kserve.fullname" . }}
+      runtime: {{ include "vllm-kserve.servingRuntimeName" . }}
       {{- end }}
       {{- with .Values.inferenceService.storage }}
       {{- if eq (lower .mode) "uri" }}

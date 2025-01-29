@@ -3,7 +3,16 @@ nameOverride: ""
 # -- String to fully override fullname template
 fullnameOverride: ""
 
+endpoint:
+  externalRoute:
+    enabled: true
+  authentication:
+    enabled: true
+
+
 servingRuntime:
+  # -- Overwrite the default name for the ServingRuntime.
+  name: ""
   # -- Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name.
   useExisting: ""
   # -- The vLLM model server image
@@ -12,6 +21,8 @@ servingRuntime:
   shmSize: 2Gi
 
 inferenceService:
+  # -- Overwrite the default name for the InferenceService.
+  name: ""
   # -- The minimum number of replicas to be deployed
   minReplicas: 1
   # -- The maximum number of replicas to be deployed

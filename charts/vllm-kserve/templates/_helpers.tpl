@@ -52,6 +52,20 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Create the name of the ServingRuntime to use
+*/}}
+{{- define "vllm-kserve.servingRuntimeName" -}}
+{{- default (include "vllm-kserve.fullname" .) .Values.servingRuntime.name }}
+{{- end }}
+
+{{/*
+Create the name of the InfernceService to use
+*/}}
+{{- define "vllm-kserve.inferenceServiceName" -}}
+{{- default (include "vllm-kserve.fullname" .) .Values.inferenceService.name }}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "vllm-kserve.serviceAccountName" -}}
