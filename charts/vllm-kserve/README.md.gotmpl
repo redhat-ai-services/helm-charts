@@ -1,0 +1,40 @@
+{{ template "chart.header" . }}
+{{ template "chart.description" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+## Installing the Chart
+
+To access charts from this from the cli repository add it:
+
+```sh
+helm repo add redhat-ai-services https://redhat-ai-services.github.io/helm-charts/
+helm repo update redhat-ai-services
+helm install [release-name] redhat-ai-services/{{ template "chart.name" . }}
+```
+
+To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
+
+```yaml
+apiVersion: v2
+name: example-chart
+description: A Helm chart for Kubernetes
+type: application
+
+version: 0.1.0
+
+appVersion: "1.16.0"
+
+dependencies:
+  - name: "{{ template "chart.name" . }}"
+    version: "{{ template "chart.version" . }}"
+    repository: "https://redhat-ai-services.github.io/helm-charts/"
+```
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+{{ template "chart.valuesSection" . }}
+
+{{ template "helm-docs.versionFooter" . }}

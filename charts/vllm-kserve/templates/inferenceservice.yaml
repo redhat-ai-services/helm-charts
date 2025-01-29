@@ -1,0 +1,54 @@
+
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    security.opendatahub.io/enable-auth: 'true'
+    serving.knative.openshift.io/enablePassthrough: 'true'
+    sidecar.istio.io/inject: 'true'
+    sidecar.istio.io/rewriteAppHTTPProbers: 'true'
+  name: {{ include "vllm-kserve.fullname" . }}
+  labels:
+    {{ include "vllm-kserve.labels" .}}
+spec:
+  predictor:
+    minReplicas: {{ .Values.inferenceService.minReplicas }}
+    {{- if gt (int .Values.inferenceService.maxReplicas) 0}}
+    maxReplicas: {{ .Values.inferenceService.maxReplicas }}
+    {{- end }}
+    annotations:
+      serving.knative.dev/progress-deadline: {{ .Values.inferenceService.timeout | default "30m" }}
+    model:
+      {{- if .Values.inferenceService.args }}
+      args:
+        {{- toYaml .Values.inferenceService.args | nindent 8 }}
+      {{- end }}
+      {{- if .Values.inferenceService.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.inferenceService.nodeSelector | nindent 8 }}
+      {{- end }}
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        {{- toYaml .Values.inferenceService.resources | nindent 8 }}
+      {{- if .Values.servingRuntime.useExisting }}
+      runtime: {{ .Values.servingRuntime.useExisting }}
+      {{- else }}
+      runtime: {{ include "vllm-kserve.fullname" . }}
+      {{- end }}
+      {{- with .Values.inferenceService.storage }}
+      {{- if eq .mode "uri" }}
+      storageUri: {{ .storageUri }}
+      {{- else if eq .mode "s3"}}
+      storage:
+        key: {{ .key }}
+        path: {{ .path }}
+      {{- end }}
+      {{- end }}
+    tolerations:
+      {{- toYaml .Values.inferenceService.tolerations | nindent 8 }}
+    {{- with .Values.inferenceService.imagePullSecrets }}
+    imagePullSecrets:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
