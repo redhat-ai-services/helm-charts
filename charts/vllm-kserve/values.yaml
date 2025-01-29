@@ -16,7 +16,7 @@ inferenceService:
   maxReplicas: 1
   # -- The timeout value determines how long before KNative marks the deployments as failed
   timeout: 30m
-  # -- Additional vLLM arguments to be used to start vLLM
+  # -- Additional vLLM arguments to be used to start vLLM.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html
   args:
     - "--gpu-memory-utilization=0.90"
   # -- Node selector for the vLLM pod
