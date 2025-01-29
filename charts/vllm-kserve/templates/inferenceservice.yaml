@@ -23,6 +23,10 @@ spec:
       args:
         {{- toYaml .Values.inferenceService.args | nindent 8 }}
       {{- end }}
+      {{- if .Values.inferenceService.env }}
+      env:
+        {{- toYaml .Values.inferenceService.env | nindent 8 }}
+      {{- end }}
       {{- if .Values.inferenceService.nodeSelector }}
       nodeSelector:
         {{- toYaml .Values.inferenceService.nodeSelector | nindent 8 }}

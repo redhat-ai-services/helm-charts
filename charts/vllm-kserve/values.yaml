@@ -21,6 +21,8 @@ inferenceService:
   # -- Additional vLLM arguments to be used to start vLLM.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html
   args:
     - "--gpu-memory-utilization=0.90"
+  # -- Additional vLLM arguments to be used to start vLLM.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html
+  env: []
   # -- Node selector for the vLLM pod
   nodeSelector: {}
   storage:
