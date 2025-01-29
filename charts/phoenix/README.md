@@ -11,7 +11,7 @@ To access charts from this from the cli repository add it:
 ```sh
 helm repo add redhat-ai-services https://redhat-ai-services.github.io/helm-charts/
 helm repo update redhat-ai-services
-helm install [release-name] redhat-ai-services/phoenix
+helm upgrade -i [release-name] redhat-ai-services/phoenix
 ```
 
 To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
@@ -66,7 +66,7 @@ https://docs.arize.com/phoenix/setup/configuration
 > By default, this helm chart disables the ability to authenticate via bearer token.  To enable this feature, you can install phoenix with the following option:
 >
 > ```
-> helm install [release-name] redhat-ai-services/phoenix \
+> helm upgrade -i [release-name] redhat-ai-services/phoenix \
 >     --set openshiftOauth.enableBearerTokenAccess=True 
 > ```
 >

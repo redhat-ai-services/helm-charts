@@ -11,7 +11,7 @@ To access charts from this from the cli repository add it:
 ```sh
 helm repo add redhat-ai-services https://redhat-ai-services.github.io/helm-charts/
 helm repo update redhat-ai-services
-helm install [release-name] redhat-ai-services/minio
+helm upgrade -i [release-name] redhat-ai-services/minio
 ```
 
 To include a chart from this repository in an umbrella chart, include it in your dependencies in your `Chart.yaml` file.
