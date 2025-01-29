@@ -1,4 +1,4 @@
-{{- if .Values.servingRuntime.useExisting }}
+{{- if not (quote .Values.servingRuntime.useExisting | empty) }}
 apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:
