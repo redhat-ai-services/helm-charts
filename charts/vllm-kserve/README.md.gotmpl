@@ -77,6 +77,18 @@ helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} 
   --set inferenceService.storage.path="my-model-folder"
 ```
 
+### Setting Additional Arguments
+
+Many models may require additional arguments to be configured in order to successfully start.  Additional arguments can be set with the following option:
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set inferenceService.args={"--gpu-memory-utilization=0.95", "--max-model-len=10000"}
+```
+
+For more information on available arguments, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html
+) documentation.
+
 {{ template "chart.sourcesSection" . }}
 
 {{ template "chart.requirementsSection" . }}
