@@ -41,6 +41,6 @@ spec:
   volumes:
     - emptyDir:
         medium: Memory
-        sizeLimit: {{ .Values.servingRuntime.shm-size }}
+        sizeLimit: {{ .Values.servingRuntime.shmSize }}
       name: shm
 {{- end }}
