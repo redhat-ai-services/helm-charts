@@ -1,18 +1,26 @@
-# This is to override the chart name.
+# -- String to partially override fullname template (will maintain the release name)
 nameOverride: ""
+# -- String to fully override fullname template
 fullnameOverride: ""
 
 servingRuntime:
+  # -- Use an existing servingRuntime instead of deploying one
   useExisting: ""
+  # -- The vLLM model server image
   image: 'quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316'
 
 inferenceService:
+  # -- The minimum number of replicas to be deployed
   minReplicas: 1
+  # -- The maximum number of replicas to be deployed
   maxReplicas: 1
+  # -- The timeout value determines how long before KNative marks the deployments as failed
   timeout: 30m
-  args: []
-  nodeSelector: 
-    test: test
+  # -- Additional vLLM arguments to be used to start vLLM
+  args:
+    - "--gpu-memory-utilization=0.90"
+  # -- Node selector for the vLLM pod
+  nodeSelector: {}
   storage:
     # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
     mode: uri
@@ -29,6 +37,7 @@ inferenceService:
   # -- This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   imagePullSecrets: []
   
+  # -- Resource configuration for the vLLM container
   resources:
     limits:
       nvidia.com/gpu: '1'
