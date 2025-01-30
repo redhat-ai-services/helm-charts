@@ -6,9 +6,6 @@ fullnameOverride: ""
 endpoint:
   externalRoute:
     enabled: true
-  authentication:
-    enabled: true
-
 
 servingRuntime:
   # -- Overwrite the default name for the ServingRuntime.

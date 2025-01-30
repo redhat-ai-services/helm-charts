@@ -10,6 +10,9 @@ metadata:
   name: {{ include "vllm-kserve.inferenceServiceName" . }}
   labels:
     {{- include "vllm-kserve.labels" . | nindent 4 }}
+    {{- if not .Values.endpoint.externalRoute.enabled }}
+    networking.knative.dev/visibility: cluster-local
+    {{- end }}
 spec:
   predictor:
     minReplicas: {{ .Values.inferenceService.minReplicas }}
