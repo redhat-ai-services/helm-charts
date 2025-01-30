@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.3](https://img.shields.io/badge/AppVersion-v0.6.3-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.3](https://img.shields.io/badge/AppVersion-v0.6.3-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.1.2"
+    version: "0.2.0"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -78,15 +78,30 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set inferenceService.storage.path="my-model-folder"
 ```
 
+### Setting Additional Arguments
+
+Many models may require additional arguments to be configured in order to successfully start.  Additional arguments can be set with the following option:
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set inferenceService.args={"--gpu-memory-utilization=0.95", "--max-model-len=10000"}
+```
+
+For more information on available arguments, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html
+) documentation.
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| endpoint.externalRoute.enabled | bool | `true` |  |
 | fullnameOverride | string | `""` | String to fully override fullname template |
-| inferenceService.args | list | `["--gpu-memory-utilization=0.90"]` | Additional vLLM arguments to be used to start vLLM |
+| inferenceService.args | list | `["--gpu-memory-utilization=0.90"]` | Additional vLLM arguments to be used to start vLLM.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html |
+| inferenceService.env | list | `[]` | Additional vLLM arguments to be used to start vLLM.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html |
 | inferenceService.imagePullSecrets | list | `[]` | This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | inferenceService.maxReplicas | int | `1` | The maximum number of replicas to be deployed |
 | inferenceService.minReplicas | int | `1` | The minimum number of replicas to be deployed |
+| inferenceService.name | string | `""` | Overwrite the default name for the InferenceService. |
 | inferenceService.nodeSelector | object | `{}` | Node selector for the vLLM pod |
 | inferenceService.resources | object | `{"limits":{"nvidia.com/gpu":"1"},"requests":{"nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
 | inferenceService.storage.key | string | `""` | The secret containing s3 credentials.  Mode must be set to "s3" to use this option. |
@@ -97,6 +112,8 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
 | inferenceService.tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
 | servingRuntime.image | string | `"quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316"` | The vLLM model server image |
+| servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
+| servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
 | servingRuntime.useExisting | string | `""` | Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name. |
 
 ----------------------------------------------
