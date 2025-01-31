@@ -15,10 +15,7 @@ spec:
     prometheus.io/port: '8080'
   containers:
     - args:
-        - '--port=8080'
-        - '--model=/mnt/models'
-        - '--served-model-name={{`{{ .Name }}`}}' # need to escape braces for helm template
-        - '--distributed-executor-backend=mp'
+        {{- toYaml .Values.servingRuntime.args | nindent 8 }}
       command:
         - python
         - '-m'
