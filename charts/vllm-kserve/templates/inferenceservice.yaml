@@ -3,6 +3,9 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
+    {{- if .Values.endpoint.auth.enabled }}
+    security.opendatahub.io/enable-auth: 'true'
+    {{- end }}
     serving.knative.openshift.io/enablePassthrough: 'true'
     sidecar.istio.io/inject: 'true'
     sidecar.istio.io/rewriteAppHTTPProbers: 'true'

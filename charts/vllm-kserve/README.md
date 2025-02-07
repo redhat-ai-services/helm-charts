@@ -90,6 +90,54 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
 For more information on available arguments, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html
 ) documentation.
 
+### Securing the Endpoint
+
+By default the vLLM instance is not secured with authentication, but this feature can be enabled by setting the following options:
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set endpoint.auth.enabled=true 
+```
+
+To access the endpoint, a user token must be provided uses a `Bearer token`.  The user must have view access to the `InferenceService` instance.  
+
+For normal OpenShift users, you can utilize the same sha token used when logging in via `oc` if your user has access as the `Bearer token`, but this is not advised for long term solutions as the `oc` token expires after 24 hours by default.
+
+Instead, you can create a Service account with the correct permissions using the following:
+
+```sh
+helm upgrade -i test charts/vllm-kserve \
+  --set endpoint.auth.enabled=true \
+  --set 'endpoint.auth.serviceAccounts[0].name=my-service-account'
+```
+
+This option will create the serviceAccount `my-service-account` and a secret with the matching name that includes an automatically generated token value.  This token is generated using a legacy k8s token tool.
+
+>[!WARNING]
+> Service Accounts created through this helm chart or service accounts that are granted permission to the vLLM instance are not visible through the OpenShift AI UI.
+
+The `serviceAccounts` configuration supports several useful options:
+
+```
+endpoint:
+  auth:
+    serviceAccounts:
+      - name: my-service-account
+      - name: existing-service-account
+        create: false
+      - name: existing-in-another-namespace
+        namespace: my-other-namespace
+        create: false
+      - name: no-token
+        createLegacyToken: false
+```
+
+The `create` option defaults to true if not set.  Disabling `create` can be useful if you wish to grant permissions to a serviceAccount that already exists.
+
+The `namespace` option allows you to specify which namespace the service account exists or should be created.  Generally it is recommended to only use this feature with `create: false` to grant permissions to an existing service account and not create a new one in that namespace.  If namespace is not specified it will utilize the Release Namespace by default.
+
+The `createLegacyToken` defaults to true if not set.  This option allows you to disable the creation of a legacy k8s token when creating a new serviceAccount and instead to rely on automounted tokens in k8s.  See the official k8s [Service Account documentation](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#auto-generated-legacy-serviceaccount-token-clean-up) for more information.
+
 ## Values
 
 | Key | Type | Default | Description |
