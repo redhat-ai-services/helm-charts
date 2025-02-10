@@ -82,7 +82,28 @@ servingRuntime:
   # -- Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name.
   useExisting: ""
   # -- The vLLM model server image
-  image: 'quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316'
+  image: 'quay.io/modh/vllm'
+
+  # -- The accelerator type used to configure various options.  Accepts `nvidia`, `amd`, or `guadi`
+  acceleratorType: nvidia
+
+  accelerators:
+    nvidia:
+      tag: 'sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316'
+      annotations:
+        opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+        opendatahub.io/template-display-name: vLLM ServingRuntime for KServe
+    amd:
+      tag: 'sha256:10f09eeca822ebe77e127aad7eca2571f859a5536a6023a1baffc6764bcadc6e'
+      annotations:
+        opendatahub.io/recommended-accelerators: '["amd.com/gpu"]'
+        openshift.io/display-name: vLLM ROCm ServingRuntime for KServe
+    gaudi:
+      tag: 'sha256:927c2a5963d6f200caeef5509e00b050c9183d0b07c9bf1d17ca2e4d9ef707fd'
+      annotations:
+        opendatahub.io/recommended-accelerators: '["habana.ai/gaudi"]'
+        openshift.io/display-name: vLLM ServingRuntime with Gaudi accelerators support for KServe
+
   # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
   shmSize: 2Gi
   # -- The arguments used to start vLLM
