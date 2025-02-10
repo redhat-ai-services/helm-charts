@@ -47,12 +47,16 @@ spec:
       runtime: {{ include "vllm-kserve.servingRuntimeName" . }}
       {{- end }}
       {{- with .Values.inferenceService.storage }}
+      {{- $valid := list "uri" "s3" }}
+      {{- if not (has (lower .mode) $valid) }}
+      {{- fail "Invalid inferenceService.storage.mode.  Either 'uri' or 's3' is expected." }}
+      {{- end }}
       {{- if eq (lower .mode) "uri" }}
-      storageUri: {{ .storageUri }}
+      storageUri: {{ required "inferenceService.storage.storageUri is required when setting mode to 'uri'" .storageUri }}
       {{- else if eq (lower .mode) "s3"}}
       storage:
-        key: {{ .key }}
-        path: {{ .path }}
+        key: {{ required "inferenceService.storage.key is required when setting mode to 's3'" .key }}
+        path: {{ required "inferenceService.storage.path is required when setting mode to 's3'" .path }}
       {{- end }}
       {{- end }}
     tolerations:
