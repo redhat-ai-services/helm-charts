@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.3](https://img.shields.io/badge/AppVersion-v0.6.3-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.3](https://img.shields.io/badge/AppVersion-v0.6.3-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.2.0"
+    version: "0.3.0"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -90,75 +90,30 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
 For more information on available arguments, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html
 ) documentation.
 
-### Securing the Endpoint
-
-By default the vLLM instance is not secured with authentication, but this feature can be enabled by setting the following options:
-
-```sh
-helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
-  --set endpoint.auth.enabled=true 
-```
-
-To access the endpoint, a user token must be provided uses a `Bearer token`.  The user must have view access to the `InferenceService` instance.  
-
-For normal OpenShift users, you can utilize the same sha token used when logging in via `oc` if your user has access as the `Bearer token`, but this is not advised for long term solutions as the `oc` token expires after 24 hours by default.
-
-Instead, you can create a Service account with the correct permissions using the following:
-
-```sh
-helm upgrade -i test charts/vllm-kserve \
-  --set endpoint.auth.enabled=true \
-  --set 'endpoint.auth.serviceAccounts[0].name=my-service-account'
-```
-
-This option will create the serviceAccount `my-service-account` and a secret with the matching name that includes an automatically generated token value.  This token is generated using a legacy k8s token tool.
-
->[!WARNING]
-> Service Accounts created through this helm chart or service accounts that are granted permission to the vLLM instance are not visible through the OpenShift AI UI.
-
-The `serviceAccounts` configuration supports several useful options:
-
-```
-endpoint:
-  auth:
-    serviceAccounts:
-      - name: my-service-account
-      - name: existing-service-account
-        create: false
-      - name: existing-in-another-namespace
-        namespace: my-other-namespace
-        create: false
-      - name: no-token
-        createLegacyToken: false
-```
-
-The `create` option defaults to true if not set.  Disabling `create` can be useful if you wish to grant permissions to a serviceAccount that already exists.
-
-The `namespace` option allows you to specify which namespace the service account exists or should be created.  Generally it is recommended to only use this feature with `create: false` to grant permissions to an existing service account and not create a new one in that namespace.  If namespace is not specified it will utilize the Release Namespace by default.
-
-The `createLegacyToken` defaults to true if not set.  This option allows you to disable the creation of a legacy k8s token when creating a new serviceAccount and instead to rely on automounted tokens in k8s.  See the official k8s [Service Account documentation](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#auto-generated-legacy-serviceaccount-token-clean-up) for more information.
-
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| endpoint.auth.enabled | bool | `false` |  |
+| endpoint.auth.serviceAccounts | list | `[]` |  |
 | endpoint.externalRoute.enabled | bool | `true` |  |
 | fullnameOverride | string | `""` | String to fully override fullname template |
 | inferenceService.args | list | `["--gpu-memory-utilization=0.90"]` | Additional vLLM arguments to be used to start vLLM.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html |
-| inferenceService.env | list | `[]` | Additional vLLM arguments to be used to start vLLM.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html |
+| inferenceService.env | list | `[{"name":"VLLM_LOGGING_LEVEL","value":"INFO"}]` | Additional vLLM arguments to be used to start vLLM.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html |
 | inferenceService.imagePullSecrets | list | `[]` | This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | inferenceService.maxReplicas | int | `1` | The maximum number of replicas to be deployed |
 | inferenceService.minReplicas | int | `1` | The minimum number of replicas to be deployed |
 | inferenceService.name | string | `""` | Overwrite the default name for the InferenceService. |
 | inferenceService.nodeSelector | object | `{}` | Node selector for the vLLM pod |
-| inferenceService.resources | object | `{"limits":{"nvidia.com/gpu":"1"},"requests":{"nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
+| inferenceService.resources | object | `{"limits":{"cpu":2,"memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":1,"memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
 | inferenceService.storage.key | string | `""` | The secret containing s3 credentials.  Mode must be set to "s3" to use this option. |
 | inferenceService.storage.mode | string | `"uri"` | Option to set how the storage will be configured.  Options: "uri" and "s3" |
 | inferenceService.storage.path | string | `""` | The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option. |
-| inferenceService.storage.storageUri | string | `"oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct"` | The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://" |
+| inferenceService.storage.storageUri | string | `"oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.1-2b-instruct"` | The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://" |
 | inferenceService.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
 | inferenceService.tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
+| servingRuntime.args | list | `["--port=8080","--model=/mnt/models","--served-model-name={{ .Name }}","--distributed-executor-backend=mp"]` | The arguments used to start vLLM |
 | servingRuntime.image | string | `"quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316"` | The vLLM model server image |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
