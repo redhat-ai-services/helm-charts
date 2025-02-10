@@ -1,0 +1,19 @@
+{{- if .Values.endpoint.auth.enabled }}
+{{- if gt (len .Values.endpoint.auth.serviceAccounts) 0 }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "vllm-kserve.fullname" . }}-view
+  labels:
+    {{- include "vllm-kserve.labels" $ | nindent 4 }}
+rules:
+  - verbs:
+      - get
+    apiGroups:
+      - serving.kserve.io
+    resources:
+      - inferenceservices
+    resourceNames:
+      - {{ include "vllm-kserve.inferenceServiceName" . }}
+{{- end }}
+{{- end }}

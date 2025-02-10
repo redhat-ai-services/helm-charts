@@ -6,39 +6,49 @@ fullnameOverride: ""
 endpoint:
   externalRoute:
     enabled: true
-
-servingRuntime:
-  # -- Overwrite the default name for the ServingRuntime.
-  name: ""
-  # -- Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name.
-  useExisting: ""
-  # -- The vLLM model server image
-  image: 'quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316'
-  # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
-  shmSize: 2Gi
+  auth:
+    enabled: false
+    serviceAccounts: []
+      # - name: my-service-account
+      # - name: existing-service-account
+      #   create: false
+      # - name: existing-in-another-namespace
+      #   namespace: my-other-namespace
+      #   create: false
+      # - name: no-token
+      #   createLegacyToken: false
 
 inferenceService:
   # -- Overwrite the default name for the InferenceService.
   name: ""
+
   # -- The minimum number of replicas to be deployed
   minReplicas: 1
+
   # -- The maximum number of replicas to be deployed
   maxReplicas: 1
+
   # -- The timeout value determines how long before KNative marks the deployments as failed
   timeout: 30m
+
   # -- Additional vLLM arguments to be used to start vLLM.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html
   args:
     - "--gpu-memory-utilization=0.90"
+
   # -- Additional vLLM arguments to be used to start vLLM.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html
-  env: []
+  env: 
+    - name: VLLM_LOGGING_LEVEL
+      value: INFO
+
   # -- Node selector for the vLLM pod
   nodeSelector: {}
+
   storage:
     # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
     mode: uri
 
     # -- The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://"
-    storageUri: oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct
+    storageUri: oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.1-2b-instruct
 
     # -- The secret containing s3 credentials.  Mode must be set to "s3" to use this option.
     key: ""
@@ -51,9 +61,13 @@ inferenceService:
   
   # -- Resource configuration for the vLLM container
   resources:
-    limits:
-      nvidia.com/gpu: '1'
     requests:
+      cpu: 1
+      memory: 4Gi
+      nvidia.com/gpu: '1'
+    limits:
+      cpu: 2
+      memory: 8Gi
       nvidia.com/gpu: '1'
   
   # -- The tolerations to be applied to the model server pod.
@@ -61,3 +75,19 @@ inferenceService:
     - effect: NoSchedule
       key: nvidia.com/gpu
       operator: Exists
+
+servingRuntime:
+  # -- Overwrite the default name for the ServingRuntime.
+  name: ""
+  # -- Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name.
+  useExisting: ""
+  # -- The vLLM model server image
+  image: 'quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316'
+  # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
+  shmSize: 2Gi
+  # -- The arguments used to start vLLM
+  args:
+    - --port=8080
+    - --model=/mnt/models
+    - --served-model-name={{ .Name }}
+    - --distributed-executor-backend=mp
