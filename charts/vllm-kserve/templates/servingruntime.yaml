@@ -3,9 +3,7 @@ apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:
   annotations:
-    opendatahub.io/accelerator-name: nvidia-gpu
-    opendatahub.io/apiProtocol: REST
-    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    {{- toYaml .Values.servingRuntime.annotations | nindent 4 }}
   name: {{ include "vllm-kserve.servingRuntimeName" . }}
   labels:
     {{- include "vllm-kserve.labels" . | nindent 4 }}
