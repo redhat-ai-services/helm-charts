@@ -65,6 +65,14 @@ Create the name of the InfernceService to use
 {{- default (include "vllm-kserve.fullname" .) .Values.inferenceService.name }}
 {{- end }}
 
+{{- define "vllm-kserve.image" -}}
+{{- if .Values.servingRuntime.tag | hasPrefix "sha256:" }}
+{{- printf "%s@%s" .Values.servingRuntime.image .Values.servingRuntime.tag }}
+{{- else }}
+{{- printf "%s:%s" .Values.servingRuntime.image .Values.servingRuntime.tag }}
+{{- end }}
+{{- end }}
+
 {{/*
 Create the name of the service account to use
 */}}

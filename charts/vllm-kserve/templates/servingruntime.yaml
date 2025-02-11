@@ -21,7 +21,7 @@ spec:
       env:
         - name: HF_HOME
           value: /tmp/hf_home
-      image: {{ .Values.servingRuntime.image }}
+      image: {{ include "vllm-kserve.image" . }}
       name: kserve-container
       ports:
         - containerPort: 8080
