@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.3](https://img.shields.io/badge/AppVersion-v0.6.3-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.3](https://img.shields.io/badge/AppVersion-v0.6.3-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.3.1"
+    version: "0.3.2"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -161,6 +161,7 @@ The `createLegacyToken` defaults to true if not set.  This option allows you to 
 | inferenceService.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
 | inferenceService.tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
+| servingRuntime.annotations | object | `{"opendatahub.io/apiProtocol":"REST","opendatahub.io/recommended-accelerators":"[\"nvidia.com/gpu\"]","opendatahub.io/template-display-name":"vLLM ServingRuntime for KServe"}` | Additional annotations to configure on the servingRuntime |
 | servingRuntime.args | list | `["--port=8080","--model=/mnt/models","--served-model-name={{ .Name }}","--distributed-executor-backend=mp"]` | The arguments used to start vLLM |
 | servingRuntime.image | string | `"quay.io/modh/vllm@sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316"` | The vLLM model server image |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
