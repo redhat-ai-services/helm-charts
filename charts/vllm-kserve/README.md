@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.3.3](https://img.shields.io/badge/Version-0.3.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.3](https://img.shields.io/badge/AppVersion-v0.6.3-informational?style=flat-square)
+![Version: 0.3.4](https://img.shields.io/badge/Version-0.3.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.3](https://img.shields.io/badge/AppVersion-v0.6.3-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.3.3"
+    version: "0.3.4"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -151,6 +151,7 @@ The `createLegacyToken` defaults to true if not set.  This option allows you to 
 | inferenceService.imagePullSecrets | list | `[]` | This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | inferenceService.maxReplicas | int | `1` | The maximum number of replicas to be deployed |
 | inferenceService.minReplicas | int | `1` | The minimum number of replicas to be deployed |
+| inferenceService.modelNameOverride | string | `""` | By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name. |
 | inferenceService.name | string | `""` | Overwrite the default name for the InferenceService. |
 | inferenceService.nodeSelector | object | `{}` | Node selector for the vLLM pod |
 | inferenceService.resources | object | `{"limits":{"cpu":2,"memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":1,"memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
@@ -162,7 +163,7 @@ The `createLegacyToken` defaults to true if not set.  This option allows you to 
 | inferenceService.tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
 | servingRuntime.annotations | object | `{"opendatahub.io/apiProtocol":"REST","opendatahub.io/recommended-accelerators":"[\"nvidia.com/gpu\"]","opendatahub.io/template-display-name":"vLLM ServingRuntime for KServe"}` | Additional annotations to configure on the servingRuntime |
-| servingRuntime.args | list | `["--port=8080","--model=/mnt/models","--served-model-name={{ .Name }}","--distributed-executor-backend=mp"]` | The arguments used to start vLLM |
+| servingRuntime.args | list | `["--port=8080","--model=/mnt/models","--distributed-executor-backend=mp"]` | The arguments used to start vLLM |
 | servingRuntime.image | string | `"quay.io/modh/vllm"` | The vLLM model server image |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
