@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   argocd:
   - apiVersion: v2
-    created: "2025-02-11T00:13:33.121924719Z"
+    created: "2025-02-17T23:26:00.026290667Z"
     description: A Helm chart for Kubernetes
-    digest: 7af0d74f97fdf1ef55e4a59e2f06b8d45212ae345e3ea923758981918abe8015
+    digest: da7d103526b9a6e291b41c1079e03c8ba457c8156995df8ba870f3c81d40089f
     kubeVersion: '>= 1.19.0'
     name: argocd
     type: application
@@ -73,9 +73,9 @@ entries:
     version: 0.3.7
   gitops-tenant:
   - apiVersion: v2
-    created: "2025-02-11T00:13:33.122402802Z"
+    created: "2025-02-17T23:26:00.026722719Z"
     description: A Helm chart to manage a multi-tiered gitops structure a project.
-    digest: 2745a0529f48b78e26dd5c518f3aa2395764c6ea4a19fa0423341525027e879a
+    digest: b60b28f6a2c113bceee5e3e2b6a6dc8341f0035f389fdaba61f0dafccdd13533
     kubeVersion: '>= 1.19.0'
     name: gitops-tenant
     type: application
@@ -150,9 +150,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2025-02-11T00:13:33.122877358Z"
+    created: "2025-02-17T23:26:00.027219072Z"
     description: A Helm chart for Kafdrop
-    digest: 5341c749f07ef10f79bb17ccff70caed409114d2e9c9f063a8db001265ccd0e0
+    digest: cb93b82b0809588dd222eb39b177b36cb63348e4639e036f6a4cfcd6ae5ab542
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -161,9 +161,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 3.3.1
-    created: "2025-02-11T00:13:33.123139257Z"
+    created: "2025-02-17T23:26:00.0274599Z"
     description: A Helm chart for Kubernetes
-    digest: 1144fe7b11c03493b5e2e55bcb3f1421cb922843c3f79762f96fa5d0b77ccc83
+    digest: a67f5697d7efaa6e7c2291e7b14912800faa5dc5df1b5db943e5a5a25227c69c
     icon: https://upload.wikimedia.org/wikipedia/commons/0/0a/Apache_kafka-icon.svg
     name: kafka
     type: application
@@ -194,9 +194,9 @@ entries:
   minio:
   - apiVersion: v2
     appVersion: RELEASE.2024-12-18T13-15-44Z
-    created: "2025-02-11T00:13:33.123606831Z"
+    created: "2025-02-17T23:26:00.027885019Z"
     description: A Helm chart for Kubernetes
-    digest: bf06bf159ad955cda27f7d03a69302218b74da15def019b4142fe4861f2f476e
+    digest: 0b76af8e65087d429500e7e1f7c38b90e755d04331b791f7c278cee6e8f29233
     name: minio
     type: application
     urls:
@@ -224,11 +224,11 @@ entries:
     version: 0.1.0
   ml-gitops-tenant:
   - apiVersion: v2
-    created: "2025-02-11T00:13:33.124123606Z"
+    created: "2025-02-17T23:26:00.028311983Z"
     deprecated: true
     description: A Helm chart to manage a multi-tiered gitops structure for a data
       science project.
-    digest: 0db8ec4f40682386f4e0d68b076110fda315d2d78cc54e08f526bd5f0f687313
+    digest: 8dda47dc774d2f33074129f7789acb1eec9c57bf6bfab85a65412a1e33ea07a1
     kubeVersion: '>= 1.19.0'
     name: ml-gitops-tenant
     type: application
@@ -359,9 +359,9 @@ entries:
   odh:
   - apiVersion: v2
     appVersion: v1.4.1
-    created: "2025-02-11T00:13:33.124573566Z"
+    created: "2025-02-17T23:26:00.028675108Z"
     description: A Helm chart for configuring OpenDataHub on OpenShift.
-    digest: 81350e12786a235baa247ba300de13bce7957e4cf0c9450eac3e4f07fa8d893d
+    digest: cc2a043c0003be2cd8f98ee26d3df8c3eb0e92db3fafa84e812e08fc41ca221e
     icon: https://avatars.githubusercontent.com/u/57720972
     kubeVersion: '>= 1.19.0'
     maintainers:
@@ -458,9 +458,9 @@ entries:
   phoenix:
   - apiVersion: v2
     appVersion: version-4.20.2
-    created: "2025-02-11T00:13:33.125590826Z"
+    created: "2025-02-17T23:26:00.029264233Z"
     description: A Helm chart for deploying Phoenix on OpenShift
-    digest: ab10eb266be1beb3f3f8035b76e174a83a7fbe050c93031645d19c5623856732
+    digest: 096c6787eb7421c625f7a4b95c4efcc1ca6473d4aa7f651f44c96275b5614769
     icon: https://pbs.twimg.com/profile_images/1652081979146506240/e2xH7qJL_400x400.png
     name: phoenix
     sources:
@@ -484,6 +484,16 @@ entries:
     - https://redhat-ai-services.github.io/helm-charts/phoenix-0.1.0.tgz
     version: 0.1.0
   vllm-kserve:
+  - apiVersion: v2
+    appVersion: v0.6.3
+    created: "2025-02-17T23:26:00.029728295Z"
+    description: A Helm deploying vLLM with KServe on OpenShift AI
+    digest: b0940bbffe56df794107b2fdc3717ec31716b497dc8792f1530e6bf8b51a888b
+    name: vllm-kserve
+    type: application
+    urls:
+    - https://redhat-ai-services.github.io/helm-charts/vllm-kserve-0.3.4.tgz
+    version: 0.3.4
   - apiVersion: v2
     appVersion: v0.6.3
     created: "2025-02-11T00:13:33.126776682Z"
@@ -564,4 +574,4 @@ entries:
     urls:
     - https://redhat-ai-services.github.io/helm-charts/vllm-kserve-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-11T00:13:33.121140975Z"
+generated: "2025-02-17T23:26:00.025443823Z"
