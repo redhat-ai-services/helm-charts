@@ -22,6 +22,9 @@ inferenceService:
   # -- Overwrite the default name for the InferenceService.
   name: ""
 
+  # -- By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name.
+  modelNameOverride: ""
+
   # -- The minimum number of replicas to be deployed
   minReplicas: 1
 
@@ -100,5 +103,4 @@ servingRuntime:
   args:
     - --port=8080
     - --model=/mnt/models
-    - --served-model-name={{ .Name }}
     - --distributed-executor-backend=mp

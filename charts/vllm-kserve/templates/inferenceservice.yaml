@@ -24,8 +24,13 @@ spec:
     annotations:
       serving.knative.dev/progress-deadline: {{ .Values.inferenceService.timeout | default "30m" }}
     model:
-      {{- if .Values.inferenceService.args }}
       args:
+        {{- if .Values.inferenceService.modelNameOverride }}
+        - --served-model-name={{ .Values.inferenceService.modelNameOverride }}
+        {{- else }}
+        - --served-model-name={{ "{{" }} .Name {{ "}}" }} {{/* Escaping brackets for downward API template */}}
+        {{- end }}
+      {{- if .Values.inferenceService.args }}
         {{- toYaml .Values.inferenceService.args | nindent 8 }}
       {{- end }}
       {{- if .Values.inferenceService.env }}
