@@ -95,7 +95,7 @@ servingRuntime:
   image: 'quay.io/modh/vllm'
 
   # -- The tag or sha for the model server image
-  tag: sha256:c86ff1e89c86bc9821b75d7f2bbc170b3c13e3ccf538bf543b1110f23e056316
+  tag: sha256:611d71be1f3ce45881f37b5cf82c728e2a517767a711c8f3543ca266ba25c4fc
 
   # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
   shmSize: 2Gi
