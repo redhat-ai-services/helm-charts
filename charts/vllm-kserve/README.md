@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.3.5](https://img.shields.io/badge/Version-0.3.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.6.6](https://img.shields.io/badge/AppVersion-v0.6.6-informational?style=flat-square)
+![Version: 0.3.6](https://img.shields.io/badge/Version-0.3.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.3](https://img.shields.io/badge/AppVersion-v0.7.3-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.3.5"
+    version: "0.3.6"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -167,7 +167,7 @@ The `createLegacyToken` defaults to true if not set.  This option allows you to 
 | servingRuntime.image | string | `"quay.io/modh/vllm"` | The vLLM model server image |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
-| servingRuntime.tag | string | `"sha256:611d71be1f3ce45881f37b5cf82c728e2a517767a711c8f3543ca266ba25c4fc"` | The tag or sha for the model server image |
+| servingRuntime.tag | string | `"sha256:4f1f6b5738b311332b2bc786ea71259872e570081807592d97b4bd4cb65c4be1"` | The tag or sha for the model server image |
 | servingRuntime.useExisting | string | `""` | Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name. |
 
 ----------------------------------------------
