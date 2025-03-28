@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.3.6](https://img.shields.io/badge/Version-0.3.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.3](https://img.shields.io/badge/AppVersion-v0.7.3-informational?style=flat-square)
+![Version: 0.3.7](https://img.shields.io/badge/Version-0.3.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.3](https://img.shields.io/badge/AppVersion-v0.7.3-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.3.6"
+    version: "0.3.7"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -154,7 +154,7 @@ The `createLegacyToken` defaults to true if not set.  This option allows you to 
 | inferenceService.modelNameOverride | string | `""` | By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name. |
 | inferenceService.name | string | `""` | Overwrite the default name for the InferenceService. |
 | inferenceService.nodeSelector | object | `{}` | Node selector for the vLLM pod |
-| inferenceService.resources | object | `{"limits":{"cpu":2,"memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":1,"memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
+| inferenceService.resources | object | `{"limits":{"cpu":"2","memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":"1","memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
 | inferenceService.storage.key | string | `""` | The secret containing s3 credentials.  Mode must be set to "s3" to use this option. |
 | inferenceService.storage.mode | string | `"uri"` | Option to set how the storage will be configured.  Options: "uri" and "s3" |
 | inferenceService.storage.path | string | `""` | The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option. |
