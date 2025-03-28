@@ -6,7 +6,7 @@ type: application
 
 # chart version
 # should be incremented with every change to the chart
-version: 0.3.6
+version: 0.3.7
 
 # vllm version
 appVersion: "v0.7.3"
