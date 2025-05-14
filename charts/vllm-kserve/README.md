@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.3.7](https://img.shields.io/badge/Version-0.3.7-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.3](https://img.shields.io/badge/AppVersion-v0.7.3-informational?style=flat-square)
+![Version: 0.3.8](https://img.shields.io/badge/Version-0.3.8-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.3](https://img.shields.io/badge/AppVersion-v0.7.3-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.3.7"
+    version: "0.3.8"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -162,12 +162,12 @@ The `createLegacyToken` defaults to true if not set.  This option allows you to 
 | inferenceService.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
 | inferenceService.tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
-| servingRuntime.annotations | object | `{"opendatahub.io/apiProtocol":"REST","opendatahub.io/recommended-accelerators":"[\"nvidia.com/gpu\"]","opendatahub.io/template-display-name":"vLLM ServingRuntime for KServe"}` | Additional annotations to configure on the servingRuntime |
-| servingRuntime.args | list | `["--port=8080","--model=/mnt/models","--distributed-executor-backend=mp"]` | The arguments used to start vLLM |
+| servingRuntime.annotations | object | `{"opendatahub.io/apiProtocol":"REST","opendatahub.io/recommended-accelerators":"[\"nvidia.com/gpu\"]","opendatahub.io/template-display-name":"vLLM NVIDIA GPU ServingRuntime for KServe"}` | Additional annotations to configure on the servingRuntime |
+| servingRuntime.args | list | `["--port=8080","--model=/mnt/models"]` | The arguments used to start vLLM |
 | servingRuntime.image | string | `"quay.io/modh/vllm"` | The vLLM model server image |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
-| servingRuntime.tag | string | `"sha256:4f1f6b5738b311332b2bc786ea71259872e570081807592d97b4bd4cb65c4be1"` | The tag or sha for the model server image |
+| servingRuntime.tag | string | `"sha256:4f550996130e7d16cacb24ca9a2865e7cf51eddaab014ceaf31a1ea6ef86d4ec"` | The tag or sha for the model server image |
 | servingRuntime.useExisting | string | `""` | Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name. |
 
 ----------------------------------------------
