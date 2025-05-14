@@ -34,8 +34,8 @@ spec:
     - autoSelect: true
       name: vLLM
   volumes:
-    - emptyDir:
+    - name: shm
+      emptyDir:
         medium: Memory
-        sizeLimit: {{ .Values.servingRuntime.shmSize }}
-      name: shm
+        sizeLimit: {{ .Values.servingRuntime.shmSize }}  
 {{- end }}
