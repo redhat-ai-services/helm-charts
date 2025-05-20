@@ -91,7 +91,7 @@ For more information on available arguments, see the [vLLM Engine Arguments](htt
 ) documentation.
 
 >[!TIP]
-> Model specific arguments are required to us tooling with vLLM. More info found [here](https://docs.vllm.ai/en/latest/features/tool_calling.html#quickstart)
+> Model specific arguments are required to use tooling with vLLM. More info found [here](https://docs.vllm.ai/en/latest/features/tool_calling.html#quickstart)
 
 ### Securing the Endpoint
 
