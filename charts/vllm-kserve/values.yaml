@@ -88,14 +88,14 @@ servingRuntime:
   # -- Additional annotations to configure on the servingRuntime
   annotations:
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-    opendatahub.io/template-display-name: vLLM ServingRuntime for KServe
+    opendatahub.io/template-display-name: vLLM NVIDIA GPU ServingRuntime for KServe
     opendatahub.io/apiProtocol: REST
 
   # -- The vLLM model server image
   image: 'quay.io/modh/vllm'
 
   # -- The tag or sha for the model server image
-  tag: sha256:4f1f6b5738b311332b2bc786ea71259872e570081807592d97b4bd4cb65c4be1
+  tag: sha256:4f550996130e7d16cacb24ca9a2865e7cf51eddaab014ceaf31a1ea6ef86d4ec
 
   # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
   shmSize: 2Gi
@@ -103,4 +103,3 @@ servingRuntime:
   args:
     - --port=8080
     - --model=/mnt/models
-    - --distributed-executor-backend=mp

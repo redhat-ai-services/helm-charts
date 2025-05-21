@@ -12,20 +12,20 @@ spec:
     prometheus.io/path: /metrics
     prometheus.io/port: '8080'
   containers:
-    - args:
-        {{- toYaml .Values.servingRuntime.args | nindent 8 }}
+    - name: kserve-container
+      image: {{ include "vllm-kserve.image" . }}
+      ports:
+        - containerPort: 8080
+          protocol: TCP
       command:
         - python
         - '-m'
         - vllm.entrypoints.openai.api_server
+      args:
+        {{- toYaml .Values.servingRuntime.args | nindent 8 }}
       env:
         - name: HF_HOME
           value: /tmp/hf_home
-      image: {{ include "vllm-kserve.image" . }}
-      name: kserve-container
-      ports:
-        - containerPort: 8080
-          protocol: TCP
       volumeMounts:
         - mountPath: /dev/shm
           name: shm
@@ -34,8 +34,8 @@ spec:
     - autoSelect: true
       name: vLLM
   volumes:
-    - emptyDir:
+    - name: shm
+      emptyDir:
         medium: Memory
-        sizeLimit: {{ .Values.servingRuntime.shmSize }}
-      name: shm
+        sizeLimit: {{ .Values.servingRuntime.shmSize }}  
 {{- end }}
