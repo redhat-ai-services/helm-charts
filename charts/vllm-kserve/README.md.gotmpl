@@ -89,6 +89,9 @@ helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} 
 For more information on available arguments, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html
 ) documentation.
 
+>[!TIP]
+> Model specific arguments are required to use tooling with vLLM. More info found [here](https://docs.vllm.ai/en/latest/features/tool_calling.html#quickstart)
+
 ### Securing the Endpoint
 
 By default the vLLM instance is not secured with authentication, but this feature can be enabled by setting the following options:
