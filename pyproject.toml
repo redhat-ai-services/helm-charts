@@ -1,0 +1,25 @@
+[project]
+name = "modelcar-catalog"
+version = "0.1.0"
+description = "A collection of tools and example Containerfiles for building model car images with various LLM models."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+dev-dependencies = [
+    "pre-commit>=4.2.0",
+    "ruff>=0.11.6",
+    "yamllint>=1.37.0",
+]
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "UP",  # pyupgrade,
+  "I",   # isort
+  "S",   # bandit
+  "N",   # pep8-naming
+  "ANN", # flake8-annotations
+]
