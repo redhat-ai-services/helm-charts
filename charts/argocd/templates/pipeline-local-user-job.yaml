@@ -61,12 +61,12 @@ spec:
                 fi
             done
         env:
-        # The account namespace where the token needs to be deployed to
-        # Example value: product-catalog-pipeline=product-catalog-cicd demo-pipeline=demo-cicd
-        - name: ACCOUNTS_NAMESPACES
-          value: "{{ include "argocd.accountsNamespaces" . }}"
-        - name: ARGO_SERVER_HOST
-          value: "argocd-server.{{ .Release.Namespace }}.svc"
+          # The account namespace where the token needs to be deployed to
+          # Example value: product-catalog-pipeline=product-catalog-cicd demo-pipeline=demo-cicd
+          - name: ACCOUNTS_NAMESPACES
+            value: "{{ include "argocd.accountsNamespaces" . }}"
+          - name: ARGO_SERVER_HOST
+            value: "argocd-server.{{ .Release.Namespace }}.svc"
         imagePullPolicy: Always
       serviceAccount: {{ include "argocd.fullname" . }}-argocd-application-controller
       serviceAccountName: {{ include "argocd.fullname" . }}-argocd-application-controller

@@ -141,8 +141,6 @@ notifications:
   # -- Enable notifications plugin
   enabled: true
 
-
-
 sso:
   dex:
     # -- Enable login via OpenShiftOAuth
