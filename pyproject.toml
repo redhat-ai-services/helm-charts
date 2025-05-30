@@ -14,12 +14,24 @@ dev-dependencies = [
 ]
 
 [tool.ruff.lint]
-select = [
-  "E",   # pycodestyle
-  "F",   # pyflakes
-  "UP",  # pyupgrade,
-  "I",   # isort
-  "S",   # bandit
-  "N",   # pep8-naming
-  "ANN", # flake8-annotations
+# RUFF DEFAULTS
+# (These are all the default groups, even if you don’t currently select them)
+# select = [
+#     "F",    # Pyflakes – detects syntax errors and basic mistakes
+#     "E4",   # Pycodestyle errors (part of E group)
+#     "E7",   # Pycodestyle E7xx errors (naming, etc.)
+#     "E9",   # Pycodestyle E9xx errors (syntax)
+# ]
+
+extend-select = [
+  "E",    # Pycodestyle errors (style issues)
+  "UP",   # Pyupgrade – upgrades syntax to newer Python versions
+  "I",    # isort – import ordering checks
+  "N",    # PEP8 Naming – naming conventions
+  "YTT",  # Flake8-2020 – checks for Python 2020 best practices
+  "ANN",  # Flake8-annotations – enforces type annotation style
+  "S",    # Flake8-bandit – security issues
+  "B",    # Flake8-bugbear – common bug patterns
+  "A",    # Flake8-builtins – misuse of Python built-in names
+  "Q",    # Flake8-quotes – enforces quote style consistency
 ]
