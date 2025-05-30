@@ -65,6 +65,22 @@ Create the name of the InfernceService to use
 {{- default (include "vllm-kserve.fullname" .) .Values.inferenceService.name }}
 {{- end }}
 
+{{/*
+Create the name of the predictor to use
+*/}}
+{{- define "vllm-kserve.predictorName" -}}
+{{- printf "%s-%s" (include "vllm-kserve.inferenceServiceName" .) "predictor" }}
+{{- end }}
+
+{{/*
+Lookup the Endpoint URL
+*/}}
+{{- define "vllm-kserve.endpointUrl" -}}
+{{- $predictor := include "vllm-kserve.predictorName" . }}
+{{- $service := lookup "serving.knative.dev/v1" "Service" .Release.Namespace $predictor }}
+{{- $service.status.url }}
+{{- end }}
+
 {{- define "vllm-kserve.image" -}}
 {{- if .Values.servingRuntime.tag | hasPrefix "sha256:" }}
 {{- printf "%s@%s" .Values.servingRuntime.image .Values.servingRuntime.tag }}

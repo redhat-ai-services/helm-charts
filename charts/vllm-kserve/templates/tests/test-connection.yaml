@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "vllm-kserve.fullname" . }}-test-connection
+  labels:
+    {{- include "vllm-kserve.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:
+        - {{ include "vllm-kserve.endpointUrl" . }}/version
+  restartPolicy: Never
