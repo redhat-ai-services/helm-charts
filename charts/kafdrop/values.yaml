@@ -75,9 +75,9 @@ ingress:
   enabled: false
   annotations: {}
   apiVersion: ~
-  #ingressClassName: ~
+  # ingressClassName: ~
   path: /
-  #pathType: ~
+  # pathType: ~
   hosts: []
   tls: []
 
