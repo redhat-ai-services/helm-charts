@@ -67,7 +67,7 @@ https://docs.arize.com/phoenix/setup/configuration
 >
 > ```
 > helm upgrade -i [release-name] redhat-ai-services/phoenix \
->     --set openshiftOauth.enableBearerTokenAccess=True 
+>     --set openshiftOauth.enableBearerTokenAccess=True
 > ```
 >
 > This option requires cluster admin privileges.

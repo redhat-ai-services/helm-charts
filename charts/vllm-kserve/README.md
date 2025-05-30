@@ -102,7 +102,7 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set endpoint.auth.enabled=true
 ```
 
-To access the endpoint, a user token must be provided uses a `Bearer token`.  The user must have view access to the `InferenceService` instance. 
+To access the endpoint, a user token must be provided uses a `Bearer token`.  The user must have view access to the `InferenceService` instance.
 
 For normal OpenShift users, you can utilize the same sha token used when logging in via `oc` if your user has access as the `Bearer token`, but this is not advised for long term solutions as the `oc` token expires after 24 hours by default.
 

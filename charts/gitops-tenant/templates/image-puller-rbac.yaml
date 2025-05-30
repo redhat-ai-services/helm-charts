@@ -14,9 +14,9 @@ roleRef:
   kind: ClusterRole
   name: system:image-puller
 subjects:
-- kind: ServiceAccount
-  name: default
-  namespace: {{ include "gitops-tenant.namespace" ( dict "namespace" $namespace "context" $ ) }}
+  - kind: ServiceAccount
+    name: default
+    namespace: {{ include "gitops-tenant.namespace" ( dict "namespace" $namespace "context" $ ) }}
 {{- end }}
 {{- end }}
 {{- end }}

@@ -21,7 +21,7 @@ imagePullSecrets: []
 
 openai:
   key: {}
-    # existingSecret: 
+    # existingSecret:
     #   name: "my_secret"
     #   key: OPENAI_API_KEY
 
@@ -110,10 +110,10 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-openshiftOauth: 
+openshiftOauth:
   # -- Secures the application with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`.
   enabled: true
-  # -- Enable access to the application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to the API.  
+  # -- Enable access to the application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to the API.
   # Warning: This feature requires cluster admin to install.
   enableBearerTokenAccess: false
   image:

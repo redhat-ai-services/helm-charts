@@ -5,7 +5,6 @@ metadata:
   labels:
     {{- include "minio.labels" . | nindent 4 }}
 spec:
-spec:
   accessModes:
     - {{ .Values.persistence.accessMode }}
   resources:
