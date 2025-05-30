@@ -37,5 +37,5 @@ spec:
     - name: shm
       emptyDir:
         medium: Memory
-        sizeLimit: {{ .Values.servingRuntime.shmSize }}  
+        sizeLimit: {{ .Values.servingRuntime.shmSize }}
 {{- end }}

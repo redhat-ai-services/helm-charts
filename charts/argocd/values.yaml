@@ -25,7 +25,7 @@ projects:
     sourceRepos: []
       # - '*'
 
-rbac: 
+rbac:
   # -- RBAC mapping for roles within ArgoCD
   policy: |-
     g, system:cluster-admins, role:admin

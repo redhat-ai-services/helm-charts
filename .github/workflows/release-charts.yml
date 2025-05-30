@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build helm-docs
         uses: docker://docker.io/jnorwood/helm-docs:latest
-      - uses: EndBug/add-and-commit@v9 
+      - uses: EndBug/add-and-commit@v9
         with:
           message: 'Automatic build of docs from GitHub Action'
   release:

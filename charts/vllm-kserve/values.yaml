@@ -39,7 +39,7 @@ inferenceService:
     - "--gpu-memory-utilization=0.90"
 
   # -- Additional vLLM arguments to be used to start vLLM.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html
-  env: 
+  env:
     - name: VLLM_LOGGING_LEVEL
       value: INFO
 
@@ -61,7 +61,7 @@ inferenceService:
 
   # -- This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   imagePullSecrets: []
-  
+
   # -- Resource configuration for the vLLM container
   resources:
     requests:
@@ -72,7 +72,7 @@ inferenceService:
       cpu: '2'
       memory: 8Gi
       nvidia.com/gpu: '1'
-  
+
   # -- The tolerations to be applied to the model server pod.
   tolerations:
     - effect: NoSchedule

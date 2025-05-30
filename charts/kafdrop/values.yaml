@@ -52,10 +52,10 @@ service:
   type: ClusterIP
   port: 9000
 
-openshiftOauth: 
+openshiftOauth:
   # -- Secures application with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`.
   enabled: true
-  # -- Enable access to application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to MLFlow using the API.  
+  # -- Enable access to application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to MLFlow using the API.
   # Warning: This feature requires cluster admin to install.
   enableBearerTokenAccess: false
   resources: {}
@@ -117,6 +117,6 @@ affinity: {}
 
 podAnnotations: {}
 
-mountProtoDesc: 
+mountProtoDesc:
   enabled: false
   hostPath:

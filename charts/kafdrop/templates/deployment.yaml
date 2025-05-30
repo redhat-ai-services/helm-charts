@@ -21,7 +21,7 @@ spec:
       annotations:
       {{- if .Values.podAnnotations }}
         {{- toYaml .Values.podAnnotations | indent 8 }}
-      {{- end }}        
+      {{- end }}
     spec:
       serviceAccountName: {{ include "kafdrop.serviceAccountName" . }}
       containers:
