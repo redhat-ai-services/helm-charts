@@ -78,7 +78,11 @@ Lookup the Endpoint URL
 {{- define "vllm-kserve.endpointUrl" -}}
 {{- $predictor := include "vllm-kserve.predictorName" . }}
 {{- $service := lookup "serving.knative.dev/v1" "Service" .Release.Namespace $predictor }}
+{{- if hasKey $service "status" }}
+{{- if hasKey $service.status "url"}}
 {{- $service.status.url }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- define "vllm-kserve.image" -}}
