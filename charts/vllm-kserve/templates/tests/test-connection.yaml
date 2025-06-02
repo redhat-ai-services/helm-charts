@@ -14,7 +14,7 @@ spec:
   containers:
     - name: wget
       image: busybox
-      command: 
+      command:
         - /bin/sh
         - -c
         {{- if .Values.endpoint.auth.enabled }}
