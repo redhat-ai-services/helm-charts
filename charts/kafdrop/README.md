@@ -63,7 +63,7 @@ dependencies:
 | mountProtoDesc.hostPath | string | `nil` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
-| openshiftOauth.enableBearerTokenAccess | bool | `false` | Enable access to application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to MLFlow using the API.   Warning: This feature requires cluster admin to install. |
+| openshiftOauth.enableBearerTokenAccess | bool | `false` | Enable access to application using an OpenShift Bearer Token.  This feature enables users from outside of the cluster to read/write to MLFlow using the API. Warning: This feature requires cluster admin to install. |
 | openshiftOauth.enabled | bool | `true` | Secures application with OpenShift Oauth Proxy.  If disabling this option it is recommended to set `route.tls.termination: edge`. |
 | openshiftOauth.resources | object | `{}` |  |
 | podAnnotations | object | `{}` |  |
