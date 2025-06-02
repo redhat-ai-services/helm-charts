@@ -1,12 +1,13 @@
 apiVersion: v2
 name: vllm-kserve
 description: A Helm deploying vLLM with KServe on OpenShift AI
+icon: https://raw.githubusercontent.com/vllm-project/media-kit/refs/heads/main/vLLM-Logo.svg
 
 type: application
 
 # chart version
 # should be incremented with every change to the chart
-version: 0.3.8
+version: 0.3.9
 
 # vllm version shipped in RHOAI 2.19
 appVersion: "v0.7.3"
