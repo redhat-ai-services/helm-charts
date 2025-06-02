@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -7,10 +8,43 @@ metadata:
   annotations:
     "helm.sh/hook": test
 spec:
+  {{- if .Values.endpoint.auth.enabled }}
+  serviceAccountName: {{ include "vllm-kserve.fullname" . }}-test-connection
+  {{- end }}
   containers:
     - name: wget
       image: busybox
-      command: ['wget']
-      args:
-        - {{ include "vllm-kserve.endpointUrl" . }}/version
+      command: 
+        - /bin/sh
+        - -c
+        {{- if .Values.endpoint.auth.enabled }}
+        - 'wget --header="Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" {{ include "vllm-kserve.endpointUrl" . }}/version'
+        {{- else }}
+        - 'wget {{ include "vllm-kserve.endpointUrl" . }}/version'
+        {{- end }}
   restartPolicy: Never
+{{- if .Values.endpoint.auth.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: '{{ include "vllm-kserve.fullname" . }}-test-connection'
+  labels:
+    {{- include "vllm-kserve.labels" $ | nindent 4 }}
+automountServiceAccountToken: true
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: '{{ include "vllm-kserve.fullname" $ }}-test-connection-view'
+  labels:
+    {{- include "vllm-kserve.labels" $ | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: '{{ include "vllm-kserve.fullname" . }}-test-connection'
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: '{{ include "vllm-kserve.fullname" $ }}-view'
+{{- end }}
