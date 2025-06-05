@@ -44,6 +44,20 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set inferenceService.storage.storageUri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct"
 ```
 
+### Deploy with a PVC
+
+KServe provides the ability to deploy a model from a PVC.
+
+The PVC must be `ReadWriteMany` and the user will need to load the model onto the PVC prior to deploying the model server.
+
+To deploy a model serving using a PVC you can provide the following options:
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set inferenceService.storage.mode=uri \
+  --set inferenceService.storage.storageUri="pvc://{pvc-name}/{model-folder}"
+```
+
 ### Deploy a Model with S3
 
 To deploy a model from an S3 bucket, a secret containing the connection details in the OpenShift AI S3 Data Connection format must exist.
