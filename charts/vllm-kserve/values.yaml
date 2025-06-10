@@ -3,11 +3,50 @@ nameOverride: ""
 # -- String to fully override fullname template
 fullnameOverride: ""
 
+# -- deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment
+deploymentMode: Serverless
+
+image:
+  # -- The vLLM model server image
+  image: 'quay.io/modh/vllm'
+
+  # -- The tag or sha for the model server image
+  tag: sha256:4f550996130e7d16cacb24ca9a2865e7cf51eddaab014ceaf31a1ea6ef86d4ec
+
+model:
+  # -- By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name.
+  modelNameOverride: ""
+
+  # -- Additional vLLM arguments to be used to start the model.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html
+  args:
+    - "--gpu-memory-utilization=0.90"
+
+  # -- Additional vLLM arguments to be used to start the model.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html
+  env:
+    - name: VLLM_LOGGING_LEVEL
+      value: INFO
+
+  # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
+  mode: uri
+
+  # -- The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://"
+  uri: oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct
+
+  s3:
+    # -- The secret containing s3 credentials.  Mode must be set to "s3" to use this option.
+    key: ""
+
+    # -- The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option.
+    path: ""
+
 endpoint:
   externalRoute:
+    # -- Creates an externally accessible route for the model endpoint
     enabled: true
   auth:
+    # -- Secures the model endpoint and creates a role to grant permissions to service accounts
     enabled: false
+    # -- Creates service accounts with permissions to access the secured endpoint
     serviceAccounts: []
       # - name: my-service-account
       # - name: existing-service-account
@@ -18,66 +57,57 @@ endpoint:
       # - name: no-token
       #   createLegacyToken: false
 
-inferenceService:
-  # -- Overwrite the default name for the InferenceService.
-  name: ""
-
-  # -- By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name.
-  modelNameOverride: ""
-
-  # -- The minimum number of replicas to be deployed
+scaling:
+  # -- The minimum number of replicas to be deployed.  Set to 0 to enable scale to zero capabilities with Serverless deployments.
   minReplicas: 1
 
   # -- The maximum number of replicas to be deployed
   maxReplicas: 1
 
-  # -- The timeout value determines how long before KNative marks the deployments as failed
-  timeout: 30m
+  serverless:
+    # -- The timeout value determines how long before KNative marks the deployments as failed
+    timeout: 30m
+    # -- The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero.
+    retentionPeriod: ""
 
-  # -- Additional vLLM arguments to be used to start vLLM.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html
-  args:
-    - "--gpu-memory-utilization=0.90"
+    # -- The scaling metric used by KNative to trigger scaling a new pod.  Can be "concurrency", "rps", "cpu", or "memory"
+    scaleMetric: concurrency
 
-  # -- Additional vLLM arguments to be used to start vLLM.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html
-  env:
-    - name: VLLM_LOGGING_LEVEL
-      value: INFO
+    # -- The scaling target used by KNative to trigger scaling a new pod.  Default is 100 when not set.
+    scaleTarget: ""
 
-  # -- Node selector for the vLLM pod
-  nodeSelector: {}
+  rawDeployment:
+    # -- The deployment strategy to use to replace existing pods with new ones.
+    deploymentStrategy:
+      # Can be type of RollingUpdate or Recreate
+      type: RollingUpdate
 
-  storage:
-    # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
-    mode: uri
+# -- Resource configuration for the vLLM container
+resources:
+  requests:
+    cpu: '1'
+    memory: 4Gi
+    nvidia.com/gpu: '1'
+  limits:
+    cpu: '2'
+    memory: 8Gi
+    nvidia.com/gpu: '1'
 
-    # -- The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://"
-    storageUri: oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.1-2b-instruct
+# -- The tolerations to be applied to the model server pod.
+tolerations:
+  - effect: NoSchedule
+    key: nvidia.com/gpu
+    operator: Exists
 
-    # -- The secret containing s3 credentials.  Mode must be set to "s3" to use this option.
-    key: ""
+# -- Node selector for the vLLM pod
+nodeSelector: {}
 
-    # -- The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option.
-    path: ""
+# -- This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+imagePullSecrets: []
 
-  # -- This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  imagePullSecrets: []
-
-  # -- Resource configuration for the vLLM container
-  resources:
-    requests:
-      cpu: '1'
-      memory: 4Gi
-      nvidia.com/gpu: '1'
-    limits:
-      cpu: '2'
-      memory: 8Gi
-      nvidia.com/gpu: '1'
-
-  # -- The tolerations to be applied to the model server pod.
-  tolerations:
-    - effect: NoSchedule
-      key: nvidia.com/gpu
-      operator: Exists
+inferenceService:
+  # -- Overwrite the default name for the InferenceService.
+  name: ""
 
 servingRuntime:
   # -- Overwrite the default name for the ServingRuntime.
@@ -90,12 +120,6 @@ servingRuntime:
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
     opendatahub.io/template-display-name: vLLM NVIDIA GPU ServingRuntime for KServe
     opendatahub.io/apiProtocol: REST
-
-  # -- The vLLM model server image
-  image: 'quay.io/modh/vllm'
-
-  # -- The tag or sha for the model server image
-  tag: sha256:4f550996130e7d16cacb24ca9a2865e7cf51eddaab014ceaf31a1ea6ef86d4ec
 
   # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
   shmSize: 2Gi

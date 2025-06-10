@@ -77,19 +77,28 @@ Lookup the Endpoint URL
 */}}
 {{- define "vllm-kserve.endpointUrl" -}}
 {{- $predictor := include "vllm-kserve.predictorName" . }}
+{{- if eq .Values.deploymentMode "Serverless" }}
 {{- $service := lookup "serving.knative.dev/v1" "Service" .Release.Namespace $predictor }}
 {{- if hasKey $service "status" }}
 {{- if hasKey $service.status "url"}}
 {{- $service.status.url }}
 {{- end }}
 {{- end }}
+{{- else if eq .Values.deploymentMode "RawDeployment" }}
+{{- $route := lookup "route.openshift.io/v1" "Route" .Release.Namespace "test-vllm-kserve" }}
+{{- if hasKey $route "spec" }}
+{{- if hasKey $route.spec "host" }}
+{{- printf "https://%s" $route.spec.host }}
+{{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- define "vllm-kserve.image" -}}
-{{- if .Values.servingRuntime.tag | hasPrefix "sha256:" }}
-{{- printf "%s@%s" .Values.servingRuntime.image .Values.servingRuntime.tag }}
+{{- if .Values.image.tag | hasPrefix "sha256:" }}
+{{- printf "%s@%s" .Values.image.image .Values.image.tag }}
 {{- else }}
-{{- printf "%s:%s" .Values.servingRuntime.image .Values.servingRuntime.tag }}
+{{- printf "%s:%s" .Values.image.image .Values.image.tag }}
 {{- end }}
 {{- end }}
 
@@ -101,5 +110,15 @@ Create the name of the service account to use
 {{- default (include "vllm-kserve.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Validate that a valid deployment mode is configured.
+*/}}
+{{- define "vllm-kserve.validateDeploymentMode" -}}
+{{- $deploymentModes := list "RawDeployment" "Serverless" }}
+{{- if not (mustHas .Values.deploymentMode $deploymentModes) }}
+    {{- fail (printf "Model deployment mode must be one of: %s" $deploymentModes) }}
 {{- end }}
 {{- end }}

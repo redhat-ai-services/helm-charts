@@ -39,8 +39,8 @@ The chart provides the ability to deploy models via URI or S3.  To deploy a mode
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set inferenceService.storage.mode=uri \
-  --set inferenceService.storage.storageUri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct"
+  --set model.mode=uri \
+  --set model.uri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct"
 ```
 
 ### Deploy with a PVC
@@ -53,8 +53,8 @@ To deploy a model serving using a PVC you can provide the following options:
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set inferenceService.storage.mode=uri \
-  --set inferenceService.storage.storageUri="pvc://{pvc-name}/{model-folder}"
+  --set model.mode=uri \
+  --set model.uri="pvc://{pvc-name}/{model-folder}"
 ```
 
 ### Deploy a Model with S3
@@ -86,9 +86,9 @@ To configure the S3 option, you must set the storage mode to S3 and provide the 
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set inferenceService.storage.mode=s3 \
-  --set inferenceService.storage.key="my-s3-connection" \
-  --set inferenceService.storage.path="my-model-folder"
+  --set model.mode=s3 \
+  --set model.s3.key="my-s3-connection" \
+  --set model.s3.path="my-model-folder"
 ```
 
 ### Setting Additional Arguments
@@ -97,7 +97,7 @@ Many models may require additional arguments to be configured in order to succes
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set inferenceService.args={"--gpu-memory-utilization=0.95", "--max-model-len=10000"}
+  --set model.args={"--gpu-memory-utilization=0.95", "--max-model-len=10000"}
 ```
 
 For more information on available arguments, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html
@@ -127,7 +127,7 @@ helm upgrade -i test charts/vllm-kserve \
   --set 'endpoint.auth.serviceAccounts[0].name=my-service-account'
 ```
 
-This option will create the serviceAccount `my-service-account` and a secret with the matching name that includes an automatically generated token value.  This token is generated using a legacy k8s token tool.
+This option will create the serviceAccount `my-service-account` and a secret with the matching name that includes an automatically generated token value.  This token is generated using a legacy k8s token tool by default.
 
 >[!WARNING]
 > Service Accounts created through this helm chart or service accounts that are granted permission to the vLLM instance are not visible through the OpenShift AI UI.
