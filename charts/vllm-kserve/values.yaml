@@ -11,7 +11,7 @@ image:
   image: 'quay.io/modh/vllm'
 
   # -- The tag or sha for the model server image
-  tag: sha256:4f550996130e7d16cacb24ca9a2865e7cf51eddaab014ceaf31a1ea6ef86d4ec
+  tag: rhoai-2.21-cuda
 
 model:
   # -- By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name.
