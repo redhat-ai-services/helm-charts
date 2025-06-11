@@ -5,67 +5,96 @@ metadata:
     {{- if .Values.endpoint.auth.enabled }}
     security.opendatahub.io/enable-auth: 'true'
     {{- end }}
-    serving.knative.openshift.io/enablePassthrough: 'true'
-    sidecar.istio.io/inject: 'true'
-    sidecar.istio.io/rewriteAppHTTPProbers: 'true'
+    {{- include "vllm-kserve.validateDeploymentMode" . }}
+    {{- if eq .Values.deploymentMode "Serverless" }}
+    serving.kserve.io/deploymentMode: Serverless
+    serving.knative.openshift.io/enablePassthrough: "true"
+    sidecar.istio.io/inject: "true"
+    sidecar.istio.io/rewriteAppHTTPProbers: "true"
+    {{- else }}
+    serving.kserve.io/deploymentMode: RawDeployment
+    {{- end }}
   name: {{ include "vllm-kserve.inferenceServiceName" . }}
   labels:
     {{- include "vllm-kserve.labels" . | nindent 4 }}
     {{- if not .Values.endpoint.externalRoute.enabled }}
+    {{- if eq .Values.deploymentMode "Serverless" }}
     networking.knative.dev/visibility: cluster-local
+    {{- end }}
+    {{- end }}
+    {{- if .Values.endpoint.externalRoute.enabled }}
+    {{- if eq .Values.deploymentMode "RawDeployment" }}
+    networking.kserve.io/visibility: exposed
+    {{- end }}
     {{- end }}
 spec:
   predictor:
-    minReplicas: {{ .Values.inferenceService.minReplicas }}
-    {{- if gt (int .Values.inferenceService.maxReplicas) 0}}
-    maxReplicas: {{ .Values.inferenceService.maxReplicas }}
+    minReplicas: {{ .Values.scaling.minReplicas }}
+    {{- if gt (int .Values.scaling.maxReplicas) 0}}
+    maxReplicas: {{ .Values.scaling.maxReplicas }}
     {{- end }}
+    {{- if .Values.scaling.scaleMetric }}
+    {{- include "vllm-kserve.validateScaleMetric" . }}
+    scaleMetric: {{ .Values.scaling.scaleMetric }}
+    {{- end }}
+    {{- if .Values.scaling.scaleTarget }}
+    scaleTarget: {{ .Values.scaling.scaleTarget }}
+    {{- end }}
+    {{- if eq .Values.deploymentMode "Serverless" }}
     annotations:
-      serving.knative.dev/progress-deadline: {{ .Values.inferenceService.timeout | default "30m" }}
+      serving.knative.dev/progress-deadline: {{ .Values.scaling.serverless.timeout | default "30m" }}
+      {{- if .Values.scaling.serverless.retentionPeriod }}
+      autoscaling.knative.dev/scale-to-zero-pod-retention-period: {{ .Values.scaling.serverless.retentionPeriod }}
+      {{- end }}
+    {{- end }}
+    {{- if eq .Values.deploymentMode "RawDeployment" }}
+    deploymentStrategy:
+      {{- toYaml .Values.scaling.rawDeployment.deploymentStrategy | nindent 6 }}
+    {{- end }}
     model:
       args:
-        {{- if .Values.inferenceService.modelNameOverride }}
-        - --served-model-name={{ .Values.inferenceService.modelNameOverride }}
+        {{- if .Values.model.modelNameOverride }}
+        - --served-model-name={{ .Values.model.modelNameOverride }}
         {{- else }}
         - --served-model-name={{ "{{" }} .Name {{ "}}" }} {{/* Escaping brackets for downward API template */}}
         {{- end }}
-      {{- if .Values.inferenceService.args }}
-        {{- toYaml .Values.inferenceService.args | nindent 8 }}
+      {{- if .Values.model.args }}
+        {{- toYaml .Values.model.args | nindent 8 }}
       {{- end }}
-      {{- if .Values.inferenceService.env }}
+      {{- if .Values.model.env }}
       env:
-        {{- toYaml .Values.inferenceService.env | nindent 8 }}
+        {{- toYaml .Values.model.env | nindent 8 }}
       {{- end }}
-      {{- if .Values.inferenceService.nodeSelector }}
+      {{- if .Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml .Values.inferenceService.nodeSelector | nindent 8 }}
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
       modelFormat:
         name: vLLM
       name: ''
       resources:
-        {{- toYaml .Values.inferenceService.resources | nindent 8 }}
+        {{- toYaml .Values.resources | nindent 8 }}
       {{- if .Values.servingRuntime.useExisting }}
       runtime: {{ .Values.servingRuntime.useExisting }}
       {{- else }}
       runtime: {{ include "vllm-kserve.servingRuntimeName" . }}
       {{- end }}
-      {{- with .Values.inferenceService.storage }}
+      {{- with .Values.model }}
       {{- $valid := list "uri" "s3" }}
       {{- if not (has (lower .mode) $valid) }}
-      {{- fail "Invalid inferenceService.storage.mode.  Either 'uri' or 's3' is expected." }}
+      {{- fail (printf "Invalid model.mode.  Must be one of: %s" $valid) }}
       {{- end }}
       {{- if eq (lower .mode) "uri" }}
-      storageUri: {{ required "inferenceService.storage.storageUri is required when setting mode to 'uri'" .storageUri }}
+      storageUri: {{ required "model.uri is required when setting mode to 'uri'" .uri }}
       {{- else if eq (lower .mode) "s3"}}
       storage:
-        key: {{ required "inferenceService.storage.key is required when setting mode to 's3'" .key }}
-        path: {{ required "inferenceService.storage.path is required when setting mode to 's3'" .path }}
+        key: {{ required "model.s3.key is required when setting mode to 's3'" .s3.key }}
+        path: {{ required "model.s3.path is required when setting mode to 's3'" .s3.path }}
       {{- end }}
       {{- end }}
     tolerations:
-      {{- toYaml .Values.inferenceService.tolerations | nindent 8 }}
-    {{- with .Values.inferenceService.imagePullSecrets }}
+      {{- toYaml .Values.tolerations | nindent 8 }}
+    {{- with .Values.imagePullSecrets }}
     imagePullSecrets:
       {{- toYaml . | nindent 6 }}
     {{- end }}
