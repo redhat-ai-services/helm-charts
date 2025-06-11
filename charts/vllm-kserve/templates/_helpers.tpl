@@ -122,3 +122,18 @@ Validate that a valid deployment mode is configured.
     {{- fail (printf "Model deployment mode must be one of: %s" $deploymentModes) }}
 {{- end }}
 {{- end }}
+
+{{/*
+Validate the scale metric.
+*/}}
+{{- define "vllm-kserve.validateScaleMetric" -}}
+{{- $scaleMetrics := list }}
+{{- if eq .Values.deploymentMode "Serverless" }}
+{{- $scaleMetrics = list "concurrency" "rps" "cpu" "memory" }}
+{{- else }}
+{{- $scaleMetrics = list "cpu" "memory" }}
+{{- end }}
+{{- if not (mustHas .Values.scaling.scaleMetric $scaleMetrics) }}
+    {{- fail (printf "For %s scaleMetric must must be one of: %s" .Values.deploymentMode $scaleMetrics) }}
+{{- end }}
+{{- end }}

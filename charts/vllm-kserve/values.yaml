@@ -64,17 +64,19 @@ scaling:
   # -- The maximum number of replicas to be deployed
   maxReplicas: 1
 
+  # -- The scaling metric used by KServe to trigger scaling a new pod.  Serverless deployments can be "concurrency", "rps", "cpu", or "memory", while RawDeployments can only utilize "cpu" and "memory".  "concurrency" is used by default for Serverless and "cpu" is used by default for RawDeployments.
+  scaleMetric: ""
+
+  # -- The scaling target used by KNative to trigger scaling a new pod.  Default is 100 when not set.
+  scaleTarget: ""
+
   serverless:
     # -- The timeout value determines how long before KNative marks the deployments as failed
     timeout: 30m
     # -- The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero.
     retentionPeriod: ""
 
-    # -- The scaling metric used by KNative to trigger scaling a new pod.  Can be "concurrency", "rps", "cpu", or "memory"
-    scaleMetric: concurrency
 
-    # -- The scaling target used by KNative to trigger scaling a new pod.  Default is 100 when not set.
-    scaleTarget: ""
 
   rawDeployment:
     # -- The deployment strategy to use to replace existing pods with new ones.

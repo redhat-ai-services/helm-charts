@@ -33,13 +33,12 @@ spec:
     {{- if gt (int .Values.scaling.maxReplicas) 0}}
     maxReplicas: {{ .Values.scaling.maxReplicas }}
     {{- end }}
-    {{- if eq .Values.deploymentMode "Serverless" }}
-    {{- if .Values.scaling.serverless.scaleMetric }}
-    scaleMetric: {{ .Values.scaling.serverless.scaleMetric }}
+    {{- if .Values.scaling.scaleMetric }}
+    {{- include "vllm-kserve.validateScaleMetric" . }}
+    scaleMetric: {{ .Values.scaling.scaleMetric }}
     {{- end }}
-    {{- if .Values.scaling.serverless.scaleTarget }}
-    scaleTarget: {{ .Values.scaling.serverless.scaleTarget }}
-    {{- end }}
+    {{- if .Values.scaling.scaleTarget }}
+    scaleTarget: {{ .Values.scaling.scaleTarget }}
     {{- end }}
     {{- if eq .Values.deploymentMode "Serverless" }}
     annotations:
