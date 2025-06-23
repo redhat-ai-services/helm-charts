@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.3.9](https://img.shields.io/badge/Version-0.3.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.7.3](https://img.shields.io/badge/AppVersion-v0.7.3-informational?style=flat-square)
+![Version: 0.4.0](https://img.shields.io/badge/Version-0.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.3.9"
+    version: "0.4.0"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -40,8 +40,8 @@ The chart provides the ability to deploy models via URI or S3.  To deploy a mode
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
-  --set inferenceService.storage.mode=uri \
-  --set inferenceService.storage.storageUri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct"
+  --set model.mode=uri \
+  --set model.uri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct"
 ```
 
 ### Deploy with a PVC
@@ -54,8 +54,8 @@ To deploy a model serving using a PVC you can provide the following options:
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
-  --set inferenceService.storage.mode=uri \
-  --set inferenceService.storage.storageUri="pvc://{pvc-name}/{model-folder}"
+  --set model.mode=uri \
+  --set model.uri="pvc://{pvc-name}/{model-folder}"
 ```
 
 ### Deploy a Model with S3
@@ -87,9 +87,9 @@ To configure the S3 option, you must set the storage mode to S3 and provide the 
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
-  --set inferenceService.storage.mode=s3 \
-  --set inferenceService.storage.key="my-s3-connection" \
-  --set inferenceService.storage.path="my-model-folder"
+  --set model.mode=s3 \
+  --set model.s3.key="my-s3-connection" \
+  --set model.s3.path="my-model-folder"
 ```
 
 ### Setting Additional Arguments
@@ -98,7 +98,7 @@ Many models may require additional arguments to be configured in order to succes
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
-  --set inferenceService.args={"--gpu-memory-utilization=0.95", "--max-model-len=10000"}
+  --set model.args={"--gpu-memory-utilization=0.95", "--max-model-len=10000"}
 ```
 
 For more information on available arguments, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html
@@ -123,12 +123,12 @@ For normal OpenShift users, you can utilize the same sha token used when logging
 Instead, you can create a Service account with the correct permissions using the following:
 
 ```sh
-helm upgrade -i test charts/vllm-kserve \
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set endpoint.auth.enabled=true \
   --set 'endpoint.auth.serviceAccounts[0].name=my-service-account'
 ```
 
-This option will create the serviceAccount `my-service-account` and a secret with the matching name that includes an automatically generated token value.  This token is generated using a legacy k8s token tool.
+This option will create the serviceAccount `my-service-account` and a secret with the matching name that includes an automatically generated token value.  This token is generated using a legacy k8s token tool by default.
 
 >[!WARNING]
 > Service Accounts created through this helm chart or service accounts that are granted permission to the vLLM instance are not visible through the OpenShift AI UI.
@@ -155,37 +155,101 @@ The `namespace` option allows you to specify which namespace the service account
 
 The `createLegacyToken` defaults to true if not set.  This option allows you to disable the creation of a legacy k8s token when creating a new serviceAccount and instead to rely on automounted tokens in k8s.  See the official k8s [Service Account documentation](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#auto-generated-legacy-serviceaccount-token-clean-up) for more information.
 
+### RawDeployment
+
+KServe supports the option to create a "RawDeployment" that is not dependent on Istio or KNative Serverless and instead creates the models using a k8s Deployment object.
+
+```
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set deploymentMode=RawDeployment
+```
+
+Additionally, with a RawDeployment, KServe can be configured to use a Recreate strategy which will delete the current pod, before attempting to deploy a new version, which can reduce the need for scaling additional GPUs.
+
+```
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set deploymentMode=RawDeployment \
+  --set scaling.rawDeployment.deploymentStrategy.type=Recreate
+```
+
+### Scaling
+
+KServe supports the ability to automatically scale model servers and allows users to configure a max and min number of replicas:
+
+```
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set scaling.minReplicas=1 \
+  --set scaling.maxReplicas=5 \
+```
+
+KServe uses KNative Servereless autoscaling capabilities for Serverless deployments to scale instances based on concurrent requests by default. Serverless deployments also alternative scaling metrics including "concurrency", "rps", "cpu", and "memory".
+
+```
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set scaling.serverless.scaleMetric=rps \
+  --set scaling.serverless.scaleTarget=10
+```
+
+For more information on the supported scaleMetric options, see the [KNative Autoscaling Metrics](https://knative.dev/docs/serving/autoscaling/autoscaling-metrics/#setting-metrics-per-revision) documentation.
+
+For RawDeployments, KServe uses HorizontalPodAutoscalers (HPA) based on CPU and memory utilization.
+
+With the Serverless deployments, KServe provides the capability to scale to 0 pods when no active queries are being processed.  This can be achieved by setting the minReplicas to 0.
+
+```
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set scaling.minReplicas=0
+```
+
+>[!NOTE]
+> Scale to zero is only supported with Serverless deployments and is not available for RawDeployments.
+
+KServe can also be configured to change how quickly a model is scaled to zero by setting the retentionPeriod.
+
+```
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set scaling.minReplicas=0 \
+  --set scaling.serverless.retentionPeriod=10m
+```
+
+Longer retention periods can help reduce the model server from starting and stopping as frequently and help to avoid long startup times.
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| endpoint.auth.enabled | bool | `false` |  |
-| endpoint.auth.serviceAccounts | list | `[]` |  |
-| endpoint.externalRoute.enabled | bool | `true` |  |
+| deploymentMode | string | `"Serverless"` | deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment |
+| endpoint.auth.enabled | bool | `false` | Secures the model endpoint and creates a role to grant permissions to service accounts |
+| endpoint.auth.serviceAccounts | list | `[]` | Creates service accounts with permissions to access the secured endpoint |
+| endpoint.externalRoute.enabled | bool | `true` | Creates an externally accessible route for the model endpoint |
 | fullnameOverride | string | `""` | String to fully override fullname template |
-| inferenceService.args | list | `["--gpu-memory-utilization=0.90"]` | Additional vLLM arguments to be used to start vLLM.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html |
-| inferenceService.env | list | `[{"name":"VLLM_LOGGING_LEVEL","value":"INFO"}]` | Additional vLLM arguments to be used to start vLLM.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html |
-| inferenceService.imagePullSecrets | list | `[]` | This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
-| inferenceService.maxReplicas | int | `1` | The maximum number of replicas to be deployed |
-| inferenceService.minReplicas | int | `1` | The minimum number of replicas to be deployed |
-| inferenceService.modelNameOverride | string | `""` | By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name. |
+| image.image | string | `"quay.io/modh/vllm"` | The vLLM model server image |
+| image.tag | string | `"rhoai-2.21-cuda"` | The tag or sha for the model server image |
+| imagePullSecrets | list | `[]` | This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | inferenceService.name | string | `""` | Overwrite the default name for the InferenceService. |
-| inferenceService.nodeSelector | object | `{}` | Node selector for the vLLM pod |
-| inferenceService.resources | object | `{"limits":{"cpu":"2","memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":"1","memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
-| inferenceService.storage.key | string | `""` | The secret containing s3 credentials.  Mode must be set to "s3" to use this option. |
-| inferenceService.storage.mode | string | `"uri"` | Option to set how the storage will be configured.  Options: "uri" and "s3" |
-| inferenceService.storage.path | string | `""` | The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option. |
-| inferenceService.storage.storageUri | string | `"oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.1-2b-instruct"` | The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://" |
-| inferenceService.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
-| inferenceService.tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
+| model.args | list | `["--gpu-memory-utilization=0.90"]` | Additional vLLM arguments to be used to start the model.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html |
+| model.env | list | `[{"name":"VLLM_LOGGING_LEVEL","value":"INFO"}]` | Additional vLLM arguments to be used to start the model.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html |
+| model.mode | string | `"uri"` | Option to set how the storage will be configured.  Options: "uri" and "s3" |
+| model.modelNameOverride | string | `""` | By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name. |
+| model.s3.key | string | `""` | The secret containing s3 credentials.  Mode must be set to "s3" to use this option. |
+| model.s3.path | string | `""` | The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option. |
+| model.uri | string | `"oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct"` | The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://" |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
+| nodeSelector | object | `{}` | Node selector for the vLLM pod |
+| resources | object | `{"limits":{"cpu":"2","memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":"1","memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
+| scaling.maxReplicas | int | `1` | The maximum number of replicas to be deployed |
+| scaling.minReplicas | int | `1` | The minimum number of replicas to be deployed.  Set to 0 to enable scale to zero capabilities with Serverless deployments. |
+| scaling.rawDeployment.deploymentStrategy | object | `{"type":"RollingUpdate"}` | The deployment strategy to use to replace existing pods with new ones. |
+| scaling.scaleMetric | string | `""` | The scaling metric used by KServe to trigger scaling a new pod.  Serverless deployments can be "concurrency", "rps", "cpu", or "memory", while RawDeployments can only utilize "cpu" and "memory".  "concurrency" is used by default for Serverless and "cpu" is used by default for RawDeployments. |
+| scaling.scaleTarget | string | `""` | The scaling target used by KNative to trigger scaling a new pod.  Default is 100 when not set. |
+| scaling.serverless.retentionPeriod | string | `""` | The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero. |
+| scaling.serverless.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
 | servingRuntime.annotations | object | `{"opendatahub.io/apiProtocol":"REST","opendatahub.io/recommended-accelerators":"[\"nvidia.com/gpu\"]","opendatahub.io/template-display-name":"vLLM NVIDIA GPU ServingRuntime for KServe"}` | Additional annotations to configure on the servingRuntime |
 | servingRuntime.args | list | `["--port=8080","--model=/mnt/models"]` | The arguments used to start vLLM |
-| servingRuntime.image | string | `"quay.io/modh/vllm"` | The vLLM model server image |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
-| servingRuntime.tag | string | `"sha256:4f550996130e7d16cacb24ca9a2865e7cf51eddaab014ceaf31a1ea6ef86d4ec"` | The tag or sha for the model server image |
 | servingRuntime.useExisting | string | `""` | Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name. |
+| tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
