@@ -39,8 +39,8 @@ The chart provides the ability to deploy models via URI or S3.  To deploy a mode
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set inferenceService.storage.mode=uri \
-  --set inferenceService.storage.storageUri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.0-2b-instruct"
+  --set model.mode=uri \
+  --set model.uri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct"
 ```
 
 ### Deploy with a PVC
@@ -53,8 +53,8 @@ To deploy a model serving using a PVC you can provide the following options:
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set inferenceService.storage.mode=uri \
-  --set inferenceService.storage.storageUri="pvc://{pvc-name}/{model-folder}"
+  --set model.mode=uri \
+  --set model.uri="pvc://{pvc-name}/{model-folder}"
 ```
 
 ### Deploy a Model with S3
@@ -86,9 +86,9 @@ To configure the S3 option, you must set the storage mode to S3 and provide the 
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set inferenceService.storage.mode=s3 \
-  --set inferenceService.storage.key="my-s3-connection" \
-  --set inferenceService.storage.path="my-model-folder"
+  --set model.mode=s3 \
+  --set model.s3.key="my-s3-connection" \
+  --set model.s3.path="my-model-folder"
 ```
 
 ### Setting Additional Arguments
@@ -97,7 +97,7 @@ Many models may require additional arguments to be configured in order to succes
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set inferenceService.args={"--gpu-memory-utilization=0.95", "--max-model-len=10000"}
+  --set model.args={"--gpu-memory-utilization=0.95", "--max-model-len=10000"}
 ```
 
 For more information on available arguments, see the [vLLM Engine Arguments](https://docs.vllm.ai/en/latest/serving/engine_args.html
@@ -122,12 +122,12 @@ For normal OpenShift users, you can utilize the same sha token used when logging
 Instead, you can create a Service account with the correct permissions using the following:
 
 ```sh
-helm upgrade -i test charts/vllm-kserve \
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
   --set endpoint.auth.enabled=true \
   --set 'endpoint.auth.serviceAccounts[0].name=my-service-account'
 ```
 
-This option will create the serviceAccount `my-service-account` and a secret with the matching name that includes an automatically generated token value.  This token is generated using a legacy k8s token tool.
+This option will create the serviceAccount `my-service-account` and a secret with the matching name that includes an automatically generated token value.  This token is generated using a legacy k8s token tool by default.
 
 >[!WARNING]
 > Service Accounts created through this helm chart or service accounts that are granted permission to the vLLM instance are not visible through the OpenShift AI UI.
@@ -153,6 +153,65 @@ The `create` option defaults to true if not set.  Disabling `create` can be usef
 The `namespace` option allows you to specify which namespace the service account exists or should be created.  Generally it is recommended to only use this feature with `create: false` to grant permissions to an existing service account and not create a new one in that namespace.  If namespace is not specified it will utilize the Release Namespace by default.
 
 The `createLegacyToken` defaults to true if not set.  This option allows you to disable the creation of a legacy k8s token when creating a new serviceAccount and instead to rely on automounted tokens in k8s.  See the official k8s [Service Account documentation](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#auto-generated-legacy-serviceaccount-token-clean-up) for more information.
+
+### RawDeployment
+
+KServe supports the option to create a "RawDeployment" that is not dependent on Istio or KNative Serverless and instead creates the models using a k8s Deployment object.
+
+```
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set deploymentMode=RawDeployment
+```
+
+Additionally, with a RawDeployment, KServe can be configured to use a Recreate strategy which will delete the current pod, before attempting to deploy a new version, which can reduce the need for scaling additional GPUs.
+
+```
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set deploymentMode=RawDeployment \
+  --set scaling.rawDeployment.deploymentStrategy.type=Recreate
+```
+
+### Scaling
+
+KServe supports the ability to automatically scale model servers and allows users to configure a max and min number of replicas:
+
+```
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set scaling.minReplicas=1 \
+  --set scaling.maxReplicas=5 \
+```
+
+KServe uses KNative Servereless autoscaling capabilities for Serverless deployments to scale instances based on concurrent requests by default. Serverless deployments also alternative scaling metrics including "concurrency", "rps", "cpu", and "memory".
+
+```
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set scaling.serverless.scaleMetric=rps \
+  --set scaling.serverless.scaleTarget=10
+```
+
+For more information on the supported scaleMetric options, see the [KNative Autoscaling Metrics](https://knative.dev/docs/serving/autoscaling/autoscaling-metrics/#setting-metrics-per-revision) documentation.
+
+For RawDeployments, KServe uses HorizontalPodAutoscalers (HPA) based on CPU and memory utilization.
+
+With the Serverless deployments, KServe provides the capability to scale to 0 pods when no active queries are being processed.  This can be achieved by setting the minReplicas to 0.
+
+```
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set scaling.minReplicas=0
+```
+
+>[!NOTE]
+> Scale to zero is only supported with Serverless deployments and is not available for RawDeployments.
+
+KServe can also be configured to change how quickly a model is scaled to zero by setting the retentionPeriod.
+
+```
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set scaling.minReplicas=0 \
+  --set scaling.serverless.retentionPeriod=10m
+```
+
+Longer retention periods can help reduce the model server from starting and stopping as frequently and help to avoid long startup times.
 
 {{ template "chart.sourcesSection" . }}
 
