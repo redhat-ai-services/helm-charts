@@ -85,7 +85,8 @@ Lookup the Endpoint URL
 {{- end }}
 {{- end }}
 {{- else if eq .Values.deploymentMode "RawDeployment" }}
-{{- $route := lookup "route.openshift.io/v1" "Route" .Release.Namespace "test-vllm-kserve" }}
+{{- $routeName := include "vllm-kserve.inferenceServiceName" . }}
+{{- $route := lookup "route.openshift.io/v1" "Route" .Release.Namespace $routeName }}
 {{- if hasKey $route "spec" }}
 {{- if hasKey $route.spec "host" }}
 {{- printf "https://%s" $route.spec.host }}
