@@ -1,0 +1,112 @@
+{{- $endpointUrl := include "vllm-kserve.endpointUrl" . }}
+{{- if eq $endpointUrl "" }}
+{{- $endpointUrl = "<YOUR_MODEL_URL>" }}
+{{- end }}
+
+Successfully deployed vLLM InferenceService!
+
+DEPLOYMENT INFORMATION:
+  Name: {{ include "vllm-kserve.inferenceServiceName" . }}
+  Namespace: {{ .Release.Namespace }}
+  Deployment Mode: {{ .Values.deploymentMode }}
+  Model: {{ .Values.model.uri | default "S3 Storage" }}
+
+CHECK STATUS:
+  oc get inferenceservice {{ include "vllm-kserve.inferenceServiceName" . }} -n {{ .Release.Namespace }}
+  oc get pods -l serving.kserve.io/inferenceservice={{ include "vllm-kserve.inferenceServiceName" . }} -n {{ .Release.Namespace }}
+
+{{- if .Values.endpoint.externalRoute.enabled }}
+
+EXTERNAL ACCESS:
+  Your model is accessible via an external route. Get the URL with:
+{{- if eq .Values.deploymentMode "Serverless" }}
+  oc get routes.serving.knative.dev {{ include "vllm-kserve.predictorName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.url}'
+{{- else }}
+  oc get route {{ include "vllm-kserve.inferenceServiceName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.spec.host}'
+{{- end }}
+
+{{- if .Values.endpoint.auth.enabled }}
+
+  Your endpoint is secured. Use the following service accounts for access:
+{{- range .Values.endpoint.auth.serviceAccounts }}
+  - {{ .name }}{{ if .namespace }} (namespace: {{ .namespace }}){{ end }}
+{{- end }}
+
+  Get the token for authentication:
+  oc get secret <service-account-name>-token -n {{ .Release.Namespace }} -o jsonpath='{.data.token}' | base64 -d
+
+  Or you can utilize your personal access token:
+  oc whoami --show-token
+{{- end }}
+
+  Once you have the URL, you can test the model with:
+  curl -X POST  {{ $endpointUrl }}/v1/completions \
+    -H "Content-Type: application/json" \
+    {{- if .Values.endpoint.auth.enabled }}
+    -H "Authorization: Bearer <YOUR_TOKEN>" \
+    {{- end }}
+    -d '{
+      "model": "{{ .Values.model.modelNameOverride | default (include "vllm-kserve.inferenceServiceName" .) }}",
+      "prompt": "Hello, how are you?",
+      "max_tokens": 50
+    }'
+
+{{- else }}
+INTERNAL ACCESS ONLY:
+  Your model is configured for internal cluster access only.
+  
+  To access the model from within the cluster:
+  oc get inferenceservice {{ include "vllm-kserve.inferenceServiceName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.url}'
+
+  For external access, use port forwarding:
+{{- if eq .Values.deploymentMode "Serverless" }}
+  oc port-forward svc/{{ include "vllm-kserve.inferenceServiceName" . }}-predictor -n {{ .Release.Namespace }} 8080:80
+{{- else }}
+  oc port-forward svc/{{ include "vllm-kserve.inferenceServiceName" . }}-predictor -n {{ .Release.Namespace }} 8080:80
+{{- end }}
+
+  Then test with:
+  curl -X POST http://localhost:8080/v1/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "{{ .Values.model.modelNameOverride | default (include "vllm-kserve.inferenceServiceName" .) }}",
+      "prompt": "Hello, how are you?",
+      "max_tokens": 50
+    }'
+{{- end }}
+
+USEFUL COMMANDS:
+  # Check InferenceService logs
+  oc logs -l serving.kserve.io/inferenceservice={{ include "vllm-kserve.inferenceServiceName" . }} -n {{ .Release.Namespace }} -f
+
+  # Get model information
+  curl  {{ $endpointUrl }}/v1/models
+
+API DOCUMENTATION:
+  Swagger docs are available at:
+  {{ $endpointUrl }}/docs
+
+  Your vLLM model supports the OpenAI-compatible API. Available endpoints:
+  - GET /v1/models - List available models
+  - POST /v1/completions - Text completion
+  - POST /v1/chat/completions - Chat completion
+  - GET /health - Health check
+
+  For more details, visit: https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html
+
+{{- if .Values.scaling.minReplicas }}
+
+SCALING CONFIGURATION:
+  Min Replicas: {{ .Values.scaling.minReplicas }}
+  Max Replicas: {{ .Values.scaling.maxReplicas }}
+{{- if .Values.scaling.scaleMetric }}
+  Scale Metric: {{ .Values.scaling.scaleMetric }}
+{{- end }}
+{{- if .Values.scaling.scaleTarget }}
+  Scale Target: {{ .Values.scaling.scaleTarget }}
+{{- end }}
+{{- end }}
+
+{{- if eq (int .Values.scaling.minReplicas) 0 }}
+  Your service is configured for scale-to-zero. First request may take longer to respond if the service isn't already running.
+{{- end }}
