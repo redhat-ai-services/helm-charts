@@ -54,7 +54,7 @@ EXTERNAL ACCESS:
 {{- else }}
 INTERNAL ACCESS ONLY:
   Your model is configured for internal cluster access only.
-  
+
   To access the model from within the cluster:
   oc get inferenceservice {{ include "vllm-kserve.inferenceServiceName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.url}'
 
