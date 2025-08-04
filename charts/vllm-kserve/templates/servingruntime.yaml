@@ -1,4 +1,5 @@
 {{- if not (quote .Values.servingRuntime.useExisting | empty) }}
+{{- if eq .Values.servingTopology "singleNode" }}
 apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:
@@ -38,4 +39,5 @@ spec:
       emptyDir:
         medium: Memory
         sizeLimit: {{ .Values.servingRuntime.shmSize }}
+{{- end }}
 {{- end }}

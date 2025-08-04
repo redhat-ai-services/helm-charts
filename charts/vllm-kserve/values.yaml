@@ -6,6 +6,9 @@ fullnameOverride: ""
 # -- deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment
 deploymentMode: Serverless
 
+# -- servingTopology determines if the model will be deployed using a single node or a multi-node topology.  Must be one of singleNode or multiNode
+servingTopology: singleNode
+
 image:
   # -- The vLLM model server image
   image: 'quay.io/modh/vllm'
@@ -56,6 +59,12 @@ endpoint:
       #   create: false
       # - name: no-token
       #   createLegacyToken: false
+
+multiNode:
+  # -- The number of pods to create for the multi-node topology.  Must be greater than 1.
+  pipelineParallelSize: 2
+  # -- The number of GPUs per node to use for the multi-node topology.
+  tensorParallelSize: 1
 
 scaling:
   # -- The minimum number of replicas to be deployed.  Set to 0 to enable scale to zero capabilities with Serverless deployments.

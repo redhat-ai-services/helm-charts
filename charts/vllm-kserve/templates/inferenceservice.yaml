@@ -14,6 +14,9 @@ metadata:
     {{- else }}
     serving.kserve.io/deploymentMode: RawDeployment
     {{- end }}
+    {{- if eq .Values.servingTopology "multiNode" }}
+    serving.kserve.io/autoscalerClass: external
+    {{- end }}
   name: {{ include "vllm-kserve.inferenceServiceName" . }}
   labels:
     {{- include "vllm-kserve.labels" . | nindent 4 }}
@@ -30,6 +33,7 @@ metadata:
 spec:
   predictor:
     minReplicas: {{ .Values.scaling.minReplicas }}
+    {{- if eq .Values.servingTopology "singleNode" }}
     {{- if gt (int .Values.scaling.maxReplicas) 0}}
     maxReplicas: {{ .Values.scaling.maxReplicas }}
     {{- end }}
@@ -39,6 +43,7 @@ spec:
     {{- end }}
     {{- if .Values.scaling.scaleTarget }}
     scaleTarget: {{ .Values.scaling.scaleTarget }}
+    {{- end }}
     {{- end }}
     {{- if eq .Values.deploymentMode "Serverless" }}
     annotations:
@@ -97,4 +102,14 @@ spec:
     {{- with .Values.imagePullSecrets }}
     imagePullSecrets:
       {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- if eq .Values.servingTopology "multiNode" }}
+    workerSpec:
+      pipelineParallelSize: {{ .Values.multiNode.pipelineParallelSize }}
+      tensorParallelSize: {{ .Values.multiNode.tensorParallelSize }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      resources:
+        {{- toYaml .Values.resources | nindent 8 }}
+      
     {{- end }}
