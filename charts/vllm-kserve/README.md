@@ -189,7 +189,7 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set multiNode.tensorParallelSize=2
 ```
 
-`pipelineParallelSize` should be be equal to the number of pods/nodes you are deploying to, and `tensorParallelSize` should be equal to the number of GPUs available in each node.
+`pipelineParallelSize` should be be equal to the number of pods/nodes you are deploying to, and `tensorParallelSize` should be equal to the number of GPUs available in each node.  By default, the multiNode deployment will use `pipelineParallelSize=2` and `tensorParallelSize=1`.
 
 >[!NOTE]
 > Autoscaling is not supported with multiNode deployments.
