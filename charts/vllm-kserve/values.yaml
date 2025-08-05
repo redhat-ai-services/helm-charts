@@ -16,6 +16,9 @@ image:
   # -- The tag or sha for the model server image
   tag: rhoai-2.22-cuda
 
+  # -- The vLLM version that will be displayed in the RHOAI Dashboard.  If not set, the appVersion of the chart will be used.
+  runtimeVersionOverride: ""
+
 model:
   # -- By default the model name will utilize the inferenceService name for the model. This parameter will override the default name to allow you to explicitly set the model name.
   modelNameOverride: ""
