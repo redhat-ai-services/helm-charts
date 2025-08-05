@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,15 +28,29 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.5.0"
+    version: "0.5.1"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
 ## Usage
 
-### Deploying a Model with ModelCar (OCI)
+### Quick Start
 
-The chart provides the ability to deploy models via URI or S3.  To deploy a model from an OCI container (aka ModelCar) you must set the storage mode to `uri` and then provide the OCI URI.
+For a basic vLLM deployment with default settings:
+
+```sh
+helm upgrade -i my-vllm redhat-ai-services/vllm-kserve
+```
+
+This will deploy a single-node vLLM instance in Serverless mode with the default model.
+
+## Deploying Models
+
+The chart supports multiple model storage options:
+
+### ModelCar (OCI Container)
+
+Deploy models packaged as OCI containers (ModelCar format):
 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
@@ -44,9 +58,9 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set model.uri="oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct"
 ```
 
-### Deploy with a PVC
+### PVC Storage
 
-KServe provides the ability to deploy a model from a PVC.
+Deploy models from a Persistent Volume Claim:
 
 The PVC must be `ReadWriteMany` and the user will need to load the model onto the PVC prior to deploying the model server.
 
@@ -58,9 +72,9 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set model.uri="pvc://{pvc-name}/{model-folder}"
 ```
 
-### Deploy a Model with S3
+### S3 Storage
 
-To deploy a model from an S3 bucket, a secret containing the connection details in the OpenShift AI S3 Data Connection format must exist.
+Deploy models from S3-compatible storage by providing S3 credentials:
 
 ```yaml
 kind: Secret
@@ -81,6 +95,30 @@ data:
   AWS_S3_BUCKET: YmxhaA==
   AWS_S3_ENDPOINT: YmxhaA==
   AWS_SECRET_ACCESS_KEY: YmxhaA==
+```
+
+>[!NOTE]
+>In the example secret, the values have already been base64 encoded.
+
+Alternatively, you can create the secret declaratively using the following commands:
+
+```
+oc create secret generic my-s3-connection \
+  --from-literal=AWS_ACCESS_KEY_ID="your-access-key" \
+  --from-literal=AWS_SECRET_ACCESS_KEY="your-secret-key" \
+  --from-literal=AWS_S3_ENDPOINT="https://s3.amazonaws.com" \
+  --from-literal=AWS_S3_BUCKET="your-bucket-name"
+
+# Add the required labels and annotations for OpenShift AI
+oc label secret my-s3-connection \
+  opendatahub.io/dashboard=true \
+  opendatahub.io/managed=true
+
+oc annotate secret my-s3-connection \
+  opendatahub.io/connection-type=s3 \
+  opendatahub.io/connection-type-ref=s3 \
+  openshift.io/description="S3 connection for vLLM model storage" \
+  openshift.io/display-name="my-s3-connection"
 ```
 
 To configure the S3 option, you must set the storage mode to S3 and provide the name of the secret for the S3 Data Connection and the path the model exists in the bucket.  The model cannot be located in the root folder of the bucket.
@@ -106,6 +144,52 @@ For more information on available arguments, see the [vLLM Engine Arguments](htt
 
 >[!TIP]
 > Model specific arguments are required to use tooling with vLLM. More info found [here](https://docs.vllm.ai/en/latest/features/tool_calling.html#quickstart)
+
+### GPU and Accelerator Support
+
+This chart supports multiple GPU types and accelerators:
+
+#### NVIDIA GPUs (Default)
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set 'resources.requests.nvidia\.com/gpu=1' \
+  --set 'resources.limits.nvidia\.com/gpu=1'
+```
+
+#### AMD GPUs
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set image.tag=rhoai-2.22-rocm \
+  --set 'resources.requests.amd\.com/gpu=1' \
+  --set 'resources.limits.amd\.com/gpu=1'
+```
+
+Additional toleration may be required.
+
+#### Intel Gaudi Accelerators
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set image.tag=rhoai-2.22-gaudi \
+  --set image.runtimeVersionOverride="0.7.2" \
+  --set 'resources.requests.habana\.ai/gaudi=1' \
+  --set 'resources.limits.habana\.ai/gaudi=1'
+```
+
+Additional toleration may be required.
+
+#### CPU-only Deployment
+
+>[!IMPORTANT]
+>The CPU only version of vLLM is only supported on ppc64le and s390x CPUs and is not supported on x86 hardware.
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set image.tag=rhoai-2.22-cpu \
+  --set resources.requests.'nvidia\.com/gpu'=null \
+  --set resources.limits.'nvidia\.com/gpu'=null \
+```
+
+## Security
 
 ### Securing the Endpoint
 
@@ -155,6 +239,8 @@ The `namespace` option allows you to specify which namespace the service account
 
 The `createLegacyToken` defaults to true if not set.  This option allows you to disable the creation of a legacy k8s token when creating a new serviceAccount and instead to rely on automounted tokens in k8s.  See the official k8s [Service Account documentation](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#auto-generated-legacy-serviceaccount-token-clean-up) for more information.
 
+## Deployment Modes
+
 ### RawDeployment
 
 KServe supports the option to create a "RawDeployment" that is not dependent on Istio or KNative Serverless and instead creates the models using a k8s Deployment object.
@@ -190,6 +276,10 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
 ```
 
 `pipelineParallelSize` should be be equal to the number of pods/nodes you are deploying to, and `tensorParallelSize` should be equal to the number of GPUs available in each node.  By default, the multiNode deployment will use `pipelineParallelSize=2` and `tensorParallelSize=1`.
+
+>[!TIP]
+> - `pipeline-parallel-size` should equal the number of pods/nodes you are deploying
+> - `tensor-parallel-size` should equal the number of GPUs per node
 
 >[!NOTE]
 > Autoscaling is not supported with multiNode deployments.
@@ -236,6 +326,34 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
 
 Longer retention periods can help reduce the model server from starting and stopping as frequently and help to avoid long startup times.
 
+## Troubleshooting
+
+### Common Issues
+
+#### Model Loading Errors
+If the model fails to load, check:
+- Model URI is accessible and correctly formatted
+- Sufficient GPU memory for the model size and KV Cache configuration
+- Model format is supported by vLLM
+
+```sh
+# Check pod logs
+oc logs -l serving.kserve.io/inferenceservice=[release-name] -f
+
+# Check InferenceService status
+oc get inferenceservice [release-name] -o yaml
+```
+
+### Getting Support
+
+- **Documentation**: [vLLM Documentation](https://docs.vllm.ai/)
+- **KServe Documentation**: [KServe Documentation](https://kserve.github.io/website/)
+- **Issues**: Report issues in the [helm-charts repository](https://github.com/redhat-ai-services/helm-charts/issues)
+
+## Configuration
+
+For a complete list of all configuration options, see the [Values](#values) section below.
+
 ## Values
 
 | Key | Type | Default | Description |
@@ -246,6 +364,7 @@ Longer retention periods can help reduce the model server from starting and stop
 | endpoint.externalRoute.enabled | bool | `true` | Creates an externally accessible route for the model endpoint |
 | fullnameOverride | string | `""` | String to fully override fullname template |
 | image.image | string | `"quay.io/modh/vllm"` | The vLLM model server image |
+| image.runtimeVersionOverride | string | `""` | The vLLM version that will be displayed in the RHOAI Dashboard.  If not set, the appVersion of the chart will be used. |
 | image.tag | string | `"rhoai-2.22-cuda"` | The tag or sha for the model server image |
 | imagePullSecrets | list | `[]` | This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | inferenceService.name | string | `""` | Overwrite the default name for the InferenceService. |
