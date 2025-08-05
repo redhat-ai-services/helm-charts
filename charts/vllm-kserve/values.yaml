@@ -6,6 +6,9 @@ fullnameOverride: ""
 # -- deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment
 deploymentMode: Serverless
 
+# -- servingTopology determines if the model will be deployed using a single node or a multi-node topology.  Must be one of singleNode or multiNode
+servingTopology: singleNode
+
 image:
   # -- The vLLM model server image
   image: 'quay.io/modh/vllm'
@@ -56,6 +59,12 @@ endpoint:
       #   create: false
       # - name: no-token
       #   createLegacyToken: false
+
+multiNode:
+  # -- The number of pods to create for the multi-node topology.  Must be greater than 1.
+  pipelineParallelSize: 2
+  # -- The number of GPUs per node to use for the multi-node topology.
+  tensorParallelSize: 1
 
 scaling:
   # -- The minimum number of replicas to be deployed.  Set to 0 to enable scale to zero capabilities with Serverless deployments.
@@ -116,12 +125,6 @@ servingRuntime:
   name: ""
   # -- Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name.
   useExisting: ""
-
-  # -- Additional annotations to configure on the servingRuntime
-  annotations:
-    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-    opendatahub.io/template-display-name: vLLM NVIDIA GPU ServingRuntime for KServe
-    opendatahub.io/apiProtocol: REST
 
   # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
   shmSize: 2Gi
