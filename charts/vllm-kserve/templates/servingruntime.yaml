@@ -3,10 +3,11 @@
 apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:
-  annotations:
-    {{- toYaml .Values.servingRuntime.annotations | nindent 4 }}
   name: {{ include "vllm-kserve.servingRuntimeName" . }}
+  annotations:
+    {{- include "vllm-kserve.rhoaiAnnotations" . | nindent 4 }}
   labels:
+    opendatahub.io/dashboard: 'true'
     {{- include "vllm-kserve.labels" . | nindent 4 }}
 spec:
   annotations:

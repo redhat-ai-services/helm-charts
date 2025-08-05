@@ -34,13 +34,54 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "vllm-kserve.labels" -}}
-opendatahub.io/dashboard: 'true'
 helm.sh/chart: {{ include "vllm-kserve.chart" . }}
 {{ include "vllm-kserve.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+RHOAI Annotation
+*/}}
+{{- define "vllm-kserve.rhoaiAnnotations" -}}
+{{- include "vllm-kserve.acceleratorAnnotations" . }}
+{{- include "vllm-kserve.runtimeAnnotation" . }}
+{{- end }}
+
+{{/*
+RHOAI Accelerator Annotations
+*/}}
+{{- define "vllm-kserve.acceleratorAnnotations" -}}
+{{- if eq .Values.servingTopology "singleNode" -}}
+{{- if index .Values.resources.requests "nvidia.com/gpu" -}}
+opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+opendatahub.io/template-display-name: vLLM NVIDIA GPU ServingRuntime for KServe
+{{- else if index .Values.resources.requests "amd.com/gpu" -}}
+opendatahub.io/recommended-accelerators: '["amd.com/gpu"]'
+opendatahub.io/template-display-name: vLLM AMD GPU ServingRuntime for KServe
+{{- else if index .Values.resources.requests "habana.ai/gaudi" -}}
+opendatahub.io/recommended-accelerators: '["habana.ai/gaudi"]'
+opendatahub.io/template-display-name: vLLM Intel Gaudi Accelerator ServingRuntime for KServe
+{{- else -}}
+opendatahub.io/template-display-name: vLLM CPU (ppc64le/s390x) ServingRuntime for KServe
+{{- end -}}
+{{- else -}}
+opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+opendatahub.io/template-display-name: vLLM Multi-Node ServingRuntime for KServe
+{{- end -}}
+{{- end }}
+
+{{/*
+vLLM Runtime Version Annotation
+*/}}
+{{- define "vllm-kserve.runtimeAnnotation" -}}
+{{- if .Values.image.runtimeVersionOverride }}
+opendatahub.io/runtime-version: {{ .Values.image.runtimeVersionOverride }}
+{{- else }}
+opendatahub.io/runtime-version: {{ .Chart.AppVersion }}
+{{- end }}
 {{- end }}
 
 {{/*

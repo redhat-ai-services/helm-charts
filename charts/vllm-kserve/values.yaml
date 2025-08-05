@@ -126,12 +126,6 @@ servingRuntime:
   # -- Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name.
   useExisting: ""
 
-  # -- Additional annotations to configure on the servingRuntime
-  annotations:
-    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-    opendatahub.io/template-display-name: vLLM NVIDIA GPU ServingRuntime for KServe
-    opendatahub.io/apiProtocol: REST
-
   # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
   shmSize: 2Gi
   # -- The arguments used to start vLLM

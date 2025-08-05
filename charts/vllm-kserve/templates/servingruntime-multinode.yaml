@@ -3,12 +3,9 @@
 apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:
-  annotations:
-    {{- toYaml .Values.servingRuntime.annotations | nindent 4 }}
-    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-    opendatahub.io/runtime-version: v0.9.1.0
-    openshift.io/display-name: vLLM Multi-Node ServingRuntime for KServe
   name: {{ include "vllm-kserve.servingRuntimeName" . }}
+  annotations:
+    {{- include "vllm-kserve.rhoaiAnnotations" . | nindent 4 }}
   labels:
     {{- include "vllm-kserve.labels" . | nindent 4 }}
     opendatahub.io/dashboard: "false"
