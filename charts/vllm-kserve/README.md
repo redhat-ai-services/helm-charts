@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.4.2](https://img.shields.io/badge/Version-0.4.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
+![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.4.2"
+    version: "0.5.0"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -172,6 +172,28 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set scaling.rawDeployment.deploymentStrategy.type=Recreate
 ```
 
+### Multi-node Deployment
+
+vLLM supports distributed multi-node inference for large models that don't fit on a single GPU or when you need to scale beyond single-node capabilities.
+
+>[!IMPORTANT]
+> Multi-node deployments are only supported with `RawDeployment` mode and cannot be used with Serverless deployments.  Additionally, multiNode only supports deploying models from an OCI container or a ReadWriteMany PVC.  It does not support serving models from S3.
+
+To deploy a multi-node vLLM instance:
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set servingTopology=multiNode \
+  --set deploymentMode=RawDeployment \
+  --set multiNode.pipelineParallelSize=2 \
+  --set multiNode.tensorParallelSize=2
+```
+
+`pipelineParallelSize` should be be equal to the number of pods/nodes you are deploying to, and `tensorParallelSize` should be equal to the number of GPUs available in each node.
+
+>[!NOTE]
+> Autoscaling is not supported with multiNode deployments.
+
 ### Scaling
 
 KServe supports the ability to automatically scale model servers and allows users to configure a max and min number of replicas:
@@ -182,7 +204,7 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set scaling.maxReplicas=5 \
 ```
 
-KServe uses KNative Servereless autoscaling capabilities for Serverless deployments to scale instances based on concurrent requests by default. Serverless deployments also alternative scaling metrics including "concurrency", "rps", "cpu", and "memory".
+KServe uses KNative Serverless autoscaling capabilities for Serverless deployments to scale instances based on concurrent requests by default. Serverless deployments also alternative scaling metrics including "concurrency", "rps", "cpu", and "memory".
 
 ```
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
@@ -234,6 +256,8 @@ Longer retention periods can help reduce the model server from starting and stop
 | model.s3.key | string | `""` | The secret containing s3 credentials.  Mode must be set to "s3" to use this option. |
 | model.s3.path | string | `""` | The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option. |
 | model.uri | string | `"oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct"` | The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://" |
+| multiNode.pipelineParallelSize | int | `2` | The number of pods to create for the multi-node topology.  Must be greater than 1. |
+| multiNode.tensorParallelSize | int | `1` | The number of GPUs per node to use for the multi-node topology. |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
 | nodeSelector | object | `{}` | Node selector for the vLLM pod |
 | resources | object | `{"limits":{"cpu":"2","memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":"1","memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
@@ -244,11 +268,11 @@ Longer retention periods can help reduce the model server from starting and stop
 | scaling.scaleTarget | string | `""` | The scaling target used by KNative to trigger scaling a new pod.  Default is 100 when not set. |
 | scaling.serverless.retentionPeriod | string | `""` | The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero. |
 | scaling.serverless.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
-| servingRuntime.annotations | object | `{"opendatahub.io/apiProtocol":"REST","opendatahub.io/recommended-accelerators":"[\"nvidia.com/gpu\"]","opendatahub.io/template-display-name":"vLLM NVIDIA GPU ServingRuntime for KServe"}` | Additional annotations to configure on the servingRuntime |
 | servingRuntime.args | list | `["--port=8080","--model=/mnt/models"]` | The arguments used to start vLLM |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
 | servingRuntime.useExisting | string | `""` | Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name. |
+| servingTopology | string | `"singleNode"` | servingTopology determines if the model will be deployed using a single node or a multi-node topology.  Must be one of singleNode or multiNode |
 | tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
 
 ----------------------------------------------
