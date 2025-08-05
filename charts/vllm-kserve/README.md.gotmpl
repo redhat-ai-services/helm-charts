@@ -171,6 +171,28 @@ helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} 
   --set scaling.rawDeployment.deploymentStrategy.type=Recreate
 ```
 
+### Multi-node Deployment
+
+vLLM supports distributed multi-node inference for large models that don't fit on a single GPU or when you need to scale beyond single-node capabilities.
+
+>[!IMPORTANT]
+> Multi-node deployments are only supported with `RawDeployment` mode and cannot be used with Serverless deployments.  Additionally, multiNode only supports deploying models from an OCI container or a ReadWriteMany PVC.  It does not support serving models from S3.
+
+To deploy a multi-node vLLM instance:
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
+  --set servingTopology=multiNode \
+  --set deploymentMode=RawDeployment \
+  --set multiNode.pipelineParallelSize=2 \
+  --set multiNode.tensorParallelSize=2
+```
+
+`pipelineParallelSize` should be be equal to the number of pods/nodes you are deploying to, and `tensorParallelSize` should be equal to the number of GPUs available in each node.
+
+>[!NOTE]
+> Autoscaling is not supported with multiNode deployments.
+
 ### Scaling
 
 KServe supports the ability to automatically scale model servers and allows users to configure a max and min number of replicas:
@@ -181,7 +203,7 @@ helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} 
   --set scaling.maxReplicas=5 \
 ```
 
-KServe uses KNative Servereless autoscaling capabilities for Serverless deployments to scale instances based on concurrent requests by default. Serverless deployments also alternative scaling metrics including "concurrency", "rps", "cpu", and "memory".
+KServe uses KNative Serverless autoscaling capabilities for Serverless deployments to scale instances based on concurrent requests by default. Serverless deployments also alternative scaling metrics including "concurrency", "rps", "cpu", and "memory".
 
 ```
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
