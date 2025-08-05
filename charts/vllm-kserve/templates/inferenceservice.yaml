@@ -1,3 +1,4 @@
+{{- include "vllm-kserve.validateAll" . }}
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
@@ -5,7 +6,6 @@ metadata:
     {{- if .Values.endpoint.auth.enabled }}
     security.opendatahub.io/enable-auth: 'true'
     {{- end }}
-    {{- include "vllm-kserve.validateDeploymentMode" . }}
     {{- if eq .Values.deploymentMode "Serverless" }}
     serving.kserve.io/deploymentMode: Serverless
     serving.knative.openshift.io/enablePassthrough: "true"
@@ -38,7 +38,6 @@ spec:
     maxReplicas: {{ .Values.scaling.maxReplicas }}
     {{- end }}
     {{- if .Values.scaling.scaleMetric }}
-    {{- include "vllm-kserve.validateScaleMetric" . }}
     scaleMetric: {{ .Values.scaling.scaleMetric }}
     {{- end }}
     {{- if .Values.scaling.scaleTarget }}
@@ -85,16 +84,12 @@ spec:
       runtime: {{ include "vllm-kserve.servingRuntimeName" . }}
       {{- end }}
       {{- with .Values.model }}
-      {{- $valid := list "uri" "s3" }}
-      {{- if not (has (lower .mode) $valid) }}
-      {{- fail (printf "Invalid model.mode.  Must be one of: %s" $valid) }}
-      {{- end }}
       {{- if eq (lower .mode) "uri" }}
-      storageUri: {{ required "model.uri is required when setting mode to 'uri'" .uri }}
+      storageUri: {{ .uri }}
       {{- else if eq (lower .mode) "s3"}}
       storage:
-        key: {{ required "model.s3.key is required when setting mode to 's3'" .s3.key }}
-        path: {{ required "model.s3.path is required when setting mode to 's3'" .s3.path }}
+        key: {{ .s3.key }}
+        path: {{ .s3.path }}
       {{- end }}
       {{- end }}
     tolerations:
@@ -111,5 +106,4 @@ spec:
         {{- toYaml .Values.tolerations | nindent 8 }}
       resources:
         {{- toYaml .Values.resources | nindent 8 }}
-      
     {{- end }}

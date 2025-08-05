@@ -1,8 +1,5 @@
 {{- if not (quote .Values.servingRuntime.useExisting | empty) }}
 {{- if eq .Values.servingTopology "multiNode" }}
-{{- if eq .Values.deploymentMode "Serverless" }}
-{{- fail (printf "Multi-Node servingTopology is only supported with RawDeployments.  Please set deploymentMode to RawDeployment") }}
-{{- end }}
 apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:

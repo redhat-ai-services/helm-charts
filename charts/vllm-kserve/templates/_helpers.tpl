@@ -113,28 +113,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-{{/*
-Validate that a valid deployment mode is configured.
-*/}}
-{{- define "vllm-kserve.validateDeploymentMode" -}}
-{{- $deploymentModes := list "RawDeployment" "Serverless" }}
-{{- if not (mustHas .Values.deploymentMode $deploymentModes) }}
-    {{- fail (printf "Model deployment mode must be one of: %s" $deploymentModes) }}
-{{- end }}
-{{- end }}
-
-{{/*
-Validate the scale metric.
-*/}}
-{{- define "vllm-kserve.validateScaleMetric" -}}
-{{- $scaleMetrics := list }}
-{{- if eq .Values.deploymentMode "Serverless" }}
-{{- $scaleMetrics = list "concurrency" "rps" "cpu" "memory" }}
-{{- else }}
-{{- $scaleMetrics = list "cpu" "memory" }}
-{{- end }}
-{{- if not (mustHas .Values.scaling.scaleMetric $scaleMetrics) }}
-    {{- fail (printf "For %s scaleMetric must must be one of: %s" .Values.deploymentMode $scaleMetrics) }}
-{{- end }}
-{{- end }}
