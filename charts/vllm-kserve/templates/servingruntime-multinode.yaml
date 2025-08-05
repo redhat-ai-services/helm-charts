@@ -37,7 +37,7 @@ spec:
 
           echo ""
           echo "Ray Start"
-          ray start --head --disable-usage-stats --include-dashboard false 
+          ray start --head --disable-usage-stats --include-dashboard false
           # wait for other node to join
           until [[ $(ray status --address ${RAY_ADDRESS} | grep -c node_) -eq ${PIPELINE_PARALLEL_SIZE} ]]; do
             echo "Waiting..."
@@ -84,12 +84,12 @@ spec:
               if [[ ! ${registered_node_count} -ge "${PIPELINE_PARALLEL_SIZE}" ]]; then
                 echo "Unhealthy - Registered nodes count (${registered_node_count}) must not be less PIPELINE_PARALLEL_SIZE (${PIPELINE_PARALLEL_SIZE})."
                 exit 1
-              fi     
+              fi
 
               # Check model health
               health_check=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080/health)
               if [[ ${health_check} != 200 ]]; then
-                echo "Unhealthy - vLLM Runtime Health Check failed." 
+                echo "Unhealthy - vLLM Runtime Health Check failed."
                 exit 1
               fi
         failureThreshold: 2
@@ -102,10 +102,10 @@ spec:
             - bash
             - '-c'
             - |
-              # Check model health 
+              # Check model health
               health_check=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080/health)
               if [[ ${health_check} != 200 ]]; then
-                echo "Unhealthy - vLLM Runtime Health Check failed." 
+                echo "Unhealthy - vLLM Runtime Health Check failed."
                 exit 1
               fi
         failureThreshold: 2
@@ -119,7 +119,7 @@ spec:
             - '-c'
             - |
               # This need when head node have issues and restarted.
-              # It will wait for new worker node.                     
+              # It will wait for new worker node.
               registered_node_count=$(ray status --address ${RAY_ADDRESS} | grep -c node_)
               if [[ ! ${registered_node_count} -ge "${PIPELINE_PARALLEL_SIZE}" ]]; then
                 echo "Unhealthy - Registered nodes count (${registered_node_count}) must not be less PIPELINE_PARALLEL_SIZE (${PIPELINE_PARALLEL_SIZE})."
@@ -127,11 +127,11 @@ spec:
               fi
 
               # Double check to make sure Model is ready to serve.
-              for i in 1 2; do                    
+              for i in 1 2; do
                 # Check model health
                 health_check=$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:8080/health)
                 if [[ ${health_check} != 200 ]]; then
-                  echo "Unhealthy - vLLM Runtime Health Check failed." 
+                  echo "Unhealthy - vLLM Runtime Health Check failed."
                   exit 1
                 fi
               done
@@ -235,7 +235,7 @@ spec:
                 if [[ ! ${registered_node_count} -ge "${PIPELINE_PARALLEL_SIZE}" ]]; then
                   echo "Unhealthy - Registered nodes count (${registered_node_count}) must not be less PIPELINE_PARALLEL_SIZE (${PIPELINE_PARALLEL_SIZE})."
                   exit 1
-                fi  
+                fi
 
                 # Double check to make sure Model is ready to serve.
                 for i in 1 2; do
@@ -244,7 +244,7 @@ spec:
                   if [[ ${model_health_check} != "${ISVC_NAME}" ]]; then
                     echo "Unhealthy - vLLM Runtime Health Check failed."
                     exit 1
-                  fi                     
+                  fi
                   sleep 10
                 done
           failureThreshold: 40
