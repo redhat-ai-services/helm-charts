@@ -96,7 +96,16 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the ServingRuntime to use
 */}}
 {{- define "vllm-kserve.servingRuntimeName" -}}
-{{- default (include "vllm-kserve.fullname" .) .Values.servingRuntime.name }}
+{{- if eq .Values.servingTopology "singleNode" -}}
+{{- default (include "vllm-kserve.fullname" .) .Values.servingRuntime.name -}}
+{{- else -}}
+{{/*
+OpenShift AI 2.22 and early require the servingruntime name to be vllm-multinode-runtime
+in order to properly create the ray-tls secret.
+Resolved in https://github.com/opendatahub-io/odh-model-controller/commit/7cf654ec55add67ee84ca9d7b40376331b9b3386
+*/}}
+{{- printf "vllm-multinode-runtime" -}}
+{{- end -}}
 {{- end }}
 
 {{/*
