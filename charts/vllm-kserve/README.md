@@ -2,7 +2,34 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.5.3](https://img.shields.io/badge/Version-0.5.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
+![Version: 0.5.4](https://img.shields.io/badge/Version-0.5.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
+
+## Table of Contents
+
+- [Installing the Chart](#installing-the-chart)
+- [Usage](#usage)
+  - [Quick Start](#quick-start)
+- [Deploying Models](#deploying-models)
+  - [ModelCar (OCI Container)](#modelcar-oci-container)
+  - [PVC Storage](#pvc-storage)
+  - [S3 Storage](#s3-storage)
+  - [Setting Additional Arguments](#setting-additional-arguments)
+  - [GPU and Accelerator Support](#gpu-and-accelerator-support)
+    - [NVIDIA GPUs (Default)](#nvidia-gpus-default)
+    - [AMD GPUs](#amd-gpus)
+    - [Intel Gaudi Accelerators](#intel-gaudi-accelerators)
+    - [CPU-only Deployment](#cpu-only-deployment)
+- [Security](#security)
+  - [Securing the Endpoint](#securing-the-endpoint)
+- [Deployment Modes](#deployment-modes)
+  - [RawDeployment](#rawdeployment)
+  - [Multi-node Deployment](#multi-node-deployment)
+  - [Scaling](#scaling)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+  - [Getting Support](#getting-support)
+- [Configuration](#configuration)
+- [Values](#values)
 
 ## Installing the Chart
 
@@ -28,7 +55,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.5.3"
+    version: "0.5.4"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -160,6 +187,8 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set image.tag=rhoai-2.22-rocm \
+  --set resources.requests.'nvidia\.com/gpu'=null \
+  --set resources.limits.'nvidia\.com/gpu'=null \
   --set 'resources.requests.amd\.com/gpu=1' \
   --set 'resources.limits.amd\.com/gpu=1'
 ```
@@ -171,6 +200,8 @@ Additional toleration may be required.
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set image.tag=rhoai-2.22-gaudi \
   --set image.runtimeVersionOverride="0.7.2" \
+  --set resources.requests.'nvidia\.com/gpu'=null \
+  --set resources.limits.'nvidia\.com/gpu'=null \
   --set 'resources.requests.habana\.ai/gaudi=1' \
   --set 'resources.limits.habana\.ai/gaudi=1'
 ```
@@ -187,6 +218,7 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set image.tag=rhoai-2.22-cpu \
   --set resources.requests.'nvidia\.com/gpu'=null \
   --set resources.limits.'nvidia\.com/gpu'=null \
+  --set tolerations=null
 ```
 
 ## Security
