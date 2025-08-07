@@ -159,6 +159,8 @@ helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} 
 ```sh
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
   --set image.tag=rhoai-2.22-rocm \
+  --set resources.requests.'nvidia\.com/gpu'=null \
+  --set resources.limits.'nvidia\.com/gpu'=null \
   --set 'resources.requests.amd\.com/gpu=1' \
   --set 'resources.limits.amd\.com/gpu=1'
 ```
@@ -170,6 +172,8 @@ Additional toleration may be required.
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
   --set image.tag=rhoai-2.22-gaudi \
   --set image.runtimeVersionOverride="0.7.2" \
+  --set resources.requests.'nvidia\.com/gpu'=null \
+  --set resources.limits.'nvidia\.com/gpu'=null \
   --set 'resources.requests.habana\.ai/gaudi=1' \
   --set 'resources.limits.habana\.ai/gaudi=1'
 ```
