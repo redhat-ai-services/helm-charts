@@ -8,7 +8,7 @@ metadata:
     {{- include "vllm-kserve.rhoaiAnnotations" . | nindent 4 }}
   labels:
     {{- include "vllm-kserve.labels" . | nindent 4 }}
-    opendatahub.io/dashboard: "false"
+    opendatahub.io/dashboard: "{{ .Values.multiNode.visibleInDashboard }}"
 spec:
   annotations:
     prometheus.io/path: /metrics
