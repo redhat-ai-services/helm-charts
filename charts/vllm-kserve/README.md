@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.5.4](https://img.shields.io/badge/Version-0.5.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
+![Version: 0.5.5](https://img.shields.io/badge/Version-0.5.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
 
 ## Table of Contents
 
@@ -55,7 +55,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.5.4"
+    version: "0.5.5"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -409,6 +409,7 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | model.uri | string | `"oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct"` | The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://" |
 | multiNode.pipelineParallelSize | int | `2` | The number of pods to create for the multi-node topology.  Must be greater than 1. |
 | multiNode.tensorParallelSize | int | `1` | The number of GPUs per node to use for the multi-node topology. |
+| multiNode.visibleInDashboard | bool | `false` | Whether to show the multi-node deployment in the RHOAI Dashboard.  Default is false. |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
 | nodeSelector | object | `{}` | Node selector for the vLLM pod |
 | resources | object | `{"limits":{"cpu":"2","memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":"1","memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
