@@ -27,10 +27,10 @@ model:
   args:
     - "--gpu-memory-utilization=0.90"
 
-  # -- Additional vLLM arguments to be used to start the model.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html
-  env:
-    - name: VLLM_LOGGING_LEVEL
-      value: INFO
+  # -- Additional vLLM arguments to be used to start the model.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html. NOTE: As of RHOAI 2.22, adding environment variables to a multi-node deployment will prevent the ray-tls-generator init container from completing successfully.
+  env: []
+    # - name: VLLM_LOGGING_LEVEL
+    #   value: INFO
 
   # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
   mode: uri
