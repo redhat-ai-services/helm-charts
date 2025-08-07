@@ -3,6 +3,33 @@
 
 {{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
 
+## Table of Contents
+
+- [Installing the Chart](#installing-the-chart)
+- [Usage](#usage)
+  - [Quick Start](#quick-start)
+- [Deploying Models](#deploying-models)
+  - [ModelCar (OCI Container)](#modelcar-oci-container)
+  - [PVC Storage](#pvc-storage)
+  - [S3 Storage](#s3-storage)
+  - [Setting Additional Arguments](#setting-additional-arguments)
+  - [GPU and Accelerator Support](#gpu-and-accelerator-support)
+    - [NVIDIA GPUs (Default)](#nvidia-gpus-default)
+    - [AMD GPUs](#amd-gpus)
+    - [Intel Gaudi Accelerators](#intel-gaudi-accelerators)
+    - [CPU-only Deployment](#cpu-only-deployment)
+- [Security](#security)
+  - [Securing the Endpoint](#securing-the-endpoint)
+- [Deployment Modes](#deployment-modes)
+  - [RawDeployment](#rawdeployment)
+  - [Multi-node Deployment](#multi-node-deployment)
+  - [Scaling](#scaling)
+- [Troubleshooting](#troubleshooting)
+  - [Common Issues](#common-issues)
+  - [Getting Support](#getting-support)
+- [Configuration](#configuration)
+- [Values](#values)
+
 ## Installing the Chart
 
 To access charts from this from the cli repository add it:
