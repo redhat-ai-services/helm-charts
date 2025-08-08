@@ -106,6 +106,8 @@ spec:
       tensorParallelSize: {{ .Values.multiNode.tensorParallelSize }}
       tolerations:
         {{- toYaml .Values.tolerations | nindent 8 }}
-      resources:
-        {{- toYaml .Values.resources | nindent 8 }}
+      containers:
+        - name: worker-container
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
     {{- end }}
