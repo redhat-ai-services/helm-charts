@@ -7,7 +7,7 @@ type: application
 
 # chart version
 # should be incremented with every change to the chart
-version: 0.5.7
+version: 0.5.8
 
 # vllm version shipped in RHOAI 2.22
 appVersion: "v0.9.0.1"

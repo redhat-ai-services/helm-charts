@@ -242,7 +242,7 @@ spec:
                   # Check model health
                   # fix to address https://issues.redhat.com/browse/RHOAIENG-32105
                   model_health_check=$(curl -s ${HEAD_SVC}.${POD_NAMESPACE}.svc.cluster.local:8080/v1/models | grep -q '"object":"model"' && echo true || echo false)
-                  if [[ ! ${model_health_check} ]]; then
+                  if [[ "${model_health_check}" == "false" ]]; then
                     echo "Unhealthy - vLLM Runtime Health Check failed."
                     exit 1
                   fi
