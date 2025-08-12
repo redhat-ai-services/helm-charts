@@ -240,8 +240,9 @@ spec:
                 # Double check to make sure Model is ready to serve.
                 for i in 1 2; do
                   # Check model health
-                  model_health_check=$(curl -s ${HEAD_SVC}.${POD_NAMESPACE}.svc.cluster.local:8080/v1/models|grep -o ${ISVC_NAME})
-                  if [[ ${model_health_check} != "${ISVC_NAME}" ]]; then
+                  # fix to address https://issues.redhat.com/browse/RHOAIENG-32105
+                  model_health_check=$(curl -s ${HEAD_SVC}.${POD_NAMESPACE}.svc.cluster.local:8080/v1/models | grep -q '"object":"model"' && echo true || echo false)
+                  if [[ ! ${model_health_check} ]]; then
                     echo "Unhealthy - vLLM Runtime Health Check failed."
                     exit 1
                   fi
