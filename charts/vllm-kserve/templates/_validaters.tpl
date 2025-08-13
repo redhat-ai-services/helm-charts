@@ -46,7 +46,7 @@ Validate that multi-node topology is only used with RawDeployment mode.
 Validate that a valid model mode is configured.
 */}}
 {{- define "vllm-kserve.validateModelMode" -}}
-{{- $validModes := list "uri" "s3" }}
+{{- $validModes := list "uri" "s3" "pvc" }}
 {{- if not (has (lower .Values.model.mode) $validModes) }}
     {{- fail (printf "Invalid model.mode. Must be one of: %s" $validModes) }}
 {{- end }}

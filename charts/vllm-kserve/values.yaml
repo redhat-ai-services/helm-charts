@@ -32,7 +32,9 @@ model:
     # - name: VLLM_LOGGING_LEVEL
     #   value: INFO
 
-  # -- Option to set how the storage will be configured.  Options: "uri" and "s3"
+  # -- Option to set how the storage will be configured.  Options: "uri" and "s3" and "pvc". 
+  # If set to "pvc", the uri will be set automatically from model.pvc elements
+  # If pvc already exists and model already downloaded to pvc, set mode to "uri" and update uri to pvc://<pvc-name>/<path-to-model>
   mode: uri
 
   # -- The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://"
@@ -44,6 +46,19 @@ model:
 
     # -- The containing the model in the s3 bucket.  Mode must be set to "s3" to use this option.
     path: ""
+
+  pvc: 
+    # Create PVC for model download and download the model from huggingface.
+    name: granite-3.3-8b-instruct-pvc
+    createPvc:
+      enabled: false
+      size: 25Gi
+      storageClass: gp3-csi
+    downloadModel:
+      enabled: false
+      huggingfaceModelRepo: "ibm-granite/granite-3.3-8b-instruct"
+      huggingfaceToken: your-token-here
+      allowPatterns: "*.safetensors,*.json,*.txt"
 
 endpoint:
   externalRoute:

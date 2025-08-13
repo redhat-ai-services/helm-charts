@@ -86,6 +86,8 @@ spec:
       {{- with .Values.model }}
       {{- if eq (lower .mode) "uri" }}
       storageUri: {{ .uri }}
+      {{- else if eq (lower .mode) "pvc"}}
+      storageUri: pvc://{{ .pvc.name }}/data/models/{{ .pvc.downloadModel.huggingfaceModelRepo }}
       {{- else if eq (lower .mode) "s3"}}
       storage:
         key: {{ .s3.key }}
