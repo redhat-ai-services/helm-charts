@@ -146,7 +146,7 @@ Lookup the Endpoint URL
 {{- end }}
 
 {{- define "vllm-kserve.image" -}}
-{{- if .Values.image.tag | hasPrefix "sha256:" }}
+{{- if quote .Values.image.tag | hasPrefix "sha256:" }}
 {{- printf "%s@%s" .Values.image.image .Values.image.tag }}
 {{- else }}
 {{- printf "%s:%s" .Values.image.image .Values.image.tag }}
