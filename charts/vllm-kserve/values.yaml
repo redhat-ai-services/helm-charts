@@ -68,8 +68,6 @@ multiNode:
   pipelineParallelSize: 2
   # -- The number of GPUs per node to use for the multi-node topology.
   tensorParallelSize: 1
-  # -- Whether to show the multi-node deployment in the RHOAI Dashboard.  Default is false.
-  visibleInDashboard: false
 
 scaling:
   # -- The minimum number of replicas to be deployed.  Set to 0 to enable scale to zero capabilities with Serverless deployments.

@@ -19,6 +19,9 @@ metadata:
     {{- end }}
   name: {{ include "vllm-kserve.inferenceServiceName" . }}
   labels:
+    {{- if eq .Values.servingTopology "singleNode" }}
+    opendatahub.io/dashboard: "true"
+    {{- end }}
     {{- include "vllm-kserve.labels" . | nindent 4 }}
     {{- if not .Values.endpoint.externalRoute.enabled }}
     {{- if eq .Values.deploymentMode "Serverless" }}

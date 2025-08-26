@@ -46,8 +46,9 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 RHOAI Annotation
 */}}
 {{- define "vllm-kserve.rhoaiAnnotations" -}}
-{{- include "vllm-kserve.acceleratorAnnotations" . }}
-{{- include "vllm-kserve.runtimeAnnotation" . }}
+opendatahub.io/apiProtocol: REST
+{{ include "vllm-kserve.acceleratorAnnotations" . }}
+{{ include "vllm-kserve.runtimeAnnotation" . }}
 {{- end }}
 
 {{/*

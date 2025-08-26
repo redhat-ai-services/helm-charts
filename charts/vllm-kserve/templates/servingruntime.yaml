@@ -7,7 +7,7 @@ metadata:
   annotations:
     {{- include "vllm-kserve.rhoaiAnnotations" . | nindent 4 }}
   labels:
-    opendatahub.io/dashboard: 'true'
+    opendatahub.io/dashboard: "true"
     {{- include "vllm-kserve.labels" . | nindent 4 }}
 spec:
   annotations:
