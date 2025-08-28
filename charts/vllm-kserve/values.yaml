@@ -135,3 +135,10 @@ servingRuntime:
   args:
     - --port=8080
     - --model=/mnt/models
+  
+  # -- Additional environment variables to be used to start the model.  For more documentation on available environments variables see https://docs.vllm.ai/en/stable/serving/env_vars.html.
+  env:
+    - name: HF_HOME
+      value: /tmp/hf_home
+    - name: VLLM_NO_USAGE_STATS
+      value: "1"
