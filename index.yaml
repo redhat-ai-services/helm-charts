@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   argocd:
   - apiVersion: v2
-    created: "2025-08-26T02:05:07.835809615Z"
+    created: "2025-09-02T22:26:56.861364755Z"
     description: A Helm chart for Kubernetes
-    digest: 5b636cb0460b40caf546c90bc362414114abc246d855f26ef690d795e407e249
+    digest: 29d8592ca16f25457fe13de67c30e7b0149944ce663a88a5c831898ab5e6c781
     kubeVersion: '>= 1.19.0'
     name: argocd
     type: application
@@ -73,9 +73,9 @@ entries:
     version: 0.3.7
   gitops-tenant:
   - apiVersion: v2
-    created: "2025-08-26T02:05:07.836239168Z"
+    created: "2025-09-02T22:26:56.86179135Z"
     description: A Helm chart to manage a multi-tiered gitops structure a project.
-    digest: 7d491aff02485bc5111570a794a53012546440074c3f5286c82d23c7a1a491cf
+    digest: 4c00068424710ac861a991038ae005d0543a8888b2b3bf208a0ec3a159824493
     kubeVersion: '>= 1.19.0'
     name: gitops-tenant
     type: application
@@ -150,9 +150,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2025-08-26T02:05:07.836760593Z"
+    created: "2025-09-02T22:26:56.86231235Z"
     description: A Helm chart for Kafdrop
-    digest: b5f7e463e5019cef8af3b47cb69d638e0c6061a4a2507c8f44f2bbc4d4839e72
+    digest: 4fc8ce25ad772e3ce00a4ce15dedb16b556781ac3558d37dd98b2ee8c0560f7a
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -161,9 +161,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 3.3.1
-    created: "2025-08-26T02:05:07.837040587Z"
+    created: "2025-09-02T22:26:56.862588635Z"
     description: A Helm chart for Kubernetes
-    digest: 29963d44367102f39789da4723f16246b210b8110800b581618a7db771ba4f2e
+    digest: 416fc2c2e1c91c200bea827660d4e32987845790f1d35a53a9c783331a5c5653
     icon: https://upload.wikimedia.org/wikipedia/commons/0/0a/Apache_kafka-icon.svg
     name: kafka
     type: application
@@ -194,9 +194,9 @@ entries:
   minio:
   - apiVersion: v2
     appVersion: RELEASE.2024-12-18T13-15-44Z
-    created: "2025-08-26T02:05:07.837502841Z"
+    created: "2025-09-02T22:26:56.86316019Z"
     description: A Helm chart for Kubernetes
-    digest: 77ae67928409d9aa5617680e34d197f0d21a585bb64102384b7235a250f8ce93
+    digest: 085c80958ac0dc54d88739b4b53d07c26d9bc5814ced5106e5799b68813fa3bf
     name: minio
     type: application
     urls:
@@ -458,9 +458,9 @@ entries:
   phoenix:
   - apiVersion: v2
     appVersion: version-4.20.2
-    created: "2025-08-26T02:05:07.838118944Z"
+    created: "2025-09-02T22:26:56.863924032Z"
     description: A Helm chart for deploying Phoenix on OpenShift
-    digest: 2da0b8cc1637c761fbbf6bb4a07949a3e21fd1602adb2026247f170d2780a63e
+    digest: 1508b30171406133be68cefeee36592461c814a8d0c9e839d7d90695d753fa7f
     icon: https://pbs.twimg.com/profile_images/1652081979146506240/e2xH7qJL_400x400.png
     name: phoenix
     sources:
@@ -486,9 +486,9 @@ entries:
   vllm-kserve:
   - apiVersion: v2
     appVersion: v0.9.0.1
-    created: "2025-08-26T02:05:07.83904226Z"
+    created: "2025-09-02T22:26:56.86489444Z"
     description: A Helm deploying vLLM with KServe on OpenShift AI
-    digest: a379d8488214992beba8e1f3c87ea1c9247f415df9d7b0e789d3df89fe99ecac
+    digest: 2ee583392194a94b9d70683087c5528c4fd9b3c26dbb4df505f8b4a4696e72ec
     icon: https://raw.githubusercontent.com/vllm-project/media-kit/refs/heads/main/vLLM-Logo.svg
     name: vllm-kserve
     type: application
@@ -768,4 +768,4 @@ entries:
     urls:
     - https://redhat-ai-services.github.io/helm-charts/vllm-kserve-0.1.0.tgz
     version: 0.1.0
-generated: "2025-08-26T02:05:07.83491408Z"
+generated: "2025-09-02T22:26:56.860526884Z"
