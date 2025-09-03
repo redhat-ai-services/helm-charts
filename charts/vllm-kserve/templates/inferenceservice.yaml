@@ -17,6 +17,7 @@ metadata:
     {{- if eq .Values.servingTopology "multiNode" }}
     serving.kserve.io/autoscalerClass: external
     {{- end }}
+    serving.kserve.io/stop: {{ .Values.scaling.stopped | quote }}
   name: {{ include "vllm-kserve.inferenceServiceName" . }}
   labels:
     {{- if eq .Values.servingTopology "singleNode" }}

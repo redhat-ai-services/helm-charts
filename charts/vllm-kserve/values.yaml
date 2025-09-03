@@ -70,6 +70,9 @@ multiNode:
   tensorParallelSize: 1
 
 scaling:
+  # -- Sets the model server to a stopped state and spins down all pods.
+  stopped: false
+
   # -- The minimum number of replicas to be deployed.  Set to 0 to enable scale to zero capabilities with Serverless deployments.
   minReplicas: 1
 
