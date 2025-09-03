@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.5.10](https://img.shields.io/badge/Version-0.5.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
+![Version: 0.5.11](https://img.shields.io/badge/Version-0.5.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
 
 ## Table of Contents
 
@@ -55,7 +55,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.5.10"
+    version: "0.5.11"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -419,6 +419,7 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | scaling.scaleTarget | string | `""` | The scaling target used by KNative to trigger scaling a new pod.  Default is 100 when not set. |
 | scaling.serverless.retentionPeriod | string | `""` | The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero. |
 | scaling.serverless.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
+| scaling.stopped | bool | `false` | Sets the model server to a stopped state and spins down all pods. |
 | servingRuntime.args | list | `["--port=8080","--model=/mnt/models"]` | The arguments used to start vLLM |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
