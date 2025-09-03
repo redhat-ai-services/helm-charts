@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.5.9](https://img.shields.io/badge/Version-0.5.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
+![Version: 0.5.10](https://img.shields.io/badge/Version-0.5.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.9.0.1](https://img.shields.io/badge/AppVersion-v0.9.0.1-informational?style=flat-square)
 
 ## Table of Contents
 
@@ -55,7 +55,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.5.9"
+    version: "0.5.10"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -397,7 +397,7 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | fullnameOverride | string | `""` | String to fully override fullname template |
 | image.image | string | `"quay.io/modh/vllm"` | The vLLM model server image |
 | image.runtimeVersionOverride | string | `""` | The vLLM version that will be displayed in the RHOAI Dashboard.  If not set, the appVersion of the chart will be used. |
-| image.tag | string | `"rhoai-2.22-cuda"` | The tag or sha for the model server image |
+| image.tag | string | `"rhoai-2.22-cuda-5e9c649953464aa3a668aba1774e42fc933f721b"` | The tag or sha for the model server image |
 | imagePullSecrets | list | `[]` | This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | inferenceService.name | string | `""` | Overwrite the default name for the InferenceService. |
 | model.args | list | `["--gpu-memory-utilization=0.90"]` | Additional vLLM arguments to be used to start the model.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html |
