@@ -1,0 +1,47 @@
+{{- if .Values.roleBindings.releaseNamespace.enabled }}
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "kubernetes-mcp.fullname" . }}-{{ .Values.roleBindings.releaseNamespace.roleRef.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubernetes-mcp.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "kubernetes-mcp.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  {{- toYaml .Values.roleBindings.releaseNamespace.roleRef | nindent 2 }}
+{{- end }}
+{{- if .Values.roleBindings.cluster.enabled }}
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "kubernetes-mcp.fullname" . }}-{{ .Values.roleBindings.cluster.roleRef.name }}
+  labels:
+    {{- include "kubernetes-mcp.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "kubernetes-mcp.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  {{- toYaml .Values.roleBindings.cluster.roleRef | nindent 2 }}
+{{- end }}
+{{- range .Values.roleBindings.additionalNamespaces }}
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "kubernetes-mcp.fullname" $ }}-{{ .roleRef.name }}
+  namespace: {{ .namespace }}
+  labels:
+    {{- include "kubernetes-mcp.labels" $ | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "kubernetes-mcp.serviceAccountName" $ }}
+    namespace: {{ $.Release.Namespace }}
+roleRef:
+  {{- toYaml .roleRef | nindent 2 }}
+{{- end }}

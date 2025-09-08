@@ -1,0 +1,16 @@
+apiVersion: v2
+name: kubernetes-mcp
+description: A Helm chart for deploying a Kubernetes MCP server
+icon: https://avatars.githubusercontent.com/u/182288589?s=200&v=4
+
+type: application
+
+# Chart version number.  Should be incremented with every change to the chart.
+version: 0.1.0
+
+# This version number should match the kuberentes-mcp server image version
+appVersion: "v0.0.49"
+
+sources:
+  - https://github.com/containers/kubernetes-mcp-server
+  - https://github.com/redhat-ai-services/helm-charts/tree/main/charts/kubernetes-mcp

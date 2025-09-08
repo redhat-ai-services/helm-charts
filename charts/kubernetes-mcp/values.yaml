@@ -1,0 +1,117 @@
+# -- String to partially override fullname template (will maintain the release name)
+nameOverride: ""
+# -- String to fully override fullname template
+fullnameOverride: ""
+
+# -- The number of replicas to create
+replicaCount: 1
+
+# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
+image:
+  # -- The vLLM model server image repository
+  repository: quay.io/manusa/kubernetes_mcp_server
+  # -- The tag or sha for the model server image.  By default, the chart appVersion is used.
+  tag: ""
+  # -- The pull policy for images.
+  pullPolicy: IfNotPresent
+
+# -- The image pull secret for the image repository
+imagePullSecrets: []
+
+roleBindings:
+  releaseNamespace:
+    # -- Specifies whether to create a role binding for the release namespace
+    enabled: true
+    # -- The role reference for the release namespace
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: edit
+  cluster:
+    # -- Specifies whether to create a role binding for the cluster
+    enabled: false
+    # -- The role reference for the cluster
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+  # -- List of additional namespaces to create role bindings
+  # Use this option to add access to namespaces beside the release namespace
+  additionalNamespaces: []
+    # - namespace: my-namespace
+    #   roleRef:
+    #     apiGroup: rbac.authorization.k8s.io
+    #     kind: ClusterRole
+    #     name: edit
+
+# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Map of annotations to add to the pods
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+podAnnotations: {}
+# -- Map of labels to add to the pods
+# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+podLabels: {}
+
+# -- Map of security context to add to the pods
+podSecurityContext: {}
+  # -- fsGroup: 2000
+  # fsGroup: 2000
+
+# -- Map of security context to add to the containers
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
+service:
+  # -- Kubernetes Service type
+  # More information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  type: ClusterIP
+  # -- The port to expose the service on
+  # More information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  port: 8080
+
+# -- Resource configuration for the container
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+# -- Map of node selectors to add to the pods
+nodeSelector: {}
+# -- List of tolerations to add to the pods
+tolerations: []
+# -- Map of affinity to add to the pods
+affinity: {}
