@@ -1,19 +1,21 @@
-# This is to override the chart name.
+# -- String to partially override fullname template (will maintain the release name)
 nameOverride: ""
+# -- String to fully override fullname template
 fullnameOverride: ""
 
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
+# -- The number of replicas to create
 replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
+  # -- The vLLM model server image repository
   repository: quay.io/manusa/kubernetes_mcp_server
-  # This sets the pull policy for images.
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # -- The tag or sha for the model server image.  By default, the chart appVersion is used.
   tag: ""
+  # -- The pull policy for images.
+  pullPolicy: IfNotPresent
 
-# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+# -- The image pull secret for the image repository
 imagePullSecrets: []
 
 roleBindings:
@@ -43,26 +45,29 @@ roleBindings:
 
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
-  # Specifies whether a service account should be created
+  # -- Specifies whether a service account should be created
   create: true
-  # Automatically mount a ServiceAccount's API credentials?
+  # -- Automatically mount a ServiceAccount's API credentials?
   automount: true
-  # Annotations to add to the service account
+  # -- Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
+  # -- The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-# This is for setting Kubernetes Annotations to a Pod.
+# -- Map of annotations to add to the pods
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
-# This is for setting Kubernetes Labels to a Pod.
+# -- Map of labels to add to the pods
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
 
+# -- Map of security context to add to the pods
 podSecurityContext: {}
+  # -- fsGroup: 2000
   # fsGroup: 2000
 
+# -- Map of security context to add to the containers
 securityContext: {}
   # capabilities:
   #   drop:
@@ -73,11 +78,14 @@ securityContext: {}
 
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
+  # -- Kubernetes Service type
+  # More information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   type: ClusterIP
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
+  # -- The port to expose the service on
+  # More information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
   port: 8080
 
+# -- Resource configuration for the container
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -100,8 +108,9 @@ readinessProbe:
     path: /
     port: http
 
+# -- Map of node selectors to add to the pods
 nodeSelector: {}
-
+# -- List of tolerations to add to the pods
 tolerations: []
-
+# -- Map of affinity to add to the pods
 affinity: {}
