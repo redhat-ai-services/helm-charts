@@ -10,3 +10,7 @@ version: 0.1.0
 
 # This version number should match the kuberentes-mcp server image version
 appVersion: "v0.0.49"
+
+sources:
+  - https://github.com/containers/kubernetes-mcp-server
+  - https://github.com/redhat-ai-services/helm-charts/tree/main/charts/kubernetes-mcp
