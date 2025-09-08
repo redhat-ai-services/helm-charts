@@ -60,3 +60,12 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "kubernetes-mcp.image" -}}
+{{- $tag := .Values.image.tag | default .Chart.AppVersion }}
+{{- if quote $tag | hasPrefix "sha256:" }}
+{{- printf "%s@%s" .Values.image.repository $tag }}
+{{- else }}
+{{- printf "%s:%s" .Values.image.repository $tag }}
+{{- end }}
+{{- end }}
