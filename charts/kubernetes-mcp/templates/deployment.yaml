@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ocp-mcp.fullname" . }}
+  name: {{ include "kubernetes-mcp.fullname" . }}
   labels:
-    {{- include "ocp-mcp.labels" . | nindent 4 }}
+    {{- include "kubernetes-mcp.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "ocp-mcp.selectorLabels" . | nindent 6 }}
+      {{- include "kubernetes-mcp.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "ocp-mcp.labels" . | nindent 8 }}
+        {{- include "kubernetes-mcp.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -25,7 +25,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "ocp-mcp.serviceAccountName" . }}
+      serviceAccountName: {{ include "kubernetes-mcp.serviceAccountName" . }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

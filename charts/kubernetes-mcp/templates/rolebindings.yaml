@@ -3,13 +3,13 @@
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ include "ocp-mcp.fullname" . }}-{{ .Values.roleBindings.releaseNamespace.roleRef.name }}
+  name: {{ include "kubernetes-mcp.fullname" . }}-{{ .Values.roleBindings.releaseNamespace.roleRef.name }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "ocp-mcp.labels" . | nindent 4 }}
+    {{- include "kubernetes-mcp.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "ocp-mcp.serviceAccountName" . }}
+    name: {{ include "kubernetes-mcp.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   {{- toYaml .Values.roleBindings.releaseNamespace.roleRef | nindent 2 }}
@@ -19,12 +19,12 @@ roleRef:
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ include "ocp-mcp.fullname" . }}-{{ .Values.roleBindings.cluster.roleRef.name }}
+  name: {{ include "kubernetes-mcp.fullname" . }}-{{ .Values.roleBindings.cluster.roleRef.name }}
   labels:
-    {{- include "ocp-mcp.labels" . | nindent 4 }}
+    {{- include "kubernetes-mcp.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "ocp-mcp.serviceAccountName" . }}
+    name: {{ include "kubernetes-mcp.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
 roleRef:
   {{- toYaml .Values.roleBindings.cluster.roleRef | nindent 2 }}
@@ -34,13 +34,13 @@ roleRef:
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ include "ocp-mcp.fullname" $ }}-{{ .roleRef.name }}
+  name: {{ include "kubernetes-mcp.fullname" $ }}-{{ .roleRef.name }}
   namespace: {{ .namespace }}
   labels:
-    {{- include "ocp-mcp.labels" $ | nindent 4 }}
+    {{- include "kubernetes-mcp.labels" $ | nindent 4 }}
 subjects:
   - kind: ServiceAccount
-    name: {{ include "ocp-mcp.serviceAccountName" $ }}
+    name: {{ include "kubernetes-mcp.serviceAccountName" $ }}
     namespace: {{ $.Release.Namespace }}
 roleRef:
   {{- toYaml .roleRef | nindent 2 }}
