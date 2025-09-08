@@ -20,28 +20,29 @@ imagePullSecrets: []
 
 roleBindings:
   releaseNamespace:
+    # -- Specifies whether to create a role binding for the release namespace
     enabled: true
+    # -- The role reference for the release namespace
     roleRef:
       apiGroup: rbac.authorization.k8s.io
       kind: ClusterRole
       name: edit
   cluster:
+    # -- Specifies whether to create a role binding for the cluster
     enabled: false
+    # -- The role reference for the cluster
     roleRef:
       apiGroup: rbac.authorization.k8s.io
       kind: ClusterRole
       name: cluster-admin
-  additionalNamespaces:
-    - namespace: my-namespace
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: edit
-    - namespace: my-namespace-2
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: edit
+  # -- List of additional namespaces to create role bindings
+  # Use this option to add access to namespaces beside the release namespace
+  additionalNamespaces: []
+    # - namespace: my-namespace
+    #   roleRef:
+    #     apiGroup: rbac.authorization.k8s.io
+    #     kind: ClusterRole
+    #     name: edit
 
 # This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
 serviceAccount:
