@@ -70,7 +70,7 @@ spec:
             - --openshift-sar={"namespace":"{{ .Release.Namespace }}","resource":"services","resourceName":"{{ include "llamastack-playground.fullname" . }}","verb":"get"}
             {{- end }}
             - --openshift-service-account={{ include "llamastack-playground.serviceAccountName" . }}
-            - --upstream=http://localhost:8080
+            - --upstream=http://localhost:{{ .Values.service.port }}
             - --tls-cert=/etc/tls/private/tls.crt
             - --tls-key=/etc/tls/private/tls.key
             - --cookie-secret=SECRET
