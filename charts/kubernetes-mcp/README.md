@@ -2,7 +2,7 @@
 
 A Helm chart for deploying a Kubernetes MCP server
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.0.49](https://img.shields.io/badge/AppVersion-v0.0.49-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.0.49](https://img.shields.io/badge/AppVersion-v0.0.49-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "kubernetes-mcp"
-    version: "0.1.1"
+    version: "0.1.2"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -104,13 +104,15 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | image.repository | string | `"quay.io/manusa/kubernetes_mcp_server"` | The vLLM model server image repository |
 | image.tag | string | `""` | The tag or sha for the model server image.  By default, the chart appVersion is used. |
 | imagePullSecrets | list | `[]` | The image pull secret for the image repository |
-| livenessProbe | object | `{}` |  |
+| livenessProbe.httpGet.path | string | `"/healthz"` |  |
+| livenessProbe.httpGet.port | string | `"http"` |  |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
 | nodeSelector | object | `{}` | Map of node selectors to add to the pods |
 | podAnnotations | object | `{}` | Map of annotations to add to the pods For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/ |
 | podLabels | object | `{}` | Map of labels to add to the pods For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/ |
 | podSecurityContext | object | `{}` | Map of security context to add to the pods |
-| readinessProbe | object | `{}` |  |
+| readinessProbe.httpGet.path | string | `"/healthz"` |  |
+| readinessProbe.httpGet.port | string | `"http"` |  |
 | replicaCount | int | `1` | The number of replicas to create |
 | resources | object | `{}` | Resource configuration for the container |
 | roleBindings.additionalNamespaces | list | `[]` | List of additional namespaces to create role bindings Use this option to add access to namespaces beside the release namespace |
