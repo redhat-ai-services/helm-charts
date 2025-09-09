@@ -54,6 +54,48 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+        {{- if .Values.openshiftOauth.enabled }}
+        - name: oauth-proxy
+          image: "{{ .Values.openshiftOauth.image.repository }}:{{ .Values.openshiftOauth.image.tag }}"
+          imagePullPolicy: {{ .Values.openshiftOauth.image.imagePullPolicy }}
+          ports:
+            - containerPort: 8443
+              name: oauth-proxy
+          args:
+            - --https-address=:8443
+            - --provider=openshift
+            {{- if .Values.openshiftOauth.enableBearerTokenAccess }}
+            - '--openshift-delegate-urls={"/": {"namespace":"{{ .Release.Namespace }}", "resource": "service", "verb": "get", "name": "{{ include "llamastack-playground.fullname" . }}"}}'
+            {{- else }}
+            - --openshift-sar={"namespace":"{{ .Release.Namespace }}","resource":"services","resourceName":"{{ include "llamastack-playground.fullname" . }}","verb":"get"}
+            {{- end }}
+            - --openshift-service-account={{ include "llamastack-playground.serviceAccountName" . }}
+            - --upstream=http://localhost:8080
+            - --tls-cert=/etc/tls/private/tls.crt
+            - --tls-key=/etc/tls/private/tls.key
+            - --cookie-secret=SECRET
+          volumeMounts:
+            - mountPath: /etc/tls/private
+              name: oauth-tls
+          livenessProbe:
+            httpGet:
+              path: /oauth/healthz
+              port: 8443
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: /oauth/healthz
+              port: 8443
+              scheme: HTTPS
+          resources:
+            {{- toYaml .Values.openshiftOauth.resources | nindent 12 }}
+        {{- end }}
+      {{- if .Values.openshiftOauth.enabled }}
+      volumes:
+        - name: oauth-tls
+          secret:
+            secretName: {{ include "llamastack-playground.fullname" . }}-tls
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -60,3 +60,16 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Configure the route termination policy
+*/}}
+{{- define "llamastack-playground.routeTermination" -}}
+{{- if ne .Values.route.tls.termination "" }}
+{{- .Values.route.tls.termination }}
+{{- else if .Values.openshiftOauth.enabled }}
+{{- "reencrypt" }}
+{{- else }}
+{{- "edge" }}
+{{- end }}
+{{- end }}

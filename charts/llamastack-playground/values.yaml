@@ -83,3 +83,51 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+route:
+  # -- Enable creation of the OpenShift Route object
+  enabled: true
+  # Allow OCP to determine the host if left blank
+  # -- The hostname for the route
+  # @default -- Set by OpenShift
+  host: ""
+  # -- The path for the OpenShift route
+  path: ""
+  tls:
+    # -- Enable secure route settings
+    enabled: true
+    # -- Secure route termination policy
+    # @default -- Set by the helm chart depending on the value of `openshiftOauth.enabled`
+    termination: ""
+    # -- Insecure route termination policy
+    insecureEdgeTerminationPolicy: Redirect
+  # -- Additional custom annotations for the route
+  annotations: {}
+
+openshiftOauth: 
+  # -- Secures with OpenShift Oauth Proxy.
+  enabled: true
+  # -- Enable access for using an OpenShift Bearer Token.  
+  # Warning: This feature requires cluster admin to install.
+  enableBearerTokenAccess: false
+  image:
+    # -- The image repository to use
+    repository: registry.redhat.io/openshift4/ose-oauth-proxy-rhel9
+    # -- The docker image pull policy
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    # -- The image tag to use
+    # @default -- Chart appVersion
+    tag: v4.18
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
