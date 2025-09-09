@@ -15,5 +15,11 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    {{- if .Values.openshiftOauth.enabled }}
+    - port: 8443
+      targetPort: oauth-proxy
+      protocol: TCP
+      name: oauth
+    {{- end }}
   selector:
     {{- include "llamastack-playground.selectorLabels" . | nindent 4 }}
