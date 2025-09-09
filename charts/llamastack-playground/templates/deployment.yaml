@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "llamastack-playground.fullname" . }}
+  labels:
+    {{- include "llamastack-playground.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "llamastack-playground.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "llamastack-playground.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "llamastack-playground.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: LLAMA_STACK_ENDPOINT
+              value: {{ .Values.llamastack.endpointUrl | quote }}
+            - name: DEFAULT_MODEL
+              value: {{ .Values.llamastack.defaultModel | quote }}
+            # these don't do anything with the current image
+            # - name: STREAMLIT_SERVER_ADDRESS
+            #   valueFrom:
+            #     fieldRef:
+            #       fieldPath: status.podIP
+            # - name: STREAMLIT_SERVER_PORT
+            #   value: {{ .Values.service.port | quote }}
+            - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+              value: "false"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- if .Values.openshiftOauth.enabled }}
+        - name: oauth-proxy
+          image: "{{ .Values.openshiftOauth.image.repository }}:{{ .Values.openshiftOauth.image.tag }}"
+          imagePullPolicy: {{ .Values.openshiftOauth.image.imagePullPolicy }}
+          ports:
+            - containerPort: 8443
+              name: oauth-proxy
+          args:
+            - --https-address=:8443
+            - --provider=openshift
+            {{- if .Values.openshiftOauth.enableBearerTokenAccess }}
+            - '--openshift-delegate-urls={"/": {"namespace":"{{ .Release.Namespace }}", "resource": "service", "verb": "get", "name": "{{ include "llamastack-playground.fullname" . }}"}}'
+            {{- else }}
+            - --openshift-sar={"namespace":"{{ .Release.Namespace }}","resource":"services","resourceName":"{{ include "llamastack-playground.fullname" . }}","verb":"get"}
+            {{- end }}
+            - --openshift-service-account={{ include "llamastack-playground.serviceAccountName" . }}
+            - --upstream=http://localhost:{{ .Values.service.port }}
+            - --tls-cert=/etc/tls/private/tls.crt
+            - --tls-key=/etc/tls/private/tls.key
+            - --cookie-secret=SECRET
+          volumeMounts:
+            - mountPath: /etc/tls/private
+              name: oauth-tls
+          livenessProbe:
+            httpGet:
+              path: /oauth/healthz
+              port: 8443
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: /oauth/healthz
+              port: 8443
+              scheme: HTTPS
+          resources:
+            {{- toYaml .Values.openshiftOauth.resources | nindent 12 }}
+        {{- end }}
+      {{- if .Values.openshiftOauth.enabled }}
+      volumes:
+        - name: oauth-tls
+          secret:
+            secretName: {{ include "llamastack-playground.fullname" . }}-tls
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
