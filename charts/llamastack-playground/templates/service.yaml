@@ -4,6 +4,10 @@ metadata:
   name: {{ include "llamastack-playground.fullname" . }}
   labels:
     {{- include "llamastack-playground.labels" . | nindent 4 }}
+  {{- if .Values.openshiftOauth.enabled }}
+  annotations:
+     service.alpha.openshift.io/serving-cert-secret-name: {{ include "llamastack-playground.fullname" . }}-tls
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
