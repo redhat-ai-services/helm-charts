@@ -38,6 +38,20 @@ spec:
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: LLAMA_STACK_ENDPOINT
+              value: {{ .Values.llamastack.endpointUrl | quote }}
+            - name: DEFAULT_MODEL
+              value: {{ .Values.llamastack.defaultModel | quote }}
+            # these don't do anything with the current image
+            # - name: STREAMLIT_SERVER_ADDRESS
+            #   valueFrom:
+            #     fieldRef:
+            #       fieldPath: status.podIP
+            # - name: STREAMLIT_SERVER_PORT
+            #   value: {{ .Values.service.port | quote }}
+            - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+              value: "false"
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
