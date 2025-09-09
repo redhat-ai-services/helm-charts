@@ -6,7 +6,7 @@ icon: https://avatars.githubusercontent.com/u/182288589?s=200&v=4
 type: application
 
 # Chart version number.  Should be incremented with every change to the chart.
-version: 0.1.2
+version: 0.2.0
 
 # This version number should match the kuberentes-mcp server image version
 appVersion: "v0.0.49"
