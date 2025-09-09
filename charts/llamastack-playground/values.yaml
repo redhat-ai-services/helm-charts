@@ -84,7 +84,6 @@ tolerations: []
 
 affinity: {}
 
-
 route:
   # -- Enable creation of the OpenShift Route object
   enabled: true
@@ -105,10 +104,10 @@ route:
   # -- Additional custom annotations for the route
   annotations: {}
 
-openshiftOauth: 
+openshiftOauth:
   # -- Secures with OpenShift Oauth Proxy.
   enabled: true
-  # -- Enable access for using an OpenShift Bearer Token.  
+  # -- Enable access for using an OpenShift Bearer Token.
   # Warning: This feature requires cluster admin to install.
   enableBearerTokenAccess: false
   image:
