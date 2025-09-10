@@ -3,7 +3,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 llamastack:
-  endpointUrl: "http://llamastack:8321"
+  endpointUrl: "http://llamastack-service:8321"
   defaultModel: "granite-33-2b-instruct"
 
 replicaCount: 1
