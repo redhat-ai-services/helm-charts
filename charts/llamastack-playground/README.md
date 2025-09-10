@@ -2,7 +2,7 @@
 
 A Helm chart for Kubernetes
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.15](https://img.shields.io/badge/AppVersion-0.2.15-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.15](https://img.shields.io/badge/AppVersion-0.2.15-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "llamastack-playground"
-    version: "0.1.0"
+    version: "0.1.1"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -53,7 +53,7 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | livenessProbe.httpGet.path | string | `"/healthz"` |  |
 | livenessProbe.httpGet.port | string | `"http"` |  |
 | llamastack.defaultModel | string | `"granite-33-2b-instruct"` |  |
-| llamastack.endpointUrl | string | `"http://llamastack:8321"` |  |
+| llamastack.endpointUrl | string | `"http://llamastack-service:8321"` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
 | openshiftOauth.enableBearerTokenAccess | bool | `false` | Enable access for using an OpenShift Bearer Token. Warning: This feature requires cluster admin to install. |
