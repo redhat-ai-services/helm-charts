@@ -4,7 +4,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 # -- deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment
-deploymentMode: Serverless
+deploymentMode: rawDeployment
 
 image:
   # -- The guardrails-huggingface-detector model server image
