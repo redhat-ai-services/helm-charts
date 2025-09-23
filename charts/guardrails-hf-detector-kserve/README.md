@@ -2,7 +2,7 @@
 
 A Helm chart deploying guardrails-huggingface-detector with KServe on OpenShift AI
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: rhoai-2.23-82e4a518ac3d144a5312205eede5674cf6a5888e](https://img.shields.io/badge/AppVersion-rhoai--2.23--82e4a518ac3d144a5312205eede5674cf6a5888e-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: rhoai-2.23-82e4a518ac3d144a5312205eede5674cf6a5888e](https://img.shields.io/badge/AppVersion-rhoai--2.23--82e4a518ac3d144a5312205eede5674cf6a5888e-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "guardrails-hf-detector-kserve"
-    version: "0.1.1"
+    version: "0.1.2"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -44,7 +44,7 @@ For a complete list of all configuration options, see the [Values](#values) sect
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| deploymentMode | string | `"rawDeployment"` | deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment |
+| deploymentMode | string | `"RawDeployment"` | deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment |
 | endpoint.auth.enabled | bool | `false` | Secures the model endpoint and creates a role to grant permissions to service accounts |
 | endpoint.auth.serviceAccounts | list | `[]` | Creates service accounts with permissions to access the secured endpoint |
 | endpoint.externalRoute.enabled | bool | `true` | Creates an externally accessible route for the model endpoint |
@@ -71,6 +71,8 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | scaling.serverless.retentionPeriod | string | `""` | The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero. |
 | scaling.serverless.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
 | scaling.stopped | bool | `false` | Sets the model server to a stopped state and spins down all pods. |
+| servingRuntime.annotations."opendatahub.io/recommended-accelerators" | string | `"[\"nvidia.com/gpu\"]"` |  |
+| servingRuntime.annotations."opendatahub.io/template-display-name" | string | `"Hugging Face Detector ServingRuntime for KServe"` |  |
 | servingRuntime.args | list | `["--workers=1","--host=0.0.0.0","--port=8000","--log-config=/common/log_conf.yaml"]` | The arguments used to start guardrails-huggingface-detector |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
