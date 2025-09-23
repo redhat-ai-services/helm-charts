@@ -30,7 +30,7 @@ model:
   mode: uri
 
   # -- The Uri to use for storage.  Mode must be set to "uri" to use this option.  Options: "oci://" and "pvc://"
-  uri: oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.3-2b-instruct
+  uri: oci://quay.io/redhat-ai-services/modelcar-catalog:granite-guardian-hap-38m
 
   s3:
     # -- The secret containing s3 credentials.  Mode must be set to "s3" to use this option.
@@ -78,8 +78,6 @@ scaling:
     timeout: 30m
     # -- The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero.
     retentionPeriod: ""
-
-
 
   rawDeployment:
     # -- The deployment strategy to use to replace existing pods with new ones.
