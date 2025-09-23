@@ -55,23 +55,7 @@ opendatahub.io/apiProtocol: REST
 RHOAI Accelerator Annotations
 */}}
 {{- define "guardrails-hf-detector-kserve.acceleratorAnnotations" -}}
-{{- if eq .Values.servingTopology "singleNode" -}}
-{{- if index .Values.resources.requests "nvidia.com/gpu" -}}
-opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-opendatahub.io/template-display-name: Guardrails HuggingFace Detector NVIDIA GPU ServingRuntime for KServe
-{{- else if index .Values.resources.requests "amd.com/gpu" -}}
-opendatahub.io/recommended-accelerators: '["amd.com/gpu"]'
-opendatahub.io/template-display-name: Guardrails HuggingFace Detector AMD GPU ServingRuntime for KServe
-{{- else if index .Values.resources.requests "habana.ai/gaudi" -}}
-opendatahub.io/recommended-accelerators: '["habana.ai/gaudi"]'
-opendatahub.io/template-display-name: Guardrails HuggingFace Detector Intel Gaudi Accelerator ServingRuntime for KServe
-{{- else -}}
-opendatahub.io/template-display-name: Guardrails HuggingFace Detector CPU (ppc64le/s390x) ServingRuntime for KServe
-{{- end -}}
-{{- else -}}
-opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-opendatahub.io/template-display-name: Guardrails HuggingFace Detector ServingRuntime for KServe
-{{- end -}}
+{{ toYaml .Values.servingRuntime.annotations }}
 {{- end }}
 
 {{/*
@@ -145,10 +129,11 @@ Lookup the Endpoint URL
 {{- end }}
 
 {{- define "guardrails-hf-detector-kserve.image" -}}
-{{- if quote .Values.image.tag | hasPrefix "sha256:" }}
-{{- printf "%s@%s" .Values.image.image .Values.image.tag }}
+{{- $tag := .Values.image.tag | default .Chart.AppVersion }}
+{{- if $tag | hasPrefix "sha256:" }}
+{{- printf "%s@%s" .Values.image.image $tag }}
 {{- else }}
-{{- printf "%s:%s" .Values.image.image .Values.image.tag }}
+{{- printf "%s:%s" .Values.image.image $tag }}
 {{- end }}
 {{- end }}
 

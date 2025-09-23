@@ -7,7 +7,7 @@ type: application
 
 # chart version
 # should be incremented with every change to the chart
-version: 0.1.1
+version: 0.1.2
 
 # guardrails-huggingface-detector version
 appVersion: "rhoai-2.23-82e4a518ac3d144a5312205eede5674cf6a5888e"

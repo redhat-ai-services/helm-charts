@@ -4,7 +4,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 # -- deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment
-deploymentMode: rawDeployment
+deploymentMode: RawDeployment
 
 image:
   # -- The guardrails-huggingface-detector model server image
@@ -115,6 +115,11 @@ inferenceService:
 servingRuntime:
   # -- Overwrite the default name for the ServingRuntime.
   name: ""
+
+  annotations:
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: Hugging Face Detector ServingRuntime for KServe
+  
   # -- Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name.
   useExisting: ""
 
