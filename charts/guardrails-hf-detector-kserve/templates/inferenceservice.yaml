@@ -1,0 +1,94 @@
+{{- include "guardrails-hf-detector-kserve.validateAll" . }}
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    {{- if .Values.endpoint.auth.enabled }}
+    security.opendatahub.io/enable-auth: 'true'
+    {{- end }}
+    {{- if eq .Values.deploymentMode "Serverless" }}
+    serving.kserve.io/deploymentMode: Serverless
+    serving.knative.openshift.io/enablePassthrough: "true"
+    sidecar.istio.io/inject: "true"
+    sidecar.istio.io/rewriteAppHTTPProbers: "true"
+    {{- else }}
+    serving.kserve.io/deploymentMode: RawDeployment
+    {{- end }}
+    serving.kserve.io/stop: {{ .Values.scaling.stopped | quote }}
+  name: {{ include "guardrails-hf-detector-kserve.inferenceServiceName" . }}
+  labels:
+    opendatahub.io/dashboard: "true"
+    {{- include "guardrails-hf-detector-kserve.labels" . | nindent 4 }}
+    {{- if not .Values.endpoint.externalRoute.enabled }}
+    {{- if eq .Values.deploymentMode "Serverless" }}
+    networking.knative.dev/visibility: cluster-local
+    {{- end }}
+    {{- end }}
+    {{- if .Values.endpoint.externalRoute.enabled }}
+    {{- if eq .Values.deploymentMode "RawDeployment" }}
+    networking.kserve.io/visibility: exposed
+    {{- end }}
+    {{- end }}
+spec:
+  predictor:
+    minReplicas: {{ .Values.scaling.minReplicas }}
+    {{- if gt (int .Values.scaling.maxReplicas) 0}}
+    maxReplicas: {{ .Values.scaling.maxReplicas }}
+    {{- end }}
+    {{- if .Values.scaling.scaleMetric }}
+    scaleMetric: {{ .Values.scaling.scaleMetric }}
+    {{- end }}
+    {{- if .Values.scaling.scaleTarget }}
+    scaleTarget: {{ .Values.scaling.scaleTarget }}
+    {{- end }}
+    {{- if eq .Values.deploymentMode "Serverless" }}
+    annotations:
+      serving.knative.dev/progress-deadline: {{ .Values.scaling.serverless.timeout | default "30m" }}
+      {{- if .Values.scaling.serverless.retentionPeriod }}
+      autoscaling.knative.dev/scale-to-zero-pod-retention-period: {{ .Values.scaling.serverless.retentionPeriod }}
+      {{- end }}
+    {{- end }}
+    {{- if eq .Values.deploymentMode "RawDeployment" }}
+    deploymentStrategy:
+      {{- toYaml .Values.scaling.rawDeployment.deploymentStrategy | nindent 6 }}
+    {{- end }}
+    model:
+      {{- if .Values.model.args }}
+      args:
+        {{- toYaml .Values.model.args | nindent 8 }}
+      {{- end }}
+      {{- if .Values.model.env }}
+      env:
+        {{- toYaml .Values.model.env | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
+      modelFormat:
+        name: guardrails-detector-hf-runtime
+      name: ''
+      resources:
+        {{- toYaml .Values.resources | nindent 8 }}
+      {{- if .Values.servingRuntime.useExisting }}
+      runtime: {{ .Values.servingRuntime.useExisting }}
+      {{- else }}
+      runtime: {{ include "guardrails-hf-detector-kserve.servingRuntimeName" . }}
+      {{- end }}
+      {{- with .Values.model }}
+      {{- if eq (lower .mode) "uri" }}
+      storageUri: {{ .uri }}
+      {{- else if eq (lower .mode) "s3"}}
+      storage:
+        key: {{ .s3.key }}
+        path: {{ .s3.path }}
+      {{- end }}
+      {{- end }}
+    {{- if .Values.tolerations }}
+    tolerations:
+      {{- toYaml .Values.tolerations | nindent 8 }}
+    {{- end }}
+    {{- with .Values.imagePullSecrets }}
+    imagePullSecrets:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}

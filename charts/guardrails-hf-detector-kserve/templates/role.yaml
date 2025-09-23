@@ -1,0 +1,17 @@
+{{- if .Values.endpoint.auth.enabled }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "guardrails-hf-detector-kserve.fullname" . }}-view
+  labels:
+    {{- include "guardrails-hf-detector-kserve.labels" $ | nindent 4 }}
+rules:
+  - verbs:
+      - get
+    apiGroups:
+      - serving.kserve.io
+    resources:
+      - inferenceservices
+    resourceNames:
+      - {{ include "guardrails-hf-detector-kserve.inferenceServiceName" . }}
+{{- end }}

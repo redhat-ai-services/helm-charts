@@ -1,0 +1,43 @@
+{{- if not (quote .Values.servingRuntime.useExisting | empty) }}
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  name: {{ include "guardrails-hf-detector-kserve.servingRuntimeName" . }}
+  annotations:
+    {{- include "guardrails-hf-detector-kserve.rhoaiAnnotations" . | nindent 4 }}
+  labels:
+    opendatahub.io/dashboard: "true"
+    {{- include "guardrails-hf-detector-kserve.labels" . | nindent 4 }}
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - name: kserve-container
+      image: {{ include "guardrails-hf-detector-kserve.image" . }}
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      command:
+        - uvicorn
+        - 'app:app'
+      args:
+        {{- toYaml .Values.servingRuntime.args | nindent 8 }}
+      env:
+        - name: MODEL_DIR
+          value: /mnt/models
+        - name: HF_HOME
+          value: /tmp/hf_home
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: guardrails-detector-hf-runtime
+  volumes:
+    - name: shm
+      emptyDir:
+        medium: Memory
+        sizeLimit: {{ .Values.servingRuntime.shmSize }}
+{{- end }}

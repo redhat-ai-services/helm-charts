@@ -1,0 +1,13 @@
+apiVersion: v2
+name: guardrails-hf-detector-kserve
+description: A Helm chart deploying guardrails-huggingface-detector with KServe on OpenShift AI
+icon: https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.png
+
+type: application
+
+# chart version
+# should be incremented with every change to the chart
+version: 0.1.0
+
+# guardrails-huggingface-detector version
+appVersion: "rhoai-2.23-82e4a518ac3d144a5312205eede5674cf6a5888e"
