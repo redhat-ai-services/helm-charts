@@ -2,7 +2,7 @@
 
 A Helm chart deploying guardrails-huggingface-detector with KServe on OpenShift AI
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: rhoai-2.23-82e4a518ac3d144a5312205eede5674cf6a5888e](https://img.shields.io/badge/AppVersion-rhoai--2.23--82e4a518ac3d144a5312205eede5674cf6a5888e-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: rhoai-2.23-82e4a518ac3d144a5312205eede5674cf6a5888e](https://img.shields.io/badge/AppVersion-rhoai--2.23--82e4a518ac3d144a5312205eede5674cf6a5888e-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "guardrails-hf-detector-kserve"
-    version: "0.1.2"
+    version: "0.1.3"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
