@@ -16,7 +16,7 @@ spec:
     - name: kserve-container
       image: {{ include "guardrails-hf-detector-kserve.image" . }}
       ports:
-        - containerPort: 8080
+        - containerPort: 8000
           protocol: TCP
       command:
         - uvicorn
