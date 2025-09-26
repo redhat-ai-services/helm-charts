@@ -164,3 +164,12 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{- define "vllm-kserve.hugginfaceGitUrl" -}}
+{{- if .Values.model.pvc.downloadModel.huggingfaceModelRepo | hasPrefix "https://huggingface.co/" }}
+{{- printf "%s" .Values.model.pvc.downloadModel.huggingfaceModelRepo }}
+{{- else }}
+{{- printf "https://huggingface.co/%s" .Values.model.pvc.downloadModel.huggingfaceModelRepo }}
+{{- end }}
+{{- end }}

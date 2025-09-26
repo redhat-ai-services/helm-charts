@@ -1,0 +1,39 @@
+{{- if .Values.model.pvc.createPvc.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: download-model-from-hf
+  annotations:
+    helm.sh/hook-weight: "-1"
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/resource-policy: keep
+spec:
+  template:
+    spec:
+      volumes:
+        - name: model-volume
+          persistentVolumeClaim:
+            claimName: {{ .Values.model.pvc.name }}
+      containers:
+        - name: download-model-from-hf
+          image: alpine/git:2.43.0
+          env:
+            - name: MODEL_REPO
+              value: {{ include "vllm-kserve.hugginfaceGitUrl" . }}
+            - name: TARGET_DIR
+              value: /data/models/{{ .Values.model.pvc.downloadModel.huggingfaceModelRepo }}
+            - name: ALLOW_PATTERNS
+              value: "{{ .Values.model.pvc.downloadModel.allowPatterns }}"
+            - name: HF_TOKEN
+              value: {{ .Values.model.pvc.downloadModel.huggingfaceToken }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              git clone --single-branch -- $MODEL_REPO $TARGET_DIR 
+              ls -la $TARGET_DIR
+          volumeMounts:
+            - name: model-volume
+              mountPath: /data/models
+      restartPolicy: Never
+  backoffLimit: 0
+{{- end }}

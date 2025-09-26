@@ -1,0 +1,20 @@
+{{- if .Values.model.pvc.createPvc.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.model.pvc.name }}
+  annotations:
+    helm.sh/hook-weight: "-10"
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/resource-policy: keep
+  labels:
+    {{- include "vllm-kserve.labels" $ | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.model.pvc.createPvc.size }}
+  storageClassName: {{ .Values.model.pvc.createPvc.storageClass }}
+  volumeMode: Filesystem
+{{- end }}

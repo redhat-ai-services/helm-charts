@@ -99,6 +99,26 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set model.uri="pvc://{pvc-name}/{model-folder}"
 ```
 
+#### PVC Storage - Create PVC and Download Model into PVC
+
+As mentioned above, the InferenceService can read a model from a PVC. This chart has the ability download a model from HuggingFace and download it into a PVC. In the InferenceService, the `storageUri` will be set automatically to read the model from this new PVC.
+
+To create a PVC and download a model from HuggingFace into it, and then bring up the Inference Service, you can provide the following options:
+
+```sh
+helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
+  --set model.mode=pvc \
+  --set model.pvc.name=granite-3.3-8b-instruct-pvc \
+  --set model.pvc.createPvc.enabled=true \
+  --set model.pvc.createPvc.size=35Gi \
+  --set model.pvc.createPvc.storageClass=gp3-csi \
+  --set model.pvc.downloadModel.enabled=true \
+  --set model.pvc.downloadModel.huggingfaceModelRepo="ibm-granite/granite-3.3-8b-instruct" \
+  --set model.pvc.downloadModel.huggingfaceToken="your-token-here" \
+  --set model.pvc.downloadModel.allowPatterns="*.safetensors,*.json,*.txt"
+```
+
+
 ### S3 Storage
 
 Deploy models from S3-compatible storage by providing S3 credentials:
