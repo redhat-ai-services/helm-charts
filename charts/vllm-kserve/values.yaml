@@ -4,17 +4,17 @@ nameOverride: ""
 fullnameOverride: ""
 
 # -- deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment
-deploymentMode: Serverless
+deploymentMode: RawDeployment
 
 # -- servingTopology determines if the model will be deployed using a single node or a multi-node topology.  Must be one of singleNode or multiNode
 servingTopology: singleNode
 
 image:
   # -- The vLLM model server image
-  image: 'quay.io/modh/vllm'
+  image: 'registry.redhat.io/rhoai/odh-vllm-cuda-rhel9'
 
   # -- The tag or sha for the model server image
-  tag: rhoai-2.22-cuda-5e9c649953464aa3a668aba1774e42fc933f721b
+  tag: v2.25.0-1759340926
 
   # -- The vLLM version that will be displayed in the RHOAI Dashboard.  If not set, the appVersion of the chart will be used.
   runtimeVersionOverride: ""
@@ -90,8 +90,6 @@ scaling:
     timeout: 30m
     # -- The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero.
     retentionPeriod: ""
-
-
 
   rawDeployment:
     # -- The deployment strategy to use to replace existing pods with new ones.
