@@ -9,6 +9,9 @@ DEPLOYMENT INFORMATION:
   Name: {{ include "vllm-kserve.inferenceServiceName" . }}
   Namespace: {{ .Release.Namespace }}
   Deployment Mode: {{ .Values.deploymentMode }}
+  {{- if eq .Values.deploymentMode "Serverless" }}
+  WARNING: As OpenShift AI 2.25, Serverless mode has been depreciated.  We recommend migrating to RawDeployment mode instead.
+  {{- end }}
   Serving Topology: {{ .Values.servingTopology }}
   Model: {{ .Values.model.uri | default "S3 Storage" }}
 
