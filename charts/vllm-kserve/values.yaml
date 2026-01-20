@@ -133,6 +133,16 @@ servingRuntime:
   # -- The size of the emptyDir used for shared memory.  You most likely don't need to adjust this.
   shmSize: 2Gi
   # -- The arguments used to start vLLM
+
+  command:
+    - python
+    - '-m'
+    - vllm.entrypoints.openai.api_server
+
   args:
     - --port=8080
     - --model=/mnt/models
+
+  env:
+    - name: HF_HOME
+    value: /tmp/hf_home

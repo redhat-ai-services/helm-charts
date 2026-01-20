@@ -20,14 +20,11 @@ spec:
         - containerPort: 8080
           protocol: TCP
       command:
-        - python
-        - '-m'
-        - vllm.entrypoints.openai.api_server
+        {{- toYaml .Values.servingRuntime.command | nindent 8 }}
       args:
         {{- toYaml .Values.servingRuntime.args | nindent 8 }}
       env:
-        - name: HF_HOME
-          value: /tmp/hf_home
+        {{- toYaml .Values.servingRuntime.env | nindent 8 }}
       volumeMounts:
         - mountPath: /dev/shm
           name: shm
