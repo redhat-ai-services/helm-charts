@@ -1,0 +1,60 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: LLMInferenceService
+metadata:
+  name: {{ include "llm-d-kserve.fullname" . }}
+  labels:
+    {{- include "llm-d-kserve.labels" . | nindent 4 }}
+spec:
+  model:
+    name: {{ .Values.model.nameOverride | default (include "llm-d-kserve.fullname" .) }}
+    uri: {{ .Values.model.uri }}
+  replicas: {{ .Values.replicaCount }}
+  router:
+    scheduler:
+      template:
+        containers:
+          - name: main
+            args:
+              - -v=4
+              - --poolName
+              - '{{ ChildName .ObjectMeta.Name `-inference-pool` }}'
+              - --poolNamespace
+              - '{{ .ObjectMeta.Namespace }}'
+              - --zap-encoder
+              - json
+              - --grpcPort
+              - "9002"
+              - --grpcHealthPort
+              - "9003"
+              - --secureServing
+              - --modelServerMetricsScheme
+              - https
+              - --modelServerMetricsHttpsInsecureSkipVerify
+              - --certPath
+              - /etc/ssl/certs
+              - --configText
+              - |2
+
+                apiVersion: inference.networking.x-k8s.io/v1alpha1
+                kind: EndpointPickerConfig
+                plugins:
+                  - type: single-profile-handler
+                  - type: max-score-picker
+                  - type: queue-scorer
+                  - type: kv-cache-scorer
+                  - type: prefix-cache-scorer
+                    parameters:
+                      hashBlockSize: 64             # block size 16 * 4 chars / token
+                      maxPrefixBlocksToMatch: 256   # this matches up to ~4k tokens
+                      lruCapacityPerServer: 39744   # total blocks (635904) / block size (16)
+                schedulingProfiles:
+                  - name: default
+                    plugins:
+                      - pluginRef: prefix-cache-scorer
+                        weight: 2.0
+                      - pluginRef: queue-scorer
+                        weight: 1.0
+                      - pluginRef: kv-cache-scorer
+                        weight: 1.0
+                      - pluginRef: max-score-picker
+            
