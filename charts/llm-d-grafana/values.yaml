@@ -1,0 +1,11 @@
+consoleLink:
+  enabled: true
+
+grafana:
+  operator:
+    enabled: true
+    namespace: openshift-operators
+    channel: v5
+  instance:
+    enabled: true
+    sessionSecret: ""

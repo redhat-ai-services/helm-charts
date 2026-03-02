@@ -1,0 +1,36 @@
+{{- if .Values.consoleLink.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: create-consolelink-script
+data:
+{{ (.Files.Glob "files/consolelink/*").AsConfig | indent 2 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-consolelink
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      serviceAccountName: create-consolelink
+      restartPolicy: Never
+      containers:
+      - name: create-consolelink
+        image: image-registry.openshift-image-registry.svc:5000/openshift/tools:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/mnt/create-consolelink.sh"]
+        volumeMounts:
+          - name: create-consolelink-script
+            mountPath: /mnt
+      volumes:
+        - name: create-consolelink-script
+          configMap:
+            name: create-consolelink-script
+            defaultMode: 493
+{{- end }}

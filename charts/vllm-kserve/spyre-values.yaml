@@ -1,0 +1,57 @@
+image:
+  image: registry.redhat.io/rhaiis/vllm-spyre-rhel9
+  tag: 3.2.2
+
+model:
+  nameOverride: "granite-3-1-8b-instruct"
+  uri: oci://registry.redhat.io/rhelai1/modelcar-granite-3-1-8b-instruct:1.5
+  env:
+    - name: VLLM_SPYRE_WARMUP_BATCH_SIZES
+      value: "4"
+    - name: VLLM_SPYRE_WARMUP_PROMPT_LENS
+      value: "1024"
+    - name: VLLM_SPYRE_WARMUP_NEW_TOKENS
+      value: "256"
+
+resources:
+  limits:
+    # cpu: '32'
+    # memory: 64Gi
+    ibm.com/spyre_pf: "1"
+  requests:
+    cpu: '4'
+    memory: 64Gi
+    ibm.com/spyre_pf: "1"
+
+tolerations:
+  - effect: NoSchedule
+    key: ibm.com/spyre_pf
+    operator: Exists
+
+
+servingRuntime:
+  command:
+    - /bin/bash
+    - -c
+    - |
+      source /etc/profile.d/ibm-aiu-setup.sh
+      exec python3 -m vllm.entrypoints.openai.api_server "$@"
+  env:
+    - name: HF_HOME
+      value: /tmp/hf_home
+    - name: FLEX_COMPUTE
+      value: SENTIENT
+    - name: FLEX_DEVICE
+      value: PF
+    - name: TOKENIZERS_PARALLELISM
+      value: "false"
+    - name: DTLOG_LEVEL
+      value: error
+    - name: TORCH_SENDNN_LOG
+      value: CRITICAL
+    - name: VLLM_SPYRE_WARMUP_BATCH_SIZES
+      value: "4"
+    - name: VLLM_SPYRE_WARMUP_PROMPT_LENS
+      value: "1024"
+    - name: VLLM_SPYRE_WARMUP_NEW_TOKENS
+      value: "256"

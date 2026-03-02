@@ -1,0 +1,114 @@
+{{- if .Values.grafana.instance.enabled }}
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: grafana
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  config:
+    analytics:
+      check_for_plugin_updates: 'false'
+      check_for_updates: 'false'
+      enabled: 'false'
+      reporting_enabled: 'false'
+    log:
+      mode: "console"
+      level: "warn"
+    auth:
+      disable_login_form: 'true'
+      disable_signout_menu: 'true'
+    auth.anonymous:
+      enabled: 'true'
+      org_role: Admin
+    auth.basic:
+      enabled: 'false'
+  deployment:
+    spec:
+      template:
+        spec:
+          volumes:
+          - name: secret-grafana-tls
+            secret:
+              secretName: grafana-tls
+          - name: secret-grafana-proxy
+            secret:
+              secretName: grafana-proxy
+          - configMap:
+              defaultMode: 420
+              name: ocp-injected-certs
+            name: ocp-injected-certs
+          - name: grafana-data
+            persistentVolumeClaim:
+              claimName: grafana-pvc
+          containers:
+          - name: grafana
+          - name: oauth-proxy
+            args:
+            - '--provider=openshift'
+            - '--pass-basic-auth=false'
+            - '--https-address=:9091'
+            - '--http-address='
+            - '--email-domain=*'
+            - '--upstream=http://localhost:3000'
+            - '--tls-cert=/etc/tls/private/tls.crt'
+            - '--tls-key=/etc/tls/private/tls.key'
+            - '--openshift-service-account=grafana-sa'
+            - '--cookie-secret-file=/etc/proxy/secrets/session_secret'
+            - '--openshift-ca=/etc/pki/tls/cert.pem'
+            - '--openshift-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt'
+            - '--openshift-ca=/etc/proxy/certs/ca-bundle.crt'
+            - '--skip-auth-regex=^/metrics'
+            - '--skip-auth-regex=^/api/health'
+            - '--openshift-sar={"namespace": "{{ .Release.Namespace }}", "resource": "services", "verb": "get"}'
+            image: 'image-registry.openshift-image-registry.svc:5000/openshift/oauth-proxy:v4.4'
+            ports:
+            - containerPort: 9091
+              name: oauth
+            resources:
+              limits:
+                cpu: 400m
+                memory: 250Mi
+              requests:
+                cpu: 50m
+                memory: 50Mi
+            volumeMounts:
+            - mountPath: /etc/tls/private
+              name: secret-grafana-tls
+            - mountPath: /etc/proxy/secrets
+              name: secret-grafana-proxy
+            - mountPath: /etc/proxy/certs
+              name: ocp-injected-certs
+  persistentVolumeClaim:
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+  route:
+    spec:
+      port:
+        targetPort: oauth
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: reencrypt
+  service:
+    metadata:
+      annotations:
+        service.beta.openshift.io/serving-cert-secret-name: grafana-tls
+    spec:
+      ports:
+      - name: oauth
+        port: 9091
+        protocol: TCP
+        targetPort: oauth
+  serviceAccount:
+    automountServiceAccountToken: true
+    metadata:
+      annotations:
+        argocd.argoproj.io/compare-options: IgnoreExtraneous
+        serviceaccounts.openshift.io/oauth-redirectreference.primary: >-
+          {"kind": "OAuthRedirectReference", "apiVersion": "v1", "reference": {"kind": "Route", "name": "grafana-route"}}
+{{- end }}

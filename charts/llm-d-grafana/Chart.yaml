@@ -1,0 +1,7 @@
+apiVersion: v2
+name: llm-d-grafana
+description: >
+  A helm chart to deploy an LLM-D Grafana Dashboard
+type: application
+version: 0.1.1
+appVersion: 0.1.0

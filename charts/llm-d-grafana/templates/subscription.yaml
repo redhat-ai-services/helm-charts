@@ -1,0 +1,13 @@
+{{ if .Values.grafana.operator.enabled }}
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: grafana-operator
+  namespace: {{ .Values.grafana.operator.namespace }}
+spec:
+  channel: {{ .Values.channel }}
+  installPlanApproval: Automatic
+  name: grafana-operator
+  source: community-operators
+  sourceNamespace: openshift-marketplace
+{{ end }}
