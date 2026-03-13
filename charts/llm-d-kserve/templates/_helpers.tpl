@@ -60,3 +60,11 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{- define "llm-d-kserve.image" -}}
+{{- if hasPrefix "sha256:" (toString .Values.vllm.image.tag) }}
+{{- printf "%s@%s" .Values.vllm.image.repository .Values.vllm.image.tag }}
+{{- else }}
+{{- printf "%s:%s" .Values.vllm.image.repository .Values.vllm.image.tag }}
+{{- end }}
+{{- end }}

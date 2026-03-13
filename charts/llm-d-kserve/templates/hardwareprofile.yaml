@@ -1,0 +1,21 @@
+{{- if .Values.hardwareProfile.create }}
+apiVersion: infrastructure.opendatahub.io/v1
+kind: HardwareProfile
+metadata:
+  annotations:
+    opendatahub.io/dashboard-feature-visibility: '["model-serving"]'
+    opendatahub.io/description: ""
+    opendatahub.io/disabled: "false"
+    opendatahub.io/display-name: {{ include "llm-d-kserve.fullname" . | quote }}
+  name: {{ include "llm-d-kserve.fullname" . }}
+spec:
+  identifiers:
+    {{- toYaml .Values.hardwareProfile.identifiers | nindent 4 }}
+  scheduling:
+    {{- if .Values.hardwareProfile.tolerations }}
+    node:
+      tolerations:
+        {{- toYaml .Values.hardwareProfile.tolerations | nindent 8 }}
+    {{- end }}
+    type: Node
+{{- end }}
