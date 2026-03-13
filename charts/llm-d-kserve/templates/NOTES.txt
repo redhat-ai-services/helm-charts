@@ -1,35 +1,65 @@
-1. Get the application URL by running these commands:
-{{- if .Values.httpRoute.enabled }}
-{{- if .Values.httpRoute.hostnames }}
-    export APP_HOSTNAME={{ .Values.httpRoute.hostnames | first }}
-{{- else }}
-    export APP_HOSTNAME=$(kubectl get --namespace {{(first .Values.httpRoute.parentRefs).namespace | default .Release.Namespace }} gateway/{{ (first .Values.httpRoute.parentRefs).name }} -o jsonpath="{.spec.listeners[0].hostname}")
-  {{- end }}
-{{- if and .Values.httpRoute.rules (first .Values.httpRoute.rules).matches (first (first .Values.httpRoute.rules).matches).path.value }}
-    echo "Visit http://$APP_HOSTNAME{{ (first (first .Values.httpRoute.rules).matches).path.value }} to use your application"
+Successfully deployed LLM-D InferenceService!
 
-    NOTE: Your HTTPRoute depends on the listener configuration of your gateway and your HTTPRoute rules.
-    The rules can be set for path, method, header and query parameters.
-    You can check the gateway configuration with 'kubectl get --namespace {{(first .Values.httpRoute.parentRefs).namespace | default .Release.Namespace }} gateway/{{ (first .Values.httpRoute.parentRefs).name }} -o yaml'
+DEPLOYMENT INFORMATION:
+  Name: {{ include "llm-d-kserve.fullname" . }}
+  Namespace: {{ .Release.Namespace }}
+  Model: {{ .Values.model.name }}
+  Model URI: {{ .Values.model.uri }}
+  Replicas: {{ .Values.vllm.replicaCount }}
+{{- if .Values.hardwareProfile.create }}
+
+  A hardware profile "{{ include "llm-d-kserve.fullname" . }}" has been created in this namespace.
+{{- else }}
+
+  Hardware Profile: {{ .Values.hardwareProfile.name }} (namespace: {{ .Values.hardwareProfile.namespace }})
 {{- end }}
-{{- else if .Values.ingress.enabled }}
-{{- range $host := .Values.ingress.hosts }}
-  {{- range .paths }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
-  {{- end }}
-{{- end }}
-{{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "llm-d-kserve.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "llm-d-kserve.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "llm-d-kserve.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
-{{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "llm-d-kserve.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
-{{- end }}
+
+CHECK STATUS:
+  oc get llminferenceservices {{ include "llm-d-kserve.fullname" . }} -n {{ .Release.Namespace }}
+  oc get pods -l serving.kserve.io/llminferenceservice={{ include "llm-d-kserve.fullname" . }} -n {{ .Release.Namespace }}
+
+INTERNAL ACCESS:
+  Your model is configured for internal cluster access.
+
+  To get the service URL (if available):
+  oc get llminferenceservices {{ include "llm-d-kserve.fullname" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.url}'
+
+  For local access, use port forwarding:
+  oc port-forward svc/{{ include "llm-d-kserve.fullname" . }}-predictor -n {{ .Release.Namespace }} 8080:80
+
+  Then test with:
+  curl -X POST http://localhost:8080/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "{{ .Values.model.name }}",
+      "messages": [{"role": "user", "content": "Hello, how are you?"}],
+      "max_tokens": 50
+    }'
+
+  Or for completions:
+  curl -X POST http://localhost:8080/v1/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "{{ .Values.model.name }}",
+      "prompt": "Hello, how are you?",
+      "max_tokens": 50
+    }'
+
+USEFUL COMMANDS:
+  # Check pod logs
+  oc logs -l serving.kserve.io/llminferenceservice={{ include "llm-d-kserve.fullname" . }} -n {{ .Release.Namespace }} -f
+
+  # List available models
+  curl http://localhost:8080/v1/models
+
+  # Health check
+  curl http://localhost:8080/health
+
+API DOCUMENTATION:
+  LLM-D exposes an OpenAI-compatible API. Available endpoints:
+  - GET  /v1/models           - List available models
+  - POST /v1/chat/completions - Chat completion
+  - POST /v1/completions      - Text completion
+  - GET  /health              - Health check
+
+  Use port-forward (see above) before calling these endpoints from your machine.
