@@ -16,6 +16,8 @@ spec:
     node:
       tolerations:
         {{- toYaml .Values.hardwareProfile.tolerations | nindent 8 }}
+    {{- else }}
+    node: {}
     {{- end }}
     type: Node
 {{- end }}

@@ -24,24 +24,27 @@ hardwareProfile:
     # - identifier: cpu
     #   displayName: CPU
     #   resourceType: CPU
-    #   defaultCount: "4"
+    #   defaultCount: "2"
     #   minCount: "1"
-    #   maxCount: "32"
+    #   maxCount: "4"
     # - identifier: memory
     #   displayName: Memory
     #   resourceType: Memory
-    #   defaultCount: 8Gi
+    #   defaultCount: 4Gi
     #   minCount: 2Gi
-    #   maxCount: 120Gi
+    #   maxCount: 8Gi
     # - identifier: nvidia.com/gpu
-    #   displayName: nvidia.com/gpu
+    #   displayName: Nvidia Gpu
     #   defaultCount: 1
     #   minCount: 1
-    #   maxCount: 8
+    #   maxCount: 2
+    #   resourceType: Accelerator
   # -- The tolerations to apply to the hardware profile.
   # This value will only be used if create is set to true.
   tolerations: []
-
+    # - key: nvidia.com/gpu
+    #   operator: Exists
+    #   effect: NoSchedule
 
 vllm:
   # -- The number of replicas to run for the model server
@@ -64,7 +67,7 @@ vllm:
     #   memory: 8Gi
     #   nvidia.com/gpu: 1
   # -- The additional arguments to pass to the model server.
-  additionalArguments: ""
+  additionalArguments: "" # "--max-model-len=819"
   image:
     # -- The repository of the image to use for the model server
     # If not set, the default image will be used.
