@@ -68,8 +68,6 @@ For a basic vLLM deployment with default settings:
 helm upgrade -i my-vllm redhat-ai-services/{{ template "chart.name" . }}
 ```
 
-This will deploy a single-node vLLM instance in Serverless mode with the default model.
-
 ## Deploying Models
 
 The chart supports multiple model storage options:
@@ -274,9 +272,9 @@ The `createLegacyToken` defaults to true if not set.  This option allows you to 
 
 ### RawDeployment
 
-As of version 0.6.0 of this chart, RawDeployments are the default deploymentMode in order to match the preferred deploymentMode of RHOAI 2.25.  As of RHOAI 2.25, Serverless Deployments have been depreciated.
+As of version 0.6.0 of this chart, RawDeployments are the default deploymentMode in order to match the preferred deploymentMode of RHOAI 2.25. KNative Serverless mode is not supported by this chart (setting `deploymentMode` to `Serverless` fails installation).
 
-KServe supports the option to create a "RawDeployment" that is not dependent on Istio or KNative Serverless and instead creates the models using a k8s Deployment object.
+This chart deploys models using KServe RawDeployments (standard Kubernetes Deployments).
 
 ```
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
@@ -296,7 +294,7 @@ helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} 
 vLLM supports distributed multi-node inference for large models that don't fit on a single GPU or when you need to scale beyond single-node capabilities.
 
 >[!IMPORTANT]
-> Multi-node deployments are only supported with `RawDeployment` mode and cannot be used with Serverless deployments.  Additionally, multiNode only supports deploying models from an OCI container or a ReadWriteMany PVC.  It does not support serving models from S3.
+> Multi-node deployments require `RawDeployment` mode. Additionally, multiNode only supports deploying models from an OCI container or a ReadWriteMany PVC. It does not support serving models from S3.
 
 To deploy a multi-node vLLM instance:
 
@@ -327,37 +325,15 @@ helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} 
   --set scaling.maxReplicas=5 \
 ```
 
-KServe uses KNative Serverless autoscaling capabilities for Serverless deployments to scale instances based on concurrent requests by default. Serverless deployments also alternative scaling metrics including "concurrency", "rps", "cpu", and "memory".
+For RawDeployments, KServe uses HorizontalPodAutoscalers (HPA) based on CPU and memory utilization. When `scaling.scaleMetric` is set, it must be `cpu` or `memory`.
 
 ```
 helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set scaling.serverless.scaleMetric=rps \
-  --set scaling.serverless.scaleTarget=10
+  --set scaling.scaleMetric=cpu \
+  --set scaling.scaleTarget=80
 ```
 
-For more information on the supported scaleMetric options, see the [KNative Autoscaling Metrics](https://knative.dev/docs/serving/autoscaling/autoscaling-metrics/#setting-metrics-per-revision) documentation.
-
-For RawDeployments, KServe uses HorizontalPodAutoscalers (HPA) based on CPU and memory utilization.
-
-With the Serverless deployments, KServe provides the capability to scale to 0 pods when no active queries are being processed.  This can be achieved by setting the minReplicas to 0.
-
-```
-helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set scaling.minReplicas=0
-```
-
->[!NOTE]
-> Scale to zero is only supported with Serverless deployments and is not available for RawDeployments.
-
-KServe can also be configured to change how quickly a model is scaled to zero by setting the retentionPeriod.
-
-```
-helm upgrade -i [release-name] redhat-ai-services/{{ template "chart.name" . }} \
-  --set scaling.minReplicas=0 \
-  --set scaling.serverless.retentionPeriod=10m
-```
-
-Longer retention periods can help reduce the model server from starting and stopping as frequently and help to avoid long startup times.
+See the [KServe documentation](https://kserve.github.io/website/) for details on autoscaling behavior for RawDeployments.
 
 ## Troubleshooting
 
