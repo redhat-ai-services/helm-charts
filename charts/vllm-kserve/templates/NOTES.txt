@@ -9,9 +9,6 @@ DEPLOYMENT INFORMATION:
   Name: {{ include "vllm-kserve.inferenceServiceName" . }}
   Namespace: {{ .Release.Namespace }}
   Deployment Mode: {{ .Values.deploymentMode }}
-  {{- if eq .Values.deploymentMode "Serverless" }}
-  WARNING: As OpenShift AI 2.25, Serverless mode has been depreciated.  We recommend migrating to RawDeployment mode instead.
-  {{- end }}
   Serving Topology: {{ .Values.servingTopology }}
   Model: {{ .Values.model.uri | default "S3 Storage" }}
 
@@ -23,11 +20,7 @@ CHECK STATUS:
 
 EXTERNAL ACCESS:
   Your model is accessible via an external route. Get the URL with:
-{{- if eq .Values.deploymentMode "Serverless" }}
-  oc get routes.serving.knative.dev {{ include "vllm-kserve.predictorName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.url}'
-{{- else }}
   oc get route {{ include "vllm-kserve.inferenceServiceName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.spec.host}'
-{{- end }}
 
 {{- if .Values.endpoint.auth.enabled }}
 
@@ -63,11 +56,7 @@ INTERNAL ACCESS ONLY:
   oc get inferenceservice {{ include "vllm-kserve.inferenceServiceName" . }} -n {{ .Release.Namespace }} -o jsonpath='{.status.url}'
 
   For external access, use port forwarding:
-{{- if eq .Values.deploymentMode "Serverless" }}
   oc port-forward svc/{{ include "vllm-kserve.inferenceServiceName" . }}-predictor -n {{ .Release.Namespace }} 8080:80
-{{- else }}
-  oc port-forward svc/{{ include "vllm-kserve.inferenceServiceName" . }}-predictor -n {{ .Release.Namespace }} 8080:80
-{{- end }}
 
   Then test with:
   curl -X POST http://localhost:8080/v1/completions \
@@ -90,7 +79,7 @@ API DOCUMENTATION:
   Swagger docs are available at:
   {{ $endpointUrl }}/docs
 
-  Your vLLM model supports the OpenAI-compatible API. Available endpoints:
+  Your vLLM model supports the OpenAI-compatible API. Some available endpoints include:
   - GET /v1/models - List available models
   - POST /v1/completions - Text completion
   - POST /v1/chat/completions - Chat completion

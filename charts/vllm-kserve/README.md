@@ -69,8 +69,6 @@ For a basic vLLM deployment with default settings:
 helm upgrade -i my-vllm redhat-ai-services/vllm-kserve
 ```
 
-This will deploy a single-node vLLM instance in Serverless mode with the default model.
-
 ## Deploying Models
 
 The chart supports multiple model storage options:
@@ -275,9 +273,9 @@ The `createLegacyToken` defaults to true if not set.  This option allows you to 
 
 ### RawDeployment
 
-As of version 0.6.0 of this chart, RawDeployments are the default deploymentMode in order to match the preferred deploymentMode of RHOAI 2.25.  As of RHOAI 2.25, Serverless Deployments have been depreciated.
+As of version 0.6.0 of this chart, RawDeployments are the default deploymentMode in order to match the preferred deploymentMode of RHOAI 2.25. KNative Serverless mode is not supported by this chart (setting `deploymentMode` to `Serverless` fails installation).
 
-KServe supports the option to create a "RawDeployment" that is not dependent on Istio or KNative Serverless and instead creates the models using a k8s Deployment object.
+This chart deploys models using KServe RawDeployments (standard Kubernetes Deployments).
 
 ```
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
@@ -297,7 +295,7 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
 vLLM supports distributed multi-node inference for large models that don't fit on a single GPU or when you need to scale beyond single-node capabilities.
 
 >[!IMPORTANT]
-> Multi-node deployments are only supported with `RawDeployment` mode and cannot be used with Serverless deployments.  Additionally, multiNode only supports deploying models from an OCI container or a ReadWriteMany PVC.  It does not support serving models from S3.
+> Multi-node only supports deploying models from an OCI container or a ReadWriteMany PVC. It does not support serving models from S3.
 
 To deploy a multi-node vLLM instance:
 
@@ -328,37 +326,15 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
   --set scaling.maxReplicas=5 \
 ```
 
-KServe uses KNative Serverless autoscaling capabilities for Serverless deployments to scale instances based on concurrent requests by default. Serverless deployments also alternative scaling metrics including "concurrency", "rps", "cpu", and "memory".
+For RawDeployments, KServe uses HorizontalPodAutoscalers (HPA) based on CPU and memory utilization. When `scaling.scaleMetric` is set, it must be `cpu` or `memory`.
 
 ```
 helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
-  --set scaling.serverless.scaleMetric=rps \
-  --set scaling.serverless.scaleTarget=10
+  --set scaling.scaleMetric=cpu \
+  --set scaling.scaleTarget=80
 ```
 
-For more information on the supported scaleMetric options, see the [KNative Autoscaling Metrics](https://knative.dev/docs/serving/autoscaling/autoscaling-metrics/#setting-metrics-per-revision) documentation.
-
-For RawDeployments, KServe uses HorizontalPodAutoscalers (HPA) based on CPU and memory utilization.
-
-With the Serverless deployments, KServe provides the capability to scale to 0 pods when no active queries are being processed.  This can be achieved by setting the minReplicas to 0.
-
-```
-helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
-  --set scaling.minReplicas=0
-```
-
->[!NOTE]
-> Scale to zero is only supported with Serverless deployments and is not available for RawDeployments.
-
-KServe can also be configured to change how quickly a model is scaled to zero by setting the retentionPeriod.
-
-```
-helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
-  --set scaling.minReplicas=0 \
-  --set scaling.serverless.retentionPeriod=10m
-```
-
-Longer retention periods can help reduce the model server from starting and stopping as frequently and help to avoid long startup times.
+See the [KServe documentation](https://kserve.github.io/website/) for details on autoscaling behavior for RawDeployments.
 
 ## Troubleshooting
 
@@ -392,7 +368,7 @@ For a complete list of all configuration options, see the [Values](#values) sect
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| deploymentMode | string | `"RawDeployment"` | deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment |
+| deploymentMode | string | `"RawDeployment"` | Must be `RawDeployment`. `Serverless` is rejected (not supported). |
 | endpoint.auth.enabled | bool | `false` | Secures the model endpoint and creates a role to grant permissions to service accounts |
 | endpoint.auth.serviceAccounts | list | `[]` | Creates service accounts with permissions to access the secured endpoint |
 | endpoint.externalRoute.enabled | bool | `true` | Creates an externally accessible route for the model endpoint |
@@ -415,12 +391,10 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | nodeSelector | object | `{}` | Node selector for the vLLM pod |
 | resources | object | `{"limits":{"cpu":"2","memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":"1","memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
 | scaling.maxReplicas | int | `1` | The maximum number of replicas to be deployed |
-| scaling.minReplicas | int | `1` | The minimum number of replicas to be deployed.  Set to 0 to enable scale to zero capabilities with Serverless deployments. |
+| scaling.minReplicas | int | `1` | The minimum number of replicas to be deployed. |
 | scaling.rawDeployment.deploymentStrategy | object | `{"type":"RollingUpdate"}` | The deployment strategy to use to replace existing pods with new ones. |
-| scaling.scaleMetric | string | `""` | The scaling metric used by KServe to trigger scaling a new pod.  Serverless deployments can be "concurrency", "rps", "cpu", or "memory", while RawDeployments can only utilize "cpu" and "memory".  "concurrency" is used by default for Serverless and "cpu" is used by default for RawDeployments. |
-| scaling.scaleTarget | string | `""` | The scaling target used by KNative to trigger scaling a new pod.  Default is 100 when not set. |
-| scaling.serverless.retentionPeriod | string | `""` | The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero. |
-| scaling.serverless.timeout | string | `"30m"` | The timeout value determines how long before KNative marks the deployments as failed |
+| scaling.scaleMetric | string | `""` | The scaling metric used by KServe with RawDeployment (HPA). Must be `cpu` or `memory` when set. |
+| scaling.scaleTarget | string | `""` | The scaling target for the HPA when scaleMetric is set. Default is 100 when not set. |
 | scaling.stopped | bool | `false` | Sets the model server to a stopped state and spins down all pods. |
 | servingRuntime.args | list | `["--port=8080","--model=/mnt/models"]` | The arguments used to start vLLM |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |

@@ -3,18 +3,25 @@ nameOverride: ""
 # -- String to fully override fullname template
 fullnameOverride: ""
 
-# -- deploymentMode determines if the model will be deployed using KNative Serverless or a standard k8s Deployment.  Must be one of Serverless or RawDeployment
+# -- The display name for the ServingRuntime in the OpenShift AI Dashboard.
+displayName: "vLLM ServingRuntime for KServe via Helm"
+
+# -- deploymentMode must be RawDeployment (KNative Serverless is not supported; setting Serverless fails template validation).
 deploymentMode: RawDeployment
 
 # -- servingTopology determines if the model will be deployed using a single node or a multi-node topology.  Must be one of singleNode or multiNode
 servingTopology: singleNode
 
+hardwareProfile:
+  name: nvidia-gpu-serving
+  namespace: redhat-ods-applications
+
 image:
   # -- The vLLM model server image
-  image: 'registry.redhat.io/rhoai/odh-vllm-cuda-rhel9'
+  image: 'registry.redhat.io/rhaiis/vllm-cuda-rhel9'
 
   # -- The tag or sha for the model server image
-  tag: v2.25.0-1759340926
+  tag: 3.3.0-1771898916
 
   # -- The vLLM version that will be displayed in the RHOAI Dashboard.  If not set, the appVersion of the chart will be used.
   runtimeVersionOverride: ""
@@ -73,23 +80,17 @@ scaling:
   # -- Sets the model server to a stopped state and spins down all pods.
   stopped: false
 
-  # -- The minimum number of replicas to be deployed.  Set to 0 to enable scale to zero capabilities with Serverless deployments.
+  # -- The minimum number of replicas to be deployed.
   minReplicas: 1
 
   # -- The maximum number of replicas to be deployed
   maxReplicas: 1
 
-  # -- The scaling metric used by KServe to trigger scaling a new pod.  Serverless deployments can be "concurrency", "rps", "cpu", or "memory", while RawDeployments can only utilize "cpu" and "memory".  "concurrency" is used by default for Serverless and "cpu" is used by default for RawDeployments.
+  # -- The scaling metric used by KServe with RawDeployment (HPA). Must be "cpu" or "memory" when set.
   scaleMetric: ""
 
-  # -- The scaling target used by KNative to trigger scaling a new pod.  Default is 100 when not set.
+  # -- The scaling target for the HPA when scaleMetric is set. Default is 100 when not set.
   scaleTarget: ""
-
-  serverless:
-    # -- The timeout value determines how long before KNative marks the deployments as failed
-    timeout: 30m
-    # -- The retentionPeriod determines the minimum amount of time that the last pod will remain active after the Autoscaler decides to scale pods to zero.
-    retentionPeriod: ""
 
   rawDeployment:
     # -- The deployment strategy to use to replace existing pods with new ones.
@@ -97,22 +98,21 @@ scaling:
       # Can be type of RollingUpdate or Recreate
       type: RollingUpdate
 
+# -- Resource configuration for the vLLM container.  By default, the resources will default to the hardware profile.
+resources: {}
 # -- Resource configuration for the vLLM container
-resources:
-  requests:
-    cpu: '1'
-    memory: 4Gi
-    nvidia.com/gpu: '1'
-  limits:
-    cpu: '2'
-    memory: 8Gi
-    nvidia.com/gpu: '1'
+  # requests:
+  #   cpu: '1'
+  #   memory: 4Gi
+  #   nvidia.com/gpu: '1'
+  # limits:
+  #   cpu: '2'
+  #   memory: 8Gi
+  #   nvidia.com/gpu: '1'
 
-# -- The tolerations to be applied to the model server pod.
-tolerations:
-  - effect: NoSchedule
-    key: nvidia.com/gpu
-    operator: Exists
+
+# -- The tolerations to be applied to the model server pod. By default, the tolerations will default to the hardware profile.
+tolerations: []
 
 # -- Node selector for the vLLM pod
 nodeSelector: {}
@@ -145,4 +145,4 @@ servingRuntime:
 
   env:
     - name: HF_HOME
-    value: /tmp/hf_home
+      value: /tmp/hf_home

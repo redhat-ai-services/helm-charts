@@ -43,35 +43,38 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
-RHOAI Annotation
+InfernceService Annotation
 */}}
-{{- define "vllm-kserve.rhoaiAnnotations" -}}
-opendatahub.io/apiProtocol: REST
-{{ include "vllm-kserve.acceleratorAnnotations" . }}
-{{ include "vllm-kserve.runtimeAnnotation" . }}
+{{- define "vllm-kserve.inferenceServiceAnnotations" -}}
+{{- if .Values.hardwareProfile.namespace }}
+opendatahub.io/hardware-profile-namespace: {{ .Values.hardwareProfile.namespace }}
+{{- end }}
+{{- if .Values.hardwareProfile.name }}
+opendatahub.io/hardware-profile-name: {{ .Values.hardwareProfile.name }}
+{{- end }}
+opendatahub.io/model-type: generative
+openshift.io/description: ""
+openshift.io/display-name: {{ include "vllm-kserve.fullname" .}}
+{{- if .Values.endpoint.auth.enabled }}
+security.opendatahub.io/enable-auth: "true"
+{{- else }}
+security.opendatahub.io/enable-auth: "true"
+{{- end }}
+{{- if eq .Values.servingTopology "multiNode" }}
+serving.kserve.io/autoscalerClass: external
+{{- end }}
+serving.kserve.io/stop: {{ .Values.scaling.stopped | quote }}
 {{- end }}
 
 {{/*
-RHOAI Accelerator Annotations
+ServingRuntime Annotation
 */}}
-{{- define "vllm-kserve.acceleratorAnnotations" -}}
-{{- if eq .Values.servingTopology "singleNode" -}}
-{{- if index .Values.resources.requests "nvidia.com/gpu" -}}
-opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-opendatahub.io/template-display-name: vLLM NVIDIA GPU ServingRuntime for KServe
-{{- else if index .Values.resources.requests "amd.com/gpu" -}}
-opendatahub.io/recommended-accelerators: '["amd.com/gpu"]'
-opendatahub.io/template-display-name: vLLM AMD GPU ServingRuntime for KServe
-{{- else if index .Values.resources.requests "habana.ai/gaudi" -}}
-opendatahub.io/recommended-accelerators: '["habana.ai/gaudi"]'
-opendatahub.io/template-display-name: vLLM Intel Gaudi Accelerator ServingRuntime for KServe
-{{- else -}}
-opendatahub.io/template-display-name: vLLM CPU (ppc64le/s390x) ServingRuntime for KServe
-{{- end -}}
-{{- else -}}
-opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-opendatahub.io/template-display-name: vLLM Multi-Node ServingRuntime for KServe
-{{- end -}}
+{{- define "vllm-kserve.servingRuntimeAnnotations" -}}
+opendatahub.io/apiProtocol: REST
+{{ include "vllm-kserve.runtimeAnnotation" . }}
+opendatahub.io/serving-runtime-scope: project
+openshift.io/display-name: {{ .Values.displayName }}
+opendatahub.io/template-display-name: {{ .Values.displayName  }}
 {{- end }}
 
 {{/*
@@ -127,21 +130,11 @@ Create the name of the predictor to use
 Lookup the Endpoint URL
 */}}
 {{- define "vllm-kserve.endpointUrl" -}}
-{{- $predictor := include "vllm-kserve.predictorName" . }}
-{{- if eq .Values.deploymentMode "Serverless" }}
-{{- $service := lookup "serving.knative.dev/v1" "Service" .Release.Namespace $predictor }}
-{{- if hasKey $service "status" }}
-{{- if hasKey $service.status "url"}}
-{{- $service.status.url }}
-{{- end }}
-{{- end }}
-{{- else if eq .Values.deploymentMode "RawDeployment" }}
 {{- $routeName := include "vllm-kserve.inferenceServiceName" . }}
 {{- $route := lookup "route.openshift.io/v1" "Route" .Release.Namespace $routeName }}
 {{- if hasKey $route "spec" }}
 {{- if hasKey $route.spec "host" }}
 {{- printf "https://%s" $route.spec.host }}
-{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}

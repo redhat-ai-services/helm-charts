@@ -3,37 +3,13 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    {{- if .Values.endpoint.auth.enabled }}
-    security.opendatahub.io/enable-auth: 'true'
-    {{- end }}
-    {{- if eq .Values.deploymentMode "Serverless" }}
-    serving.kserve.io/deploymentMode: Serverless
-    serving.knative.openshift.io/enablePassthrough: "true"
-    sidecar.istio.io/inject: "true"
-    sidecar.istio.io/rewriteAppHTTPProbers: "true"
-    {{- else }}
-    serving.kserve.io/deploymentMode: RawDeployment
-    {{- end }}
-    {{- if eq .Values.servingTopology "multiNode" }}
-    serving.kserve.io/autoscalerClass: external
-    {{- end }}
-    serving.kserve.io/stop: {{ .Values.scaling.stopped | quote }}
+    {{- include "vllm-kserve.inferenceServiceAnnotations" . | nindent 4 }}
   name: {{ include "vllm-kserve.inferenceServiceName" . }}
   labels:
     {{- if eq .Values.servingTopology "singleNode" }}
     opendatahub.io/dashboard: "true"
     {{- end }}
-    {{- include "vllm-kserve.labels" . | nindent 4 }}
-    {{- if not .Values.endpoint.externalRoute.enabled }}
-    {{- if eq .Values.deploymentMode "Serverless" }}
-    networking.knative.dev/visibility: cluster-local
-    {{- end }}
-    {{- end }}
-    {{- if .Values.endpoint.externalRoute.enabled }}
-    {{- if eq .Values.deploymentMode "RawDeployment" }}
     networking.kserve.io/visibility: exposed
-    {{- end }}
-    {{- end }}
 spec:
   predictor:
     minReplicas: {{ .Values.scaling.minReplicas }}
@@ -48,17 +24,8 @@ spec:
     scaleTarget: {{ .Values.scaling.scaleTarget }}
     {{- end }}
     {{- end }}
-    {{- if eq .Values.deploymentMode "Serverless" }}
-    annotations:
-      serving.knative.dev/progress-deadline: {{ .Values.scaling.serverless.timeout | default "30m" }}
-      {{- if .Values.scaling.serverless.retentionPeriod }}
-      autoscaling.knative.dev/scale-to-zero-pod-retention-period: {{ .Values.scaling.serverless.retentionPeriod }}
-      {{- end }}
-    {{- end }}
-    {{- if eq .Values.deploymentMode "RawDeployment" }}
     deploymentStrategy:
       {{- toYaml .Values.scaling.rawDeployment.deploymentStrategy | nindent 6 }}
-    {{- end }}
     model:
       args:
         {{- if .Values.model.modelNameOverride }}
@@ -80,8 +47,10 @@ spec:
       modelFormat:
         name: vLLM
       name: ''
-      resources:
-        {{- toYaml .Values.resources | nindent 8 }}
+      {{- with .Values.resources }}
+        resources:
+          {{- toYaml .Values.resources | nindent 8 }}
+        {{- end }}
       {{- if .Values.servingRuntime.useExisting }}
       runtime: {{ .Values.servingRuntime.useExisting }}
       {{- else }}
@@ -112,6 +81,8 @@ spec:
         {{- toYaml .Values.tolerations | nindent 8 }}
       containers:
         - name: worker-container
+          {{- with .Values.resources }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- end }}
     {{- end }}

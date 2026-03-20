@@ -5,7 +5,7 @@ kind: ServingRuntime
 metadata:
   name: {{ include "vllm-kserve.servingRuntimeName" . }}
   annotations:
-    {{- include "vllm-kserve.rhoaiAnnotations" . | nindent 4 }}
+    {{- include "vllm-kserve.servingRuntimeAnnotations" . | nindent 4 }}
   labels:
     opendatahub.io/dashboard: "false"
     {{- include "vllm-kserve.labels" . | nindent 4 }}
