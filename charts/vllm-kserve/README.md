@@ -2,7 +2,7 @@
 
 A Helm deploying vLLM with KServe on OpenShift AI
 
-![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.10.1.1](https://img.shields.io/badge/AppVersion-v0.10.1.1-informational?style=flat-square)
+![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.13.0](https://img.shields.io/badge/AppVersion-v0.13.0-informational?style=flat-square)
 
 ## Table of Contents
 
@@ -55,7 +55,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "vllm-kserve"
-    version: "0.6.1"
+    version: "0.7.0"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -295,7 +295,7 @@ helm upgrade -i [release-name] redhat-ai-services/vllm-kserve \
 vLLM supports distributed multi-node inference for large models that don't fit on a single GPU or when you need to scale beyond single-node capabilities.
 
 >[!IMPORTANT]
-> Multi-node only supports deploying models from an OCI container or a ReadWriteMany PVC. It does not support serving models from S3.
+> Multi-node deployments require `RawDeployment` mode. Additionally, multiNode only supports deploying models from an OCI container or a ReadWriteMany PVC. It does not support serving models from S3.
 
 To deploy a multi-node vLLM instance:
 
@@ -368,14 +368,17 @@ For a complete list of all configuration options, see the [Values](#values) sect
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| deploymentMode | string | `"RawDeployment"` | Must be `RawDeployment`. `Serverless` is rejected (not supported). |
+| deploymentMode | string | `"RawDeployment"` | deploymentMode must be RawDeployment (KNative Serverless is not supported; setting Serverless fails template validation). |
+| displayName | string | `"vLLM ServingRuntime for KServe via Helm"` | The display name for the ServingRuntime in the OpenShift AI Dashboard. |
 | endpoint.auth.enabled | bool | `false` | Secures the model endpoint and creates a role to grant permissions to service accounts |
 | endpoint.auth.serviceAccounts | list | `[]` | Creates service accounts with permissions to access the secured endpoint |
 | endpoint.externalRoute.enabled | bool | `true` | Creates an externally accessible route for the model endpoint |
 | fullnameOverride | string | `""` | String to fully override fullname template |
-| image.image | string | `"registry.redhat.io/rhoai/odh-vllm-cuda-rhel9"` | The vLLM model server image |
+| hardwareProfile.name | string | `"nvidia-gpu-serving"` | The name of the hardware profile to use. |
+| hardwareProfile.namespace | string | `"redhat-ods-applications"` | The namespace of the hardware profile to use. |
+| image.image | string | `"registry.redhat.io/rhaiis/vllm-cuda-rhel9"` | The vLLM model server image |
 | image.runtimeVersionOverride | string | `""` | The vLLM version that will be displayed in the RHOAI Dashboard.  If not set, the appVersion of the chart will be used. |
-| image.tag | string | `"v2.25.0-1759340926"` | The tag or sha for the model server image |
+| image.tag | string | `"3.3.0-1771898916"` | The tag or sha for the model server image |
 | imagePullSecrets | list | `[]` | This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | inferenceService.name | string | `""` | Overwrite the default name for the InferenceService. |
 | model.args | list | `["--gpu-memory-utilization=0.90"]` | Additional vLLM arguments to be used to start the model.  For more documentation on available arguments see https://docs.vllm.ai/en/latest/serving/engine_args.html |
@@ -389,19 +392,25 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | multiNode.tensorParallelSize | int | `1` | The number of GPUs per node to use for the multi-node topology. |
 | nameOverride | string | `""` | String to partially override fullname template (will maintain the release name) |
 | nodeSelector | object | `{}` | Node selector for the vLLM pod |
-| resources | object | `{"limits":{"cpu":"2","memory":"8Gi","nvidia.com/gpu":"1"},"requests":{"cpu":"1","memory":"4Gi","nvidia.com/gpu":"1"}}` | Resource configuration for the vLLM container |
+| resources | object | `{}` | Resource configuration for the vLLM container.  By default, the resources will default to the hardware profile. |
 | scaling.maxReplicas | int | `1` | The maximum number of replicas to be deployed |
 | scaling.minReplicas | int | `1` | The minimum number of replicas to be deployed. |
 | scaling.rawDeployment.deploymentStrategy | object | `{"type":"RollingUpdate"}` | The deployment strategy to use to replace existing pods with new ones. |
-| scaling.scaleMetric | string | `""` | The scaling metric used by KServe with RawDeployment (HPA). Must be `cpu` or `memory` when set. |
+| scaling.scaleMetric | string | `""` | The scaling metric used by KServe with RawDeployment (HPA). Must be "cpu" or "memory" when set. |
 | scaling.scaleTarget | string | `""` | The scaling target for the HPA when scaleMetric is set. Default is 100 when not set. |
 | scaling.stopped | bool | `false` | Sets the model server to a stopped state and spins down all pods. |
-| servingRuntime.args | list | `["--port=8080","--model=/mnt/models"]` | The arguments used to start vLLM |
+| servingRuntime.args[0] | string | `"--port=8080"` |  |
+| servingRuntime.args[1] | string | `"--model=/mnt/models"` |  |
+| servingRuntime.command[0] | string | `"python"` |  |
+| servingRuntime.command[1] | string | `"-m"` |  |
+| servingRuntime.command[2] | string | `"vllm.entrypoints.openai.api_server"` |  |
+| servingRuntime.env[0].name | string | `"HF_HOME"` |  |
+| servingRuntime.env[0].value | string | `"/tmp/hf_home"` |  |
 | servingRuntime.name | string | `""` | Overwrite the default name for the ServingRuntime. |
 | servingRuntime.shmSize | string | `"2Gi"` | The size of the emptyDir used for shared memory.  You most likely don't need to adjust this. |
 | servingRuntime.useExisting | string | `""` | Use an existing servingRuntime instead of creating one.  If useExisting value is set, no servingRuntime will be created and the InferenceService will be configured to use the value set here as the runtime name. |
 | servingTopology | string | `"singleNode"` | servingTopology determines if the model will be deployed using a single node or a multi-node topology.  Must be one of singleNode or multiNode |
-| tolerations | list | `[{"effect":"NoSchedule","key":"nvidia.com/gpu","operator":"Exists"}]` | The tolerations to be applied to the model server pod. |
+| tolerations | list | `[]` | The tolerations to be applied to the model server pod. By default, the tolerations will default to the hardware profile. |
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
