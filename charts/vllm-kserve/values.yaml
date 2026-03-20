@@ -13,7 +13,9 @@ deploymentMode: RawDeployment
 servingTopology: singleNode
 
 hardwareProfile:
+  # -- The name of the hardware profile to use.
   name: nvidia-gpu-serving
+  # -- The namespace of the hardware profile to use.
   namespace: redhat-ods-applications
 
 image:
