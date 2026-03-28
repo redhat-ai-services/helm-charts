@@ -1,0 +1,116 @@
+# -- String to partially override fullname template (will maintain the release name)
+nameOverride: ""
+# -- String to fully override fullname template
+fullnameOverride: ""
+
+model:
+  # -- The name of the model to be advertised  in the /v1/models endpoint
+  name: "meta-llama/llama-3.2-1b-instruct"
+  # -- The URI of the model to be used by the model server
+  uri: oci://quay.io/redhat-ai-services/modelcar-catalog:llama-3.2-1b-instruct
+
+hardwareProfile:
+  # -- Creates a hardware profile and adds it to the release namespace.
+  create: false
+  # -- The name of the hardware profile to use.
+  # If create is set to true, this value will be ignored and the hardware profile will be created with the release name.
+  name: nvidia-gpu
+  # -- The namespace of the hardware profile to use.
+  # If create is set to true, this value will be ignored and the hardware profile will be created in the release namespace.
+  namespace: redhat-ods-applications
+  # -- The identifiers to add to the hardware profile.
+  # This value will only be used if create is set to true.
+  identifiers: []
+    # - identifier: cpu
+    #   displayName: CPU
+    #   resourceType: CPU
+    #   defaultCount: "2"
+    #   minCount: "1"
+    #   maxCount: "4"
+    # - identifier: memory
+    #   displayName: Memory
+    #   resourceType: Memory
+    #   defaultCount: 4Gi
+    #   minCount: 2Gi
+    #   maxCount: 8Gi
+    # - identifier: nvidia.com/gpu
+    #   displayName: Nvidia Gpu
+    #   defaultCount: 1
+    #   minCount: 1
+    #   maxCount: 2
+    #   resourceType: Accelerator
+  # -- The tolerations to apply to the hardware profile.
+  # This value will only be used if create is set to true.
+  tolerations: []
+    # - key: nvidia.com/gpu
+    #   operator: Exists
+    #   effect: NoSchedule
+
+vllm:
+  # -- The number of replicas to run for the model server
+  replicaCount: 1
+  # -- The tolerations to apply to the model server pod.
+  # If not set, the hardware profile will add the default tolerations.
+  tolerations: []
+    # - key: "nvidia.com/gpu"
+    #   operator: "Exists"
+    #   effect: "NoSchedule"
+  # -- The resources to apply to the model server pod.
+  # If not set, the hardware profile will add the default resources.
+  resources: {}
+    # requests:
+    #   cpu: 1
+    #   memory: 4Gi
+    #   nvidia.com/gpu: 1
+    # limits:
+    #   cpu: 2
+    #   memory: 8Gi
+    #   nvidia.com/gpu: 1
+  # -- The additional arguments to pass to the model server.
+  additionalArguments: "" # "--max-model-len=819"
+  image:
+    # -- The repository of the image to use for the model server
+    # If not set, the default image will be used.
+    repository: ""
+    # -- The tag of the image to use for the model server
+    tag: ""
+    # -- The pull policy of the image to use for the model server
+    pullPolicy: IfNotPresent
+
+scheduler:
+  endpointPickerConfig: "" #|4
+    # apiVersion: inference.networking.x-k8s.io/v1alpha1
+    # kind: EndpointPickerConfig
+    # plugins:
+    #   - type: pd-profile-handler
+    #     parameters:
+    #       threshold: 30000
+    #   - type: prefill-header-handler
+    #   - type: prefill-filter
+    #   - type: decode-filter
+    #   - type: random-picker
+    #     parameters:
+    #       maxNumOfEndpoints: 1
+    # schedulingProfiles:
+    #   - name: prefill
+    #     plugins:
+    #       - pluginRef: prefill-filter
+    #       - pluginRef: random-picker
+    #   - name: decode
+    #     plugins:
+    #       - pluginRef: decode-filter
+    #       - pluginRef: random-picker
+
+# -- The image pull secrets to use for the model server.
+imagePullSecrets: []
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
