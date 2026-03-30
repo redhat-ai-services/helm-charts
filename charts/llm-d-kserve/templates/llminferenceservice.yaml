@@ -1,0 +1,48 @@
+apiVersion: serving.kserve.io/v1alpha1
+kind: LLMInferenceService
+metadata:
+  annotations:
+    {{- if .Values.hardwareProfile.create }}
+    opendatahub.io/hardware-profile-name: {{ include "llm-d-kserve.fullname" . | quote }}
+    opendatahub.io/hardware-profile-namespace: {{ .Release.Namespace | quote }}
+    {{- else }}
+    opendatahub.io/hardware-profile-name: {{ .Values.hardwareProfile.name | quote }}
+    opendatahub.io/hardware-profile-namespace: {{ .Values.hardwareProfile.namespace | quote }}
+    {{- end }}
+    opendatahub.io/model-type: generative
+    openshift.io/display-name: {{ .Values.model.name | quote }}
+    security.opendatahub.io/enable-auth: "false"
+  labels:
+    opendatahub.io/dashboard: "true"
+  name: {{ include "llm-d-kserve.fullname" . }}
+spec:
+  model:
+    name: {{ .Values.model.name | quote }}
+    uri: {{ .Values.model.uri | quote }}
+  router:
+    gateway: {}
+    route: {}
+    scheduler: {}
+  replicas: {{ .Values.vllm.replicaCount }}
+  template:
+    {{- if .Values.imagePullSecrets }}
+    imagePullSecrets:
+      {{- toYaml .Values.imagePullSecrets | nindent 6 }}
+    {{- end }}
+    containers:
+    - name: main
+      env:
+        - name: VLLM_ADDITIONAL_ARGS
+          value: {{ .Values.vllm.additionalArguments | quote }}
+      {{- if .Values.vllm.image.repository }}
+      image: {{ include "llm-d-kserve.image" . }}
+      {{- end }}
+      imagePullPolicy: {{ .Values.vllm.image.pullPolicy | quote }}
+      {{- if .Values.vllm.resources }}
+      resources:
+        {{- toYaml .Values.vllm.resources | nindent 8 }}
+      {{- end }}
+    {{- if .Values.vllm.tolerations }}
+    tolerations:
+      {{- toYaml .Values.vllm.tolerations | nindent 6 }}
+    {{- end }}
