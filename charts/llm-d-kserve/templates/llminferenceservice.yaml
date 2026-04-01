@@ -30,19 +30,19 @@ spec:
       {{- toYaml .Values.imagePullSecrets | nindent 6 }}
     {{- end }}
     containers:
-    - name: main
-      env:
-        - name: VLLM_ADDITIONAL_ARGS
-          value: {{ .Values.vllm.additionalArguments | quote }}
-      {{- if .Values.vllm.image.repository }}
-      image: {{ include "llm-d-kserve.image" . }}
+      - name: main
+        env:
+          - name: VLLM_ADDITIONAL_ARGS
+            value: {{ .Values.vllm.additionalArguments | quote }}
+        {{- if .Values.vllm.image.repository }}
+        image: {{ include "llm-d-kserve.image" . }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.vllm.image.pullPolicy | quote }}
+        {{- if .Values.vllm.resources }}
+        resources:
+          {{- toYaml .Values.vllm.resources | nindent 10 }}
+        {{- end }}
+      {{- if .Values.vllm.tolerations }}
+      tolerations:
+        {{- toYaml .Values.vllm.tolerations | nindent 8 }}
       {{- end }}
-      imagePullPolicy: {{ .Values.vllm.image.pullPolicy | quote }}
-      {{- if .Values.vllm.resources }}
-      resources:
-        {{- toYaml .Values.vllm.resources | nindent 8 }}
-      {{- end }}
-    {{- if .Values.vllm.tolerations }}
-    tolerations:
-      {{- toYaml .Values.vllm.tolerations | nindent 6 }}
-    {{- end }}
