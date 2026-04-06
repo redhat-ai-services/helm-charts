@@ -61,6 +61,19 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{/*
+Render a map as a compact YAML list item ("- key: …" instead of "-\n  key: …").
+*/}}
+{{- define "llm-d-kserve.toYamlListItem" -}}
+{{- $lines := splitList "\n" (toYaml .) -}}
+- {{ first $lines }}
+{{- range rest $lines }}
+{{- if . }}
+  {{ . }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
 {{- define "llm-d-kserve.image" -}}
 {{- if hasPrefix "sha256:" (toString .Values.vllm.image.tag) }}
 {{- printf "%s@%s" .Values.vllm.image.repository .Values.vllm.image.tag }}

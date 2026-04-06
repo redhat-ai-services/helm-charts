@@ -76,6 +76,12 @@ vllm:
     tag: ""
     # -- The pull policy of the image to use for the model server
     pullPolicy: IfNotPresent
+  # -- Pod topology spread constraints for the model server.
+  # If labelSelector is omitted on an item, the chart sets matchLabels app.kubernetes.io/name to llm-d-kserve.fullname.
+  topologySpreadConstraints:
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: ScheduleAnyway
 
 scheduler:
   endpointPickerConfig: "" #|4
