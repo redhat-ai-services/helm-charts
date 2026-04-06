@@ -1,0 +1,83 @@
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "llm-d-kserve.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "llm-d-kserve.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "llm-d-kserve.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "llm-d-kserve.labels" -}}
+helm.sh/chart: {{ include "llm-d-kserve.chart" . }}
+{{ include "llm-d-kserve.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "llm-d-kserve.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "llm-d-kserve.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "llm-d-kserve.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "llm-d-kserve.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Render a map as a compact YAML list item ("- key: …" instead of "-\n  key: …").
+*/}}
+{{- define "llm-d-kserve.toYamlListItem" -}}
+{{- $lines := splitList "\n" (toYaml .) -}}
+- {{ first $lines }}
+{{- range rest $lines }}
+{{- if . }}
+  {{ . }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "llm-d-kserve.image" -}}
+{{- if hasPrefix "sha256:" (toString .Values.vllm.image.tag) }}
+{{- printf "%s@%s" .Values.vllm.image.repository .Values.vllm.image.tag }}
+{{- else }}
+{{- printf "%s:%s" .Values.vllm.image.repository .Values.vllm.image.tag }}
+{{- end }}
+{{- end }}
