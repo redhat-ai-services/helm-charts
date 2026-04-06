@@ -29,6 +29,22 @@ spec:
     imagePullSecrets:
       {{- toYaml .Values.imagePullSecrets | nindent 6 }}
     {{- end }}
+    {{- if .Values.vllm.topologySpreadConstraints }}
+    topologySpreadConstraints:
+    {{- range .Values.vllm.topologySpreadConstraints }}
+      {{- if hasKey . "labelSelector" }}
+      {{- /* Caller supplied labelSelector — render unchanged. */}}
+      {{- include "llm-d-kserve.toYamlListItem" . | nindent 6 }}
+      {{- else }}
+      {{- /* No labelSelector — default to matching this chart's pods. */}}
+      {{- $c := deepCopy . }}
+      {{- $defaultMatchLabels := dict "app.kubernetes.io/name" (include "llm-d-kserve.fullname" $) }}
+      {{- $defaultLabelSelector := dict "matchLabels" $defaultMatchLabels }}
+      {{- $_ := set $c "labelSelector" $defaultLabelSelector }}
+      {{- include "llm-d-kserve.toYamlListItem" $c | nindent 6 }}
+      {{- end }}
+    {{- end }}
+    {{- end }}
     containers:
       - name: main
         env:
