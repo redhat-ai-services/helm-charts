@@ -11,8 +11,9 @@ metadata:
     {{- end }}
     opendatahub.io/model-type: generative
     openshift.io/display-name: {{ .Values.model.name | quote }}
-    security.opendatahub.io/enable-auth: "false"
+    security.opendatahub.io/enable-auth: {{ .Values.auth.enabled | quote }}
   labels:
+    {{- include "llm-d-kserve.labels" . | nindent 4 }}
     opendatahub.io/dashboard: "true"
   name: {{ include "llm-d-kserve.fullname" . }}
 spec:

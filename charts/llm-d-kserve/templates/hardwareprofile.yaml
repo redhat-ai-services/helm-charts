@@ -7,6 +7,8 @@ metadata:
     opendatahub.io/description: ""
     opendatahub.io/disabled: "false"
     opendatahub.io/display-name: {{ include "llm-d-kserve.fullname" . | quote }}
+  labels:
+    {{- include "llm-d-kserve.labels" . | nindent 4 }}
   name: {{ include "llm-d-kserve.fullname" . }}
 spec:
   identifiers:
