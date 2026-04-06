@@ -9,6 +9,20 @@ model:
   # -- The URI of the model to be used by the model server
   uri: oci://quay.io/redhat-ai-services/modelcar-catalog:llama-3.2-1b-instruct
 
+auth:
+  # -- Secures the model endpoint and creates a role to grant permissions to service accounts
+  enabled: false
+  # -- Creates service accounts with permissions to access the secured endpoint
+  serviceAccounts: []
+    # - name: my-service-account
+    # - name: existing-service-account
+    #   create: false
+    # - name: existing-in-another-namespace
+    #   namespace: my-other-namespace
+    #   create: false
+    # - name: no-token
+    #   createLegacyToken: false
+
 hardwareProfile:
   # -- Creates a hardware profile and adds it to the release namespace.
   create: false

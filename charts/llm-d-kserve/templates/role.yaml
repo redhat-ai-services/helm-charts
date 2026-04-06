@@ -1,0 +1,17 @@
+{{- if .Values.auth.enabled }}
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "llm-d-kserve.fullname" . }}-view
+  labels:
+    {{- include "llm-d-kserve.labels" $ | nindent 4 }}
+rules:
+  - verbs:
+      - get
+    apiGroups:
+      - serving.kserve.io
+    resources:
+      - inferenceservices
+    resourceNames:
+      - {{ include "llm-d-kserve.inferenceServiceName" . }}
+{{- end }}
