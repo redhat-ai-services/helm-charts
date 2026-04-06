@@ -56,7 +56,8 @@ vllm:
     #   operator: "Exists"
     #   effect: "NoSchedule"
   # -- The resources to apply to the model server pod.
-  # If not set, the hardware profile will add the default resources.
+  # If not set, the hardware profile will add the default resources, 
+  # however it is highly recommended to set the resources explicitly.
   resources: {}
     # requests:
     #   cpu: 1
@@ -65,9 +66,13 @@ vllm:
     # limits:
     #   cpu: 2
     #   memory: 8Gi
-    #   nvidia.com/gpu: 1
+    #   nvidia.com/gpu: 1\
+
   # -- The additional arguments to pass to the model server.
-  additionalArguments: "" # "--max-model-len=819"
+  additionalArguments: []
+    # - "--max-model-len=8192"
+    # - "--gpu-memory-utilization=0.90"
+
   image:
     # -- The repository of the image to use for the model server
     # If not set, the default image will be used.
