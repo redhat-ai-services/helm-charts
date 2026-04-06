@@ -1,0 +1,44 @@
+{{- if .Values.auth.enabled }}
+{{- range $serviceAccount := .Values.auth.serviceAccounts }}
+{{- if list nil true | has $serviceAccount.create }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $serviceAccount.name }}
+  namespace: {{ $serviceAccount.namespace | default $.Release.Namespace }}
+  labels:
+    {{- include "llm-d-kserve.labels" $ | nindent 4 }}
+{{ if list nil true | has $serviceAccount.createLegacyToken }}
+secrets:
+  - name: {{ $serviceAccount.name }}
+{{- end }}
+automountServiceAccountToken: true
+{{ if list nil true | has $serviceAccount.createLegacyToken }}
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: {{ $serviceAccount.name }}
+  annotations:
+    kubernetes.io/service-account.name: {{ $serviceAccount.name }}
+{{- end }}
+{{- end }}
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "llm-d-kserve.fullname" $ }}-{{ $serviceAccount.name }}-view
+  labels:
+    {{- include "llm-d-kserve.labels" $ | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ $serviceAccount.name }}
+    namespace: {{ $serviceAccount.namespace | default $.Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "llm-d-kserve.fullname" $ }}-view
+{{- end }}
+{{- end }}

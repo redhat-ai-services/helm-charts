@@ -13,6 +13,9 @@ auth:
   # -- Secures the model endpoint and creates a role to grant permissions to service accounts
   enabled: false
   # -- Creates service accounts with permissions to access the secured endpoint
+  # If create not set, assume true; if create is set to false, the service account must already exist.
+  # If createLegacyToken not set, assume true; if createLegacyToken is true, a static token will be created for the service account.
+  # If namespace not set, assume the release namespace.
   serviceAccounts: []
     # - name: my-service-account
     # - name: existing-service-account
