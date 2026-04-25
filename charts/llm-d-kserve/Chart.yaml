@@ -1,0 +1,14 @@
+apiVersion: v2
+type: application
+
+name: llm-d-kserve
+description: A Helm chart for deploying LLM-D with KServe on OpenShift AI
+
+version: 0.1.0
+
+# OpenShift AI version
+appVersion: "3.3.0"
+
+icon: https://avatars.githubusercontent.com/u/211385051?s=48&v=4
+sources:
+  - https://github.com/redhat-ai-services/helm-charts/tree/main/charts/llm-d-kserve
