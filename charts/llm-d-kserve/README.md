@@ -50,6 +50,8 @@ For a complete list of all configuration options, see the [Values](#values) sect
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| auth.enabled | bool | `false` | Secures the model endpoint and creates a role to grant permissions to service accounts |
+| auth.serviceAccounts | list | `[]` | Creates service accounts with permissions to access the secured endpoint If create not set, assume true; if create is set to false, the service account must already exist. If createLegacyToken not set, assume true; if createLegacyToken is true, a static token will be created for the service account. If namespace not set, assume the release namespace. |
 | fullnameOverride | string | `""` | String to fully override fullname template |
 | hardwareProfile.create | bool | `false` | Creates a hardware profile and adds it to the release namespace. |
 | hardwareProfile.identifiers | list | `[]` | The identifiers to add to the hardware profile. This value will only be used if create is set to true. |
@@ -65,12 +67,12 @@ For a complete list of all configuration options, see the [Values](#values) sect
 | serviceAccount.automount | bool | `true` | Automatically mount a ServiceAccount's API credentials? |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
-| vllm.additionalArguments | string | `""` | The additional arguments to pass to the model server. |
+| vllm.additionalArguments | list | `[]` | The additional arguments to pass to the model server. |
 | vllm.image.pullPolicy | string | `"IfNotPresent"` | The pull policy of the image to use for the model server |
 | vllm.image.repository | string | `""` | The repository of the image to use for the model server If not set, the default image will be used. |
 | vllm.image.tag | string | `""` | The tag of the image to use for the model server |
 | vllm.replicaCount | int | `1` | The number of replicas to run for the model server |
-| vllm.resources | object | `{}` | The resources to apply to the model server pod. If not set, the hardware profile will add the default resources. |
+| vllm.resources | object | `{}` | The resources to apply to the model server pod. If not set, the hardware profile will add the default resources, however it is highly recommended to set the resources explicitly. |
 | vllm.tolerations | list | `[]` | The tolerations to apply to the model server pod. If not set, the hardware profile will add the default tolerations. |
 | vllm.topologySpreadConstraints | list | `[{"maxSkew":1,"topologyKey":"kubernetes.io/hostname","whenUnsatisfiable":"ScheduleAnyway"}]` | Pod topology spread constraints for the model server. If labelSelector is omitted on an item, the chart sets matchLabels app.kubernetes.io/name to llm-d-kserve.fullname. |
 
