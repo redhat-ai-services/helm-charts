@@ -73,7 +73,7 @@ vllm:
     #   operator: "Exists"
     #   effect: "NoSchedule"
   # -- The resources to apply to the model server pod.
-  # If not set, the hardware profile will add the default resources, 
+  # If not set, the hardware profile will add the default resources,
   # however it is highly recommended to set the resources explicitly.
   resources: {}
     # requests:
