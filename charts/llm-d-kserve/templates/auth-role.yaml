@@ -3,6 +3,7 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ include "llm-d-kserve.fullname" . }}-view
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "llm-d-kserve.labels" $ | nindent 4 }}
 rules:
@@ -11,7 +12,7 @@ rules:
     apiGroups:
       - serving.kserve.io
     resources:
-      - inferenceservices
+      - LLMInferenceServices
     resourceNames:
-      - {{ include "llm-d-kserve.inferenceServiceName" . }}
+      - {{ include "llm-d-kserve.fullname" . }}
 {{- end }}

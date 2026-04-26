@@ -11,7 +11,7 @@ model:
 
 auth:
   # -- Secures the model endpoint and creates a role to grant permissions to service accounts
-  enabled: false
+  enabled: true
   # -- Creates service accounts with permissions to access the secured endpoint
   # If create not set, assume true; if create is set to false, the service account must already exist.
   # If createLegacyToken not set, assume true; if createLegacyToken is true, a static token will be created for the service account.
@@ -131,14 +131,3 @@ scheduler:
 
 # -- The image pull secrets to use for the model server.
 imagePullSecrets: []
-
-serviceAccount:
-  # -- Specifies whether a service account should be created
-  create: true
-  # -- Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # -- Annotations to add to the service account
-  annotations: {}
-  # -- The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""

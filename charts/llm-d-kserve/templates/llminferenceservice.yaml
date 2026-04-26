@@ -16,6 +16,7 @@ metadata:
     {{- include "llm-d-kserve.labels" . | nindent 4 }}
     opendatahub.io/dashboard: "true"
   name: {{ include "llm-d-kserve.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   model:
     name: {{ .Values.model.name | quote }}

@@ -10,6 +10,7 @@ metadata:
   labels:
     {{- include "llm-d-kserve.labels" . | nindent 4 }}
   name: {{ include "llm-d-kserve.fullname" . }}
+  namespace: {{ .Release.Namespace }}
 spec:
   identifiers:
     {{- toYaml .Values.hardwareProfile.identifiers | nindent 4 }}
