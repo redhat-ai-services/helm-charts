@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   argocd:
   - apiVersion: v2
-    created: "2026-04-26T21:47:29.205788596Z"
+    created: "2026-04-26T22:32:15.899821576Z"
     description: A Helm chart for Kubernetes
-    digest: 2e94d970f026643d7de020ebe5ea7db2b78f8cefa78925120b5f66a59a95ac3f
+    digest: 3055aad19d79c8be6f0daea63255a2902cf362244de9111b57d177cf100109c5
     kubeVersion: '>= 1.19.0'
     name: argocd
     type: application
@@ -73,9 +73,9 @@ entries:
     version: 0.3.7
   gitops-tenant:
   - apiVersion: v2
-    created: "2026-04-26T21:47:29.206280895Z"
+    created: "2026-04-26T22:32:15.900276669Z"
     description: A Helm chart to manage a multi-tiered gitops structure a project.
-    digest: 0b70a50251ce46e68b0d5f1b918a42664004b0a356d293c2b23ed95f63a8a8d5
+    digest: cd7828c4fa74c027ad35a72bd7f25d85732e7e9480dc86db965f323ea1f382c9
     kubeVersion: '>= 1.19.0'
     name: gitops-tenant
     type: application
@@ -150,10 +150,10 @@ entries:
   guardrails-hf-detector-kserve:
   - apiVersion: v2
     appVersion: rhoai-2.23-82e4a518ac3d144a5312205eede5674cf6a5888e
-    created: "2026-04-26T21:47:29.206811065Z"
+    created: "2026-04-26T22:32:15.900799218Z"
     description: A Helm chart deploying guardrails-huggingface-detector with KServe
       on OpenShift AI
-    digest: d472b45fad6b16a45f69e8ece9aa2c57e9d9d063859932f736f6d0b52b1fbf3d
+    digest: c813417c1f2e2eea9ce365450ab4cbf6c9ff255f1c6d0c1b4f452449b03b0257
     icon: https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.png
     name: guardrails-hf-detector-kserve
     type: application
@@ -175,9 +175,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2026-04-26T21:47:29.207326957Z"
+    created: "2026-04-26T22:32:15.901282674Z"
     description: A Helm chart for Kafdrop
-    digest: 6622dab162e1ac226a0221b7e64e559bd023ae2f913ce68f5c0d981c664ce0ca
+    digest: 8b8b2c1a91377f3d648fd44476d05aead869887548d24b9106a75b511f7da38e
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -186,9 +186,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 3.3.1
-    created: "2026-04-26T21:47:29.207560774Z"
+    created: "2026-04-26T22:32:15.901512324Z"
     description: A Helm chart for Kubernetes
-    digest: 049f6be28e25238780b5830d7ea0670dd403c0bf01c12e33b5ab47125fae9343
+    digest: 32024c62b61ca74b0997f9006a77dee616e1816369666c15b0b85774b05ba59b
     icon: https://upload.wikimedia.org/wikipedia/commons/0/0a/Apache_kafka-icon.svg
     name: kafka
     type: application
@@ -219,9 +219,9 @@ entries:
   kubernetes-mcp:
   - apiVersion: v2
     appVersion: v0.0.49
-    created: "2026-04-26T21:47:29.207978945Z"
+    created: "2026-04-26T22:32:15.901941979Z"
     description: A Helm chart for deploying a Kubernetes MCP server
-    digest: 58d05d097f20413633e44186a57ef72365747b5949d59b8d93d7d45fcd366fac
+    digest: fa2d73a6b7843e74595073bcd0e8e958727028ac3c99580f97e0c4a4647b1d7c
     icon: https://avatars.githubusercontent.com/u/182288589?s=200&v=4
     name: kubernetes-mcp
     sources:
@@ -262,9 +262,9 @@ entries:
   llamastack-playground:
   - apiVersion: v2
     appVersion: 0.2.15
-    created: "2026-04-26T21:47:29.208430688Z"
+    created: "2026-04-26T22:32:15.90235282Z"
     description: A Helm chart for Kubernetes
-    digest: 12164d92c0c428a5188771f85a0736f526eb05d1c812f4815342d83b0b4e314b
+    digest: 0cf0351ad29f25530a88410db81d1e48a6652e981b5d2c5c40af5599d34a70f2
     name: llamastack-playground
     type: application
     urls:
@@ -281,6 +281,19 @@ entries:
     - https://redhat-ai-services.github.io/helm-charts/llamastack-playground-0.1.0.tgz
     version: 0.1.0
   llm-d-kserve:
+  - apiVersion: v2
+    appVersion: 3.3.0
+    created: "2026-04-26T22:32:15.902746587Z"
+    description: A Helm chart for deploying LLM-D with KServe on OpenShift AI
+    digest: c6a8645484750282a70a74e7a20231a1101f03db001e85a5979fa314e356c163
+    icon: https://avatars.githubusercontent.com/u/211385051?s=48&v=4
+    name: llm-d-kserve
+    sources:
+    - https://github.com/redhat-ai-services/helm-charts/tree/main/charts/llm-d-kserve
+    type: application
+    urls:
+    - https://redhat-ai-services.github.io/helm-charts/llm-d-kserve-0.1.3.tgz
+    version: 0.1.3
   - apiVersion: v2
     appVersion: 3.3.0
     created: "2026-04-26T21:47:29.208954956Z"
@@ -323,9 +336,9 @@ entries:
   minio:
   - apiVersion: v2
     appVersion: RELEASE.2024-12-18T13-15-44Z
-    created: "2026-04-26T21:47:29.209405808Z"
+    created: "2026-04-26T22:32:15.903191281Z"
     description: A Helm chart for Kubernetes
-    digest: 330d35cdabd7b342689a8393b480ba3bef9cc869888756f1c3ebfcaaa575aef0
+    digest: 769f20493671e1fa8f2c2de61ee780f4d128f90706a956c53bdafbe0d04a366a
     name: minio
     type: application
     urls:
@@ -597,9 +610,9 @@ entries:
   phoenix:
   - apiVersion: v2
     appVersion: version-4.20.2
-    created: "2026-04-26T21:47:29.210015286Z"
+    created: "2026-04-26T22:32:15.903725121Z"
     description: A Helm chart for deploying Phoenix on OpenShift
-    digest: 28fabe8cf39b967e39bb70328c8bd72aedc834f0f28b1504941552018bd543cc
+    digest: 6c81a0d1936113183a67c56c9090f9b8a6c0421fea884d6e43cdef40721ea1d7
     icon: https://pbs.twimg.com/profile_images/1652081979146506240/e2xH7qJL_400x400.png
     name: phoenix
     sources:
@@ -625,9 +638,9 @@ entries:
   vllm-kserve:
   - apiVersion: v2
     appVersion: v0.13.0
-    created: "2026-04-26T21:47:29.210704462Z"
+    created: "2026-04-26T22:32:15.904560477Z"
     description: A Helm deploying vLLM with KServe on OpenShift AI
-    digest: 0d5649ca8311bb2fd3f8aa1c7a1ccdd4fd2022bfe7d9305058e4d74831df9062
+    digest: 9737e48b6f9fbc0cd0505d7d03277b046ef608f5f9cee4202b03a2af61e218a7
     icon: https://raw.githubusercontent.com/vllm-project/media-kit/refs/heads/main/vLLM-Logo.svg
     name: vllm-kserve
     type: application
@@ -962,4 +975,4 @@ entries:
     urls:
     - https://redhat-ai-services.github.io/helm-charts/vllm-kserve-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-26T21:47:29.204916829Z"
+generated: "2026-04-26T22:32:15.898238095Z"
