@@ -4,7 +4,7 @@ type: application
 name: llm-d-kserve
 description: A Helm chart for deploying LLM-D with KServe on OpenShift AI
 
-version: 0.1.2
+version: 0.1.3
 
 # OpenShift AI version
 appVersion: "3.3.0"

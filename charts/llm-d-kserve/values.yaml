@@ -63,6 +63,12 @@ hardwareProfile:
     #   operator: Exists
     #   effect: NoSchedule
 
+dataConnection:
+  # -- Creates a data connection and adds it to the release namespace.
+  create: true
+  # -- The name of the data connection to use.  If not set, the data connection will be created with the release name.
+  name: ""
+
 vllm:
   # -- The number of replicas to run for the model server
   replicaCount: 1

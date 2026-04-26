@@ -9,6 +9,9 @@ metadata:
     opendatahub.io/hardware-profile-name: {{ .Values.hardwareProfile.name | quote }}
     opendatahub.io/hardware-profile-namespace: {{ .Values.hardwareProfile.namespace | quote }}
     {{- end }}
+    {{- if or .Values.dataConnection.create .Values.dataConnection.name }}
+    opendatahub.io/connections: {{ include "llm-d-kserve.dataConnectionName" . }}
+    {{- end }}
     opendatahub.io/model-type: generative
     openshift.io/display-name: {{ .Values.model.name | quote }}
     security.opendatahub.io/enable-auth: {{ .Values.auth.enabled | quote }}

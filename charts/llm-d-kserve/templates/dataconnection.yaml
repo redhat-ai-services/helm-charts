@@ -1,0 +1,14 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: {{ include "llm-d-kserve.dataConnectionName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    opendatahub.io/dashboard: 'true'
+  annotations:
+    opendatahub.io/connection-type-protocol: uri
+    opendatahub.io/connection-type-ref: uri-v1
+    openshift.io/display-name: {{ include "llm-d-kserve.dataConnectionName" . }}
+data:
+  URI: {{ .Values.model.uri | b64enc }}
+type: Opaque

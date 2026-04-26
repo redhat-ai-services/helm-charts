@@ -62,6 +62,13 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Create the name of the data connect to use
+*/}}
+{{- define "llm-d-kserve.dataConnectionName" -}}
+{{- default (include "llm-d-kserve.fullname" .) (index .Values "dataConnection" "name") }}
+{{- end }}
+
+{{/*
 Render a map as a compact YAML list item ("- key: …" instead of "-\n  key: …").
 */}}
 {{- define "llm-d-kserve.toYamlListItem" -}}
