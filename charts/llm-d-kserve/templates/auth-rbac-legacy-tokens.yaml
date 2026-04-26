@@ -1,0 +1,60 @@
+{{/*
+Legacy long-lived service account tokens for auth.
+
+When any normalized auth service account has createLegacyToken true, this template
+renders one shared ServiceAccount (see llm-d-kserve.legacyServiceAccountName), a
+RoleBinding to the chart view Role, and one kubernetes.io/service-account-token
+Secret per entry with create and createLegacyToken true. Set createLegacyToken: false to opt out.
+*/}}
+{{- if .Values.auth.enabled }}
+{{- $items := index (fromJson (include "llm-d-kserve.normalizedServiceAccounts" $)) "items" -}}
+{{/* Whether any consumer asked for a static legacy token (drives the whole block). */}}
+{{- $anyCreateLegacyToken := false }}
+{{- range $items -}}
+{{- if index . "createLegacyToken" -}}
+{{- $anyCreateLegacyToken = true -}}
+{{- end -}}
+{{- end -}}
+{{- if $anyCreateLegacyToken }}
+{{/* Single identity for all legacy-token consumers in this release. */}}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "llm-d-kserve.legacyServiceAccountName" $ }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "llm-d-kserve.labels" $ | nindent 4 }}
+{{/* Grant the shared legacy SA the same LLMInferenceService get access as other auth SAs. */}}
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "llm-d-kserve.legacyServiceAccountName" $ }}-view
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "llm-d-kserve.labels" $ | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "llm-d-kserve.legacyServiceAccountName" $ }}
+    namespace: {{ $.Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "llm-d-kserve.fullname" $ }}-view
+{{/* One distinct token secret per list entry with create and createLegacyToken (same SA in annotation). */}}
+{{- range $items -}}
+{{- if and (index . "create") (index . "createLegacyToken") }}
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: {{ index . "name" }}-{{ include "llm-d-kserve.legacyServiceAccountName" $ }}
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    kubernetes.io/service-account.name: {{ include "llm-d-kserve.legacyServiceAccountName" $ }}
+{{- end }}
+{{- end -}}
+{{- end -}}
+{{- end -}}

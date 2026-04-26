@@ -62,6 +62,53 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Name of the shared ServiceAccount used for auth legacy token secrets (one per release).
+*/}}
+{{- define "llm-d-kserve.legacyServiceAccountName" -}}
+{{- printf "%s-sa" (include "llm-d-kserve.fullname" .) }}
+{{- end }}
+
+{{/*
+Build a list of auth.serviceAccounts with explicit create and createLegacyToken booleans
+(optional create defaults true; if createLegacyToken is unset and create is true, legacy token
+is enabled; if create is false, createLegacyToken defaults false). Namespace defaults to
+.Release.Namespace when not set on the item.
+The result is a JSON object `{"items":[...]}` (not a top-level array) so templates can `range` over
+`.items` reliably; each item is a map built with JSON round-trip.
+*/}}
+{{- define "llm-d-kserve.normalizedServiceAccounts" -}}
+{{- $result := list -}}
+{{- range .Values.auth.serviceAccounts }}
+  {{- $name := .name -}}
+  {{- $namespace := $.Release.Namespace -}}
+  {{- if hasKey . "namespace" }}
+    {{- $namespace = .namespace -}}
+  {{- else }}
+    {{- $namespace = $.Release.Namespace -}}
+  {{- end }}
+  {{- $create := true -}}
+  {{- if hasKey . "create" }}
+    {{- $create = .create -}}
+  {{- else }}
+    {{- $create = true -}}
+  {{- end }}
+  {{- $createLegacyToken := false -}}
+  {{- if hasKey . "createLegacyToken" }}
+    {{- $createLegacyToken = .createLegacyToken -}}
+  {{- else }}
+    {{- if $create }}
+      {{- $createLegacyToken = true -}}
+    {{- else }}
+      {{- $createLegacyToken = false -}}
+    {{- end }}
+  {{- end }}
+  {{- $item := fromJson (printf `{"name":%q,"namespace":%q,"create":%t,"createLegacyToken":%t}` $name $namespace $create $createLegacyToken) -}}
+  {{- $result = append $result $item -}}
+{{- end }}
+{{- toJson (dict "items" $result) -}}
+{{- end -}}
+
+{{/*
 Create the name of the data connect to use
 */}}
 {{- define "llm-d-kserve.dataConnectionName" -}}

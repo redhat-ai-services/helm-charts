@@ -11,20 +11,20 @@ model:
 
 auth:
   # -- Secures the model endpoint and creates a role to grant permissions to service accounts
-  enabled: false
+  enabled: true
   # -- Creates service accounts with permissions to access the secured endpoint
   # If create not set, assume true; if create is set to false, the service account must already exist.
-  # If createLegacyToken not set, assume true; if createLegacyToken is true, a static token will be created for the service account.
+  # If createLegacyToken is unset or true, a static legacy token secret is created for that entry; set createLegacyToken: false to opt out.
   # If namespace not set, assume the release namespace.
-  serviceAccounts: []
-    # - name: my-service-account
-    # - name: existing-service-account
-    #   create: false
-    # - name: existing-in-another-namespace
-    #   namespace: my-other-namespace
-    #   create: false
-    # - name: no-token
-    #   createLegacyToken: false
+  serviceAccounts:
+    - name: my-service-account
+    - name: existing-service-account
+      create: false
+    - name: existing-in-another-namespace
+      namespace: my-other-namespace
+      create: false
+    - name: no-token
+      createLegacyToken: false
 
 hardwareProfile:
   # -- Creates a hardware profile and adds it to the release namespace.
