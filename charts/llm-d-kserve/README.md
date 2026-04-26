@@ -2,7 +2,7 @@
 
 A Helm chart for deploying LLM-D with KServe on OpenShift AI
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.3.0](https://img.shields.io/badge/AppVersion-3.3.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.3.0](https://img.shields.io/badge/AppVersion-3.3.0-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -28,7 +28,7 @@ appVersion: "1.16.0"
 
 dependencies:
   - name: "llm-d-kserve"
-    version: "0.1.3"
+    version: "0.2.0"
     repository: "https://redhat-ai-services.github.io/helm-charts/"
 ```
 
@@ -50,8 +50,8 @@ For a complete list of all configuration options, see the [Values](#values) sect
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| auth.enabled | bool | `false` | Secures the model endpoint and creates a role to grant permissions to service accounts |
-| auth.serviceAccounts | list | `[]` | Creates service accounts with permissions to access the secured endpoint If create not set, assume true; if create is set to false, the service account must already exist. If createLegacyToken not set, assume true; if createLegacyToken is true, a static token will be created for the service account. If namespace not set, assume the release namespace. |
+| auth.enabled | bool | `true` | Secures the model endpoint and creates a role to grant permissions to service accounts |
+| auth.serviceAccounts | list | `[{"name":"my-service-account"},{"create":false,"name":"existing-service-account"},{"create":false,"name":"existing-in-another-namespace","namespace":"my-other-namespace"},{"createLegacyToken":false,"name":"no-token"}]` | Creates service accounts with permissions to access the secured endpoint If create not set, assume true; if create is set to false, the service account must already exist. If createLegacyToken is unset or true, a static legacy token secret is created for that entry; set createLegacyToken: false to opt out. If namespace not set, assume the release namespace. |
 | dataConnection.create | bool | `true` | Creates a data connection and adds it to the release namespace. |
 | dataConnection.name | string | `""` | The name of the data connection to use.  If not set, the data connection will be created with the release name. |
 | fullnameOverride | string | `""` | String to fully override fullname template |
