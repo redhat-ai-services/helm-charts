@@ -1,0 +1,12 @@
+{{- if .Values.autoscaling.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: {{ include "llm-d-kserve.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "llm-d-kserve.labels" . | nindent 4 }}
+spec:
+  podIdentity:
+    provider: kubernetes
+{{- end }}

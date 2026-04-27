@@ -69,6 +69,15 @@ dataConnection:
   # -- The name of the data connection to use.  If not set, the data connection will be created with the release name.
   name: ""
 
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  scaleMetric: "kserve_vllm:num_requests_waiting"
+  threshold: 5
+  activationThreshold: 1
+  serverAddress: https://thanos-querier.openshift-monitoring.svc:9092
+
 vllm:
   # -- The number of replicas to run for the model server
   replicaCount: 1
@@ -138,3 +147,16 @@ scheduler:
 
 # -- The image pull secrets to use for the model server.
 imagePullSecrets: []
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  # -- Enable creation of a ServiceAccount
+  create: true
+  # Annotations to add to the service account
+  # -- Additional custom annotations for the ServiceAccount
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  # -- The name of the ServiceAccount to use.
+  # @default -- fullname template
+  name: ""

@@ -1,0 +1,33 @@
+{{- if .Values.autoscaling.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "llm-d-kserve.fullname" . }}-{{ .Release.Namespace }}-keda-view
+  labels:
+    {{- include "llm-d-kserve.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-monitoring-view
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "llm-d-kserve.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "llm-d-kserve.fullname" . }}-keda-view
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "llm-d-kserve.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "llm-d-kserve.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}
