@@ -58,6 +58,7 @@ metadata:
     {{- include "llm-d-kserve.labels" $ | nindent 4 }}
   annotations:
     kubernetes.io/service-account.name: {{ include "llm-d-kserve.legacyServiceAccountName" $ }}
+    openshift.io/display-name: {{ index . "name" }}
 {{- end }}
 {{- end -}}
 {{- end -}}
