@@ -244,7 +244,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "histogram_quantile(0.50, rate(vllm:time_per_output_token_seconds_bucket{model_name=~\"$model\", namespace=~\"$namespace\"}[5m]))",
+          "expr": "histogram_quantile(0.50, rate(vllm:request_time_per_output_token_seconds_bucket{model_name=~\"$model\", namespace=~\"$namespace\"}[5m]))",
           "interval": "",
           "legendFormat": "P50 Inter-Token",
           "refId": "A"
@@ -254,7 +254,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "histogram_quantile(0.95, rate(vllm:time_per_output_token_seconds_bucket{model_name=~\"$model\", namespace=~\"$namespace\"}[5m]))",
+          "expr": "histogram_quantile(0.95, rate(vllm:request_time_per_output_token_seconds_bucket{model_name=~\"$model\", namespace=~\"$namespace\"}[5m]))",
           "interval": "",
           "legendFormat": "P95 Inter-Token",
           "refId": "B"
@@ -1160,7 +1160,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "inference_pool_ready_pods{name=\"llm-d-gaie\"}",
+          "expr": "inference_pool_ready_pods{name=\"gpt-oss-20b-inference-pool\"}",
           "interval": "",
           "legendFormat": "Ready Pods",
           "refId": "A"
@@ -1170,7 +1170,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "inference_pool_average_queue_size{name=\"llm-d-gaie\"}",
+          "expr": "inference_pool_average_queue_size{name=\"gpt-oss-20b-inference-pool\"}",
           "interval": "",
           "legendFormat": "Average Queue Size",
           "refId": "B"
@@ -1243,7 +1243,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "inference_pool_average_kv_cache_utilization{name=\"llm-d-gaie\"}",
+          "expr": "inference_pool_average_kv_cache_utilization{name=\"gpt-oss-20b-inference-pool\"}",
           "interval": "",
           "legendFormat": "Pool KV Cache Utilization",
           "refId": "A"
@@ -1309,7 +1309,7 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "expr": "inference_pool_per_pod_queue_size{name=\"llm-d-gaie\"}",
+          "expr": "inference_pool_per_pod_queue_size{name=\"gpt-oss-20b-inference-pool\"}",
           "interval": "",
           "legendFormat": "Pod {{model_server_pod}}",
           "refId": "A"

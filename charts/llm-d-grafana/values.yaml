@@ -3,7 +3,7 @@ consoleLink:
 
 grafana:
   operator:
-    enabled: true
+    enabled: false
     namespace: openshift-operators
     channel: v5
   instance:
