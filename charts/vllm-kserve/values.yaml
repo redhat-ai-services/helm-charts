@@ -20,10 +20,10 @@ hardwareProfile:
 
 image:
   # -- The vLLM model server image
-  image: 'registry.redhat.io/rhaiis/vllm-cuda-rhel9'
+  image: 'registry.redhat.io/rhaii/vllm-cuda-rhel9'
 
   # -- The tag or sha for the model server image
-  tag: 3.3.0-1771898916
+  tag: 3.4.0-1777444689
 
   # -- The vLLM version that will be displayed in the RHOAI Dashboard.  If not set, the appVersion of the chart will be used.
   runtimeVersionOverride: ""
