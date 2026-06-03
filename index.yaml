@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   argocd:
   - apiVersion: v2
-    created: "2026-04-27T01:38:54.152597849Z"
+    created: "2026-06-03T22:27:47.289633149Z"
     description: A Helm chart for Kubernetes
-    digest: 79a8aa670cd5721e6f17d1eae2c1a08879a781e4d546b6d09e0e12500fd198d2
+    digest: f3900176e6d218e9c58ad1c25a56f7d506386af167a340386d3dd1a9e0c69750
     kubeVersion: '>= 1.19.0'
     name: argocd
     type: application
@@ -73,9 +73,9 @@ entries:
     version: 0.3.7
   gitops-tenant:
   - apiVersion: v2
-    created: "2026-04-27T01:38:54.153050444Z"
+    created: "2026-06-03T22:27:47.290666632Z"
     description: A Helm chart to manage a multi-tiered gitops structure a project.
-    digest: 1ba9c4cf89c12888887222c1748d6e364980128c6736b46e0da9d23e5a864077
+    digest: 3a03a3cb824f9c2cb399b58294440e75092b426a8a928bc31c67dc03ab6dba0f
     kubeVersion: '>= 1.19.0'
     name: gitops-tenant
     type: application
@@ -150,10 +150,10 @@ entries:
   guardrails-hf-detector-kserve:
   - apiVersion: v2
     appVersion: rhoai-2.23-82e4a518ac3d144a5312205eede5674cf6a5888e
-    created: "2026-04-27T01:38:54.153636547Z"
+    created: "2026-06-03T22:27:47.291332089Z"
     description: A Helm chart deploying guardrails-huggingface-detector with KServe
       on OpenShift AI
-    digest: 0ee813a659a67eddde1b4fa4a452664c7adc2ad3be5a06b5ea753b4a2062e9b6
+    digest: 76291674bd29e1abfc9e36bf55e31bfd79eb16d18b9e1c42ffedb44eacd50403
     icon: https://huggingface.co/datasets/huggingface/brand-assets/resolve/main/hf-logo.png
     name: guardrails-hf-detector-kserve
     type: application
@@ -175,9 +175,9 @@ entries:
   kafdrop:
   - apiVersion: v1
     appVersion: 3.x
-    created: "2026-04-27T01:38:54.154142161Z"
+    created: "2026-06-03T22:27:47.291820773Z"
     description: A Helm chart for Kafdrop
-    digest: 893238ae6d2f64e8735f024d3525643c755673a8d074c9c9ce86142ae4fb6d9d
+    digest: 1af1e66a50db82ca758f7cabdb9ad949cf6d674daf5920471050514bf82bfc6a
     icon: https://raw.githubusercontent.com/wiki/obsidiandynamics/kafdrop/images/kafdrop-logo.png
     name: kafdrop
     urls:
@@ -186,9 +186,9 @@ entries:
   kafka:
   - apiVersion: v2
     appVersion: 3.3.1
-    created: "2026-04-27T01:38:54.154363985Z"
+    created: "2026-06-03T22:27:47.292058456Z"
     description: A Helm chart for Kubernetes
-    digest: 67f1e58817d50931a81805bfc08a1585ad3eb08e0ec7ecfbb7aec9f2594219c5
+    digest: d5f8344ad731510257ec7edd5b9d6ee9788615771b176e26bc98c53635290d99
     icon: https://upload.wikimedia.org/wikipedia/commons/0/0a/Apache_kafka-icon.svg
     name: kafka
     type: application
@@ -219,9 +219,9 @@ entries:
   kubernetes-mcp:
   - apiVersion: v2
     appVersion: v0.0.49
-    created: "2026-04-27T01:38:54.154805188Z"
+    created: "2026-06-03T22:27:47.292473391Z"
     description: A Helm chart for deploying a Kubernetes MCP server
-    digest: f97592637d5824f1913936fb7139bf4b63a0ca59c91cb49cee549a57a00ef349
+    digest: e8b7ef4f55161757bfc225e71630aaf669095ba9dd654c67e44fdedf15db6e22
     icon: https://avatars.githubusercontent.com/u/182288589?s=200&v=4
     name: kubernetes-mcp
     sources:
@@ -262,9 +262,9 @@ entries:
   llamastack-playground:
   - apiVersion: v2
     appVersion: 0.2.15
-    created: "2026-04-27T01:38:54.155217608Z"
+    created: "2026-06-03T22:27:47.29287034Z"
     description: A Helm chart for Kubernetes
-    digest: 95bc32cce5fed63b66ba67c0f54315f5b7b7ff0334b2fed5762e36fe19d4f84a
+    digest: 676ddaf85427898533cbd6f1aba28be6c7045608af682cbc602720d336755813
     name: llamastack-playground
     type: application
     urls:
@@ -283,9 +283,9 @@ entries:
   llm-d-kserve:
   - apiVersion: v2
     appVersion: 3.3.0
-    created: "2026-04-27T01:38:54.155674751Z"
+    created: "2026-06-03T22:27:47.293349581Z"
     description: A Helm chart for deploying LLM-D with KServe on OpenShift AI
-    digest: bd6013125f624b6e1167c24312a5b1c1fa8a3481ade7577a77438aa990e1d623
+    digest: e0432532bf106558fbe5d1c796bc29fec1590f1c35be210c1b2dbc6cb2a801b1
     icon: https://avatars.githubusercontent.com/u/211385051?s=48&v=4
     name: llm-d-kserve
     sources:
@@ -375,9 +375,9 @@ entries:
   minio:
   - apiVersion: v2
     appVersion: RELEASE.2024-12-18T13-15-44Z
-    created: "2026-04-27T01:38:54.156118449Z"
+    created: "2026-06-03T22:27:47.293736925Z"
     description: A Helm chart for Kubernetes
-    digest: bf525186612ba23f5a9c36c478094fd213976d8a7ce36e61eed266b0566285a5
+    digest: 1a4a6198ecb0301c642ad00ead4a30a885e9724626037546ee71851b7071d973
     name: minio
     type: application
     urls:
@@ -649,9 +649,9 @@ entries:
   phoenix:
   - apiVersion: v2
     appVersion: version-4.20.2
-    created: "2026-04-27T01:38:54.156669698Z"
+    created: "2026-06-03T22:27:47.294302033Z"
     description: A Helm chart for deploying Phoenix on OpenShift
-    digest: b9f7e065dee435f1dcc69bedf988c5eb4fdf1a76111720c362f21c4518768e7c
+    digest: 7ebf1c347f9bd65b7e3803d85b3a81843a77a6e642dc05c9fb82c4f3a43d80dd
     icon: https://pbs.twimg.com/profile_images/1652081979146506240/e2xH7qJL_400x400.png
     name: phoenix
     sources:
@@ -675,6 +675,17 @@ entries:
     - https://redhat-ai-services.github.io/helm-charts/phoenix-0.1.0.tgz
     version: 0.1.0
   vllm-kserve:
+  - apiVersion: v2
+    appVersion: v0.18.0
+    created: "2026-06-03T22:27:47.295109461Z"
+    description: A Helm deploying vLLM with KServe on OpenShift AI
+    digest: ea4bb2eea62d20a9f864cd1635a84e5a819eaa6b27f9c0e227b414b6b496a321
+    icon: https://raw.githubusercontent.com/vllm-project/media-kit/refs/heads/main/vLLM-Logo.svg
+    name: vllm-kserve
+    type: application
+    urls:
+    - https://redhat-ai-services.github.io/helm-charts/vllm-kserve-0.7.1.tgz
+    version: 0.7.1
   - apiVersion: v2
     appVersion: v0.13.0
     created: "2026-04-27T01:38:54.157498204Z"
@@ -1014,4 +1025,4 @@ entries:
     urls:
     - https://redhat-ai-services.github.io/helm-charts/vllm-kserve-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-27T01:38:54.151106025Z"
+generated: "2026-06-03T22:27:47.28883101Z"
