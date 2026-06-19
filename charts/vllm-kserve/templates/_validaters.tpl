@@ -36,7 +36,7 @@ Validate that a valid serving topology is configured.
 Validate that a valid model mode is configured.
 */}}
 {{- define "vllm-kserve.validateModelMode" -}}
-{{- $validModes := list "uri" "s3" }}
+{{- $validModes := list "uri" "s3" "pvc" }}
 {{- if not (has (lower .Values.model.mode) $validModes) }}
     {{- fail (printf "Invalid model.mode. Must be one of: %s" $validModes) }}
 {{- end }}
